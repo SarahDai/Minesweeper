@@ -1,0 +1,111 @@
+/* GLOBAL STYLES
+-------------------------------------------------- */
+body {
+   padding-top: 3rem;
+   padding-bottom: 3rem;
+   color: #5a5a5a;
+}
+
+footer p {
+   font-size: large;
+}
+
+/* Featurettes
+------------------------- */
+.featurette-divider-header {
+   margin: 2rem 0;
+}
+
+.featurette-divider-footer {
+   margin: 7rem 0;
+}
+
+.featurette-heading {
+   font-weight: 300;
+   line-height: 1;
+   letter-spacing: -.05rem;
+}
+
+/* Specific Feature
+------------------------- */
+.card-header {
+   display: flex;
+   flex-direction: column;
+}
+
+.footer-font {
+   color: black;
+}
+
+.nav-font {
+   font-size: 1.5rem;
+}
+
+.btn-secondary:focus, .btn-secondary:hover:not(:disabled) {
+   background-color: #17a2b8;
+}
+
+.page-title-margin {
+   margin-top: 3rem;
+   margin-bottom: 1rem;
+}
+
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+@media (max-width: 991px) {
+}
+
+@media (max-width: 768px) {
+   .featurette-divider-footer {
+      margin: 6rem 0;
+   }
+}
+
+@media (max-width: 600px) {
+   .featurette-divider-footer {
+      margin: 5rem 0;
+   }
+}
+
+@media (max-width: 575px) {
+}
+
+@media (max-width: 500px) {
+   .featurette-divider-footer {
+      margin: 4.5rem 0;
+   }
+}
+
+@media (max-width: 414px) {
+   .featurette-divider-header {
+      margin: 1.3rem 0;
+   }
+}
+
+@media (max-width: 368px) {  
+}
+
+@media (max-width: 353px) {
+}
+
+@media (max-width: 327px) {
+   .featurette-divider-header {
+      margin: 1.2rem 0;
+   }
+
+   .featurette-divider-footer {
+      margin: 4rem 0;
+   }
+}
+
+@media (min-width: 40em) {
+   .featurette-heading {
+      font-size: 50px;
+   }
+}
+
+@media (min-width: 62em) {
+   .featurette-heading {
+      margin-top: 7rem;
+   }
+}
