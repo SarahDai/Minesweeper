@@ -1,17 +1,11 @@
-import {createStore} from "redux";
-import {INITIAL_STATE} from "./stateConstants";
-import { UPDATE_PROP1, INCREMENT_PROP2 } from "./actionConstants";
+import { createStore, applyMiddleware, combineReducers } from "redux";
+import thunkMiddleware from "redux-thunk";
+import { loginReducer } from "./reducers/login";
+import { userReducer } from "./reducers/user";
 
+export const rootReducer = combineReducers({
+    login: loginReducer,
+    user: userReducer,
+})
 
-function rootReducer(state = INITIAL_STATE, action) {
-    switch (action.type) {
-        case UPDATE_PROP1:
-            return {...state, stateProp1: action.payload.prop1};
-        case INCREMENT_PROP2:
-            return {...state, stateProp2: state.stateProp2 + 1}; 
-        default:
-            return state;
-    }
-}
-
-export default createStore(rootReducer);
+export default createStore(rootReducer, applyMiddleware(thunkMiddleware));
