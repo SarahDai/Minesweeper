@@ -17,7 +17,6 @@ const App = () => {
   }, [dispatch, page]);
 
   const getPage = () => {
-    console.log(page);
     if (page === PAGE.LOGIN) {
       return <LoginPage/>;
     } else if (page === PAGE.SIGN_UP) {
