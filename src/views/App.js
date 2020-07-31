@@ -6,20 +6,24 @@ import { PAGE } from "../redux/storeConstants";
 import LoginPage from "../components/LoginPage";
 import SignUpPage from "../components/SignUpPage";
 import InvalidPage from "../components/InvalidPage";
+import ProjectBoard from "../components/ProjectBoard";
 
 const App = () => {
   const page = useSelector(state => state.user.page);
   const dispatch = useDispatch();
    
   useEffect(() => {
-    dispatch(getUserList());
+    // dispatch(getUserList());
   }, [dispatch, page]);
 
   const getPage = () => {
+    console.log(page);
     if (page === PAGE.LOGIN) {
       return <LoginPage/>;
     } else if (page === PAGE.SIGN_UP) {
       return <SignUpPage/>;
+    } else if (page === PAGE.PROJECT_BOARD) {
+      return <ProjectBoard/>
     } else {
       return <InvalidPage/>
     }

@@ -2,14 +2,23 @@ import {
    LOGIN_SUCCESS, ADD_TIME_ID, STORE_USER_LIST, LOGOUT, 
    CLEAN_TIME_ID, SET_STATUS, SET_PAGE
 } from "../actionConstants";
-import { STATUS, PAGE } from "../storeConstants";
+import { PAGE } from "../storeConstants";
+
+// export const INITIAL_STATE = {
+//    username: "",
+//    timeIds: [],
+//    userList: [],
+//    page: PAGE.LOGIN,
+// }
 
 export const INITIAL_STATE = {
-   username: "",
+   username: "user",
    timeIds: [],
-   status: STATUS.LOADING,
-   userList: [],
-   page: PAGE.LOGIN,
+   userList: [{
+      username: "user",
+      password: "user"
+   }],
+   page: PAGE.PROJECT_BOARD,
 }
 
 export const userReducer = (state=INITIAL_STATE, action) => {
@@ -24,6 +33,7 @@ export const userReducer = (state=INITIAL_STATE, action) => {
       case LOGOUT:
          return {
             ...INITIAL_STATE,
+            page: PAGE.LOGIN,
             userList: state.userList
          };
       case ADD_TIME_ID:

@@ -23,5 +23,6 @@ export const STATUS = {
 export const PAGE = {
     LOGIN: "log in",
     SIGN_UP: "sign up",
-    INVALID: "invalid"
+    INVALID: "invalid",
+    PROJECT_BOARD: "project board",
 };
