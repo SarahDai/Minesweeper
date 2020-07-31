@@ -1,14 +1,37 @@
-import React from 'react';
-import { Provider } from "react-redux"; // Automatically passes the store to all child components
+import React, { useEffect } from 'react';
 import { Container } from 'reactstrap';
-import store from "../redux/store";
-import AccountPage from "../components/AccountPage";
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserList } from "../redux/actions";
+import { PAGE } from "../redux/storeConstants";
+import LoginPage from "../components/LoginPage";
+import SignUpPage from "../components/SignUpPage";
+import InvalidPage from "../components/InvalidPage";
 
-const App = () => 
-  <Provider store={store}>
-    <Container fluid>   
-      <AccountPage/>
-    </Container> 
-  </Provider>
+const App = () => {
+  const page = useSelector(state => state.user.page);
+  const dispatch = useDispatch();
+   
+  useEffect(() => {
+    dispatch(getUserList());
+  }, [dispatch, page]);
+
+  const getPage = () => {
+    if (page === PAGE.LOGIN) {
+      return <LoginPage/>;
+    } else if (page === PAGE.SIGN_UP) {
+      return <SignUpPage/>;
+    } else {
+      return <InvalidPage/>
+    }
+  };
+  
+  return (
+    <Container fluid>  
+    {getPage()}
+    </Container>
+  );
+};
 
 export default App;
+export const ALERT_MSG_TIME = 2000;
+export const EMPTY = "";

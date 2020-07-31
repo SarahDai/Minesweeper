@@ -1,18 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Col, Row, Button, Alert } from "react-bootstrap";
 import { Label, Input } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { validateUser } from "../redux/actions";
-import { LOGIN_STATE } from "../redux/storeConstants";
+import { 
+   validateUser, loginNetworkError, exist, 
+   loginNonExistUserFailure, logout, setPage
+} from "../redux/actions";
+import { LOGIN_STATE, PAGE } from "../redux/storeConstants";
+import { ALERT_MSG_TIME, EMPTY } from "../views/App";
 
-const EMPTY = "";
 let beginEdit = false;
 
-const Login = props => {
+const Login = () => {
    const [username, setUsername] = useState(EMPTY);
    const [password, setPassword] = useState(EMPTY);
-   const loginState = useSelector(state => state.loginState);
+   const [showAlert, setShowAlert] = useState(false);
+   const loginState = useSelector(state => state.login);
    const dispatch = useDispatch();
+
+   let network = navigator.onLine;
+   let canLogin = username.length > 0 && password.length > 0;
+
+   useEffect(() => {
+      if (network) {
+         dispatch(logout());
+      } else {
+         dispatch(loginNetworkError());
+      }
+   }, [network, dispatch]);
 
    const clearForm = () => {
       beginEdit = false;
@@ -20,9 +35,21 @@ const Login = props => {
       setPassword(EMPTY);
    }
 
-   const handleLogin = () => {
-      dispatch(validateUser(username, password));
+   const handleSubmit = () => {
+      setShowAlert(true);
+      setInterval(()=>setShowAlert(false), ALERT_MSG_TIME);
       clearForm();
+   }
+
+   const handleLogin = () => {
+      if (loginState !== LOGIN_STATE.NETWORK_ERROR) {
+         if (!exist(username)) {
+            dispatch(loginNonExistUserFailure());
+         } else {
+            dispatch(validateUser(username, password));
+         }
+      }
+      handleSubmit();
    }
 
    const handleKeyPress = event => {
@@ -34,16 +61,28 @@ const Login = props => {
 
    const handleAlert = () => {
       if (!beginEdit) {
-         if (loginState === LOGIN_STATE.LOGGED_FAILURE) {
-            return (
-               <Alert variant="danger">
-                  Invalid username or password! Please try again.
-               </Alert>
-            );
-         } else if (loginState === LOGIN_STATE.NETWORK_ERROR) {
+         if (loginState === LOGIN_STATE.NETWORK_ERROR) {
             return (
                <Alert variant="danger">
                   Unable to connect to the server! Please check your internet connection and try again.
+               </Alert>
+            );
+         } else if (loginState === LOGIN_STATE.LOGGED_NON_EXIST_USER_FAILURE) {
+            return (
+               <Alert variant="danger">
+                  This user has not been signed up, please sign up with it or login with another user.
+               </Alert>
+            );
+         } else if (loginState === LOGIN_STATE.LOGGED_INVALID_PASSWORD_FAILURE) {
+            return (
+               <Alert variant="danger">
+                  This password does not match with this user! Please try again.
+               </Alert>
+            );
+         } else if (loginState === LOGIN_STATE.LOGGED_IN) {
+            return (
+               <Alert variant="success">
+                  Successfully logged in!.
                </Alert>
             );
          }
@@ -103,7 +142,17 @@ const Login = props => {
             </Col>
          </Row>
          <br />
-         {handleAlert()}
+         {
+            showAlert?
+            <Row>
+               <Col xl={4} lg={3} sm={0}/>
+               <Col xl={6} lg={9} sm={12}>
+                  {handleAlert()}
+               </Col>
+               <Col xl={2} />
+            </Row>
+            :""
+         }
          </Card.Body>
          <Card.Footer>
          <Row>
@@ -111,13 +160,13 @@ const Login = props => {
             <Col lg={3} sm={6}>
                <Button 
                   className="login-button-margin login-font-size" block
-                  variant="light" onClick={()=>props.showSignUp()}>
+                  variant="light" onClick={()=>dispatch(setPage(PAGE.SIGN_UP))}>
                   Sign Up
                </Button>
             </Col>
             <Col lg={2} />
             <Col lg={3} sm={6}>
-               <Button 
+               <Button disabled={!canLogin}
                   className="login-button-margin login-font-size" block
                   variant="light" onClick={(e)=>handleLogin(e)}>
                   Login
