@@ -24,5 +24,12 @@ export const PAGE = {
     LOGIN: "log in",
     SIGN_UP: "sign up",
     INVALID: "invalid",
-    PROJECT_BOARD: "project board",
+    GAME: "game",
+};
+
+export const GAME = {
+    LOSE: "lose",
+    WIN: "win",
+    PROGRESS: "progress",
+    TIE: "tie",
 };

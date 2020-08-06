@@ -18,7 +18,7 @@ export const INITIAL_STATE = {
       username: "user",
       password: "user"
    }],
-   page: PAGE.PROJECT_BOARD,
+   page: PAGE.GAME,
 }
 
 export const userReducer = (state=INITIAL_STATE, action) => {

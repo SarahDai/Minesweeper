@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { Container } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserList } from "../redux/actions";
+// import { getUserList } from "../redux/actions";
 import { PAGE } from "../redux/storeConstants";
 import LoginPage from "../components/LoginPage";
 import SignUpPage from "../components/SignUpPage";
 import InvalidPage from "../components/InvalidPage";
-import ProjectBoard from "../components/ProjectBoard";
+import Game from "../components/Game";
 
 const App = () => {
   const page = useSelector(state => state.user.page);
@@ -21,8 +21,8 @@ const App = () => {
       return <LoginPage/>;
     } else if (page === PAGE.SIGN_UP) {
       return <SignUpPage/>;
-    } else if (page === PAGE.PROJECT_BOARD) {
-      return <ProjectBoard/>
+    } else if (page === PAGE.GAME) {
+      return <Game/>
     } else {
       return <InvalidPage/>
     }

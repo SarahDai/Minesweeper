@@ -9,3 +9,4 @@ export const CLEAN_TIME_ID = "CLEAN_TIME_ID";
 export const SET_STATUS = "SET_STATUS";
 export const SET_PAGE = "SET_PAGE";
 export const STORE_USER_LIST = "STORE_USER_LIST";
+export const SET_GAME_STATUS = "SET_GAME_STATUS";

@@ -2,8 +2,7 @@ import {
     LOGIN_SUCCESS, LOGIN_INVALID_PASSWORD_FAILURE, 
     LOGOUT, ADD_TIME_ID, LOGIN_NON_EXIST_USER_FAILURE,
     CLEAN_TIME_ID, LOGIN_NETWORK_ERROR, SET_STATUS,
-    STORE_USER_LIST,
-    SET_PAGE
+    STORE_USER_LIST, SET_GAME_STATUS, SET_PAGE
 } from "./actionConstants";
 import store from "./store";
 import { STATUS, SIGN_UP_STATE } from "./storeConstants";
@@ -104,7 +103,7 @@ export const setPage = (newPage) => ({
     payload: {
         page: newPage
     }
-})
+});
 
 export const storeUserList = userList => ({
     type: STORE_USER_LIST,
@@ -160,3 +159,10 @@ export const exist = username => {
     }
     return false;
 };
+
+export const setGameStatus = status => ({
+    type: SET_GAME_STATUS,
+    payload: {
+        status
+    }
+});
