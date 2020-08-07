@@ -30,6 +30,6 @@ export const PAGE = {
 export const GAME = {
     LOSE: "lose",
     WIN: "win",
-    PROGRESS: "progress",
+    IN_PROGRESS: "in progress",
     TIE: "tie",
 };

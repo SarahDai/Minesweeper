@@ -36,6 +36,7 @@ const Board = () => {
               }
           });
       });
+      console.log(arr);
       return arr;
    };
 
@@ -175,7 +176,7 @@ const Board = () => {
          alert("you win");
       }
       dispatch(setGameBoard(newBoard));
-      dispatch(setGameMines(mines - getTypes("flag", newBoard).length));
+      // dispatch(setGameMines(mines - getTypes("flag", newBoard).length));
    };
 
    const revealEmpty = (x, y, newBoard) => {

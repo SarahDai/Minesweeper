@@ -5,7 +5,7 @@ export const INITIAL_STATE = {
    height: 8,
    width: 8,
    mines: 10,
-   status: GAME.PROGRESS,
+   status: GAME.IN_PROGRESS,
    board: []
 };
 
