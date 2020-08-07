@@ -1,9 +1,9 @@
 /* GLOBAL STYLES
 -------------------------------------------------- */
 body {
-   padding-top: 3rem;
+   /* padding-top: 3rem;
    padding-bottom: 3rem;
-   color: #5a5a5a;
+   color: #5a5a5a; */
 }
 
 /* Specific Feature
@@ -40,4 +40,55 @@ body {
 
 .margin-top-5 {
    margin-top: 5rem;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+body {
+   margin: 20px;
+   padding: 0;
+   font-family: sans-serif;
+   background: linear-gradient(0deg, #d9cfe0, #e7e1ee, #d9cfe0);
+}
+
+.clear {
+  clear: both;
+  content: "";
+}
+
+.game {
+  max-width: 400px;
+  height: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #48E5C2;
+  margin-top: 15vh;
+}
+
+.game .cell {
+   background: #FCFAF9;
+   border: 1px solid #48E5C2;
+   border-radius: 4px;
+   float: left;
+   line-height: 45px;
+   height: 45px;
+   text-align: center;
+   width: 45px;
+   cursor: pointer;
+   color: #333333;
+   font-weight: 600;
+}
+
+.game :focus {
+   outline: none;
+}
+
+.game .hidden {
+   background: #333333;
+}
+
+.game .is-flag, .game .is-mine {
+   color: #fc543c;
 }

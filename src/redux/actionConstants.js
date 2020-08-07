@@ -10,3 +10,5 @@ export const SET_STATUS = "SET_STATUS";
 export const SET_PAGE = "SET_PAGE";
 export const STORE_USER_LIST = "STORE_USER_LIST";
 export const SET_GAME_STATUS = "SET_GAME_STATUS";
+export const SET_GAME_MINES = "SET_GAME_MINES";
+export const SET_GAME_BOARD = "SET_GAME_BOARD";

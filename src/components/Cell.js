@@ -3,20 +3,25 @@ import React from 'react';
 const Cell = props => {
 
    const getValue = () => {
-      if (props.isRevealed) {
-         return props.isFlagged ? "🚩" : null;
-      }
-      if (props.isMine) {
+      if (!props.value.isRevealed) {
+         return props.value.isFlagged ? "🚩" : null;
+      } else if (props.value.isMine) {
          return "💣";
-      }
-      if (props.neighbor === 0) {
+      } else if (props.value.neighbor === 0) {
          return null;
+      } else {
+         return props.value.neighbor;
       }
-      return props.neighbor;
    }
 
+   let className = "cell" +
+      (props.value.isRevealed ? "" : " hidden") +
+      (props.value.isMine ? " is-mine" : "") +
+      (props.value.isFlagged ? " is-flag" : "");
+   
    return (
-      <div
+      <div 
+         className={className}
          onClick={props.onClick}
          onContextMenu={props.onContextMenu}
       >

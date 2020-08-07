@@ -23,7 +23,7 @@ export const INITIAL_STATE = {
 
 export const userReducer = (state=INITIAL_STATE, action) => {
    console.log("action type: " + action.type);
-   console.log("action load: " + JSON.stringify(action.payload));
+   // console.log("action load: " + JSON.stringify(action.payload));
    switch(action.type) {
       case LOGIN_SUCCESS:
          return {

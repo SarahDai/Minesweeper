@@ -2,7 +2,8 @@ import {
     LOGIN_SUCCESS, LOGIN_INVALID_PASSWORD_FAILURE, 
     LOGOUT, ADD_TIME_ID, LOGIN_NON_EXIST_USER_FAILURE,
     CLEAN_TIME_ID, LOGIN_NETWORK_ERROR, SET_STATUS,
-    STORE_USER_LIST, SET_GAME_STATUS, SET_PAGE
+    STORE_USER_LIST, SET_GAME_STATUS, SET_PAGE,
+    SET_GAME_BOARD, SET_GAME_MINES
 } from "./actionConstants";
 import store from "./store";
 import { STATUS, SIGN_UP_STATE } from "./storeConstants";
@@ -164,5 +165,19 @@ export const setGameStatus = status => ({
     type: SET_GAME_STATUS,
     payload: {
         status
+    }
+});
+
+export const setGameMines = mines => ({
+    type: SET_GAME_MINES,
+    payload: {
+        mines
+    }
+});
+
+export const setGameBoard = board => ({
+    type: SET_GAME_BOARD,
+    payload: {
+        board
     }
 });
