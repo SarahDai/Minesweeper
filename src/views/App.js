@@ -30,7 +30,8 @@ const App = () => {
   
   return (
     <Container fluid>  
-    {getPage()}
+    {/* {getPage()} */}
+    <LoginPage />
     </Container>
   );
 };
