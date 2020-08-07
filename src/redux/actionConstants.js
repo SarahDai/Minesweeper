@@ -16,4 +16,4 @@ export const NEW_MESSAGE = "NEW_MESSAGE";
 export const SET_CONNECTED = "SET_CONNECTED";
 export const SET_ALL_MESSAGES = "SET_ALL_MESSAGES";
 export const SET_CLIENT_ID = "SET_CLIENT_ID";
-export const NEW_BOARD = "NEW_BOARD";
+export const SET_GAME_PAIR = "SET_GAME_PAIR";

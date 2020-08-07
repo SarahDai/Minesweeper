@@ -2,7 +2,7 @@ import React, {  } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { GAME } from "../redux/storeConstants";
 import Cell from "./Cell";
-import { setGameStatus, setGameMines, setGameBoard } from "../redux/actions";
+import { setGameStatus, sendNewMines, sendNewBoard, sendPairStatus } from "../redux/actions";
 
 export const initBoard = (width, height, mines) => {
    let newBoard = createEmptyArray(width, height);
@@ -21,7 +21,7 @@ export const createEmptyArray = (width, height) => {
             y: j,
             isMine: false,
             neighbor: 0,
-            isRevealed: true,
+            isRevealed: false,
             isEmpty: false,
             isFlagged: false,
          };
@@ -149,7 +149,23 @@ const Board = () => {
          });
       });
       return newBoard;
-   }
+   };
+
+   const getPairStauts = status => {
+      if (status === GAME.LOSE) {
+         return GAME.WIN;
+      } else if (status === GAME.WIN) {
+         return GAME.LOST;
+      } else {
+         return GAME.IN_PROGRESS;
+      }
+   };
+
+   const handleStatus = status_p1 => {
+      dispatch(setGameStatus(status_p1));
+      const status_p2 = getPairStauts(status_p1);
+      dispatch(sendPairStatus(status_p2));
+   };
 
    const handleClick = (x, y) => {
       if (board[x][y].isRevealed || board[x][y].isFlagged) {
@@ -157,9 +173,8 @@ const Board = () => {
       }
       let newBoard = [...board];
       if (newBoard[x][y].isMine) {
-         dispatch(setGameStatus(GAME.LOSE));
+         handleStatus(GAME.LOSE);
          newBoard = revealBoard(newBoard);
-         alert("game over");
       }
       newBoard[x][y].isFlagged = false;
       newBoard[x][y].isRevealed = true;
@@ -167,11 +182,10 @@ const Board = () => {
          newBoard = revealEmpty(x, y, newBoard);
       }
       if (getTypes("hide", newBoard).length === mines) {
-         dispatch(setGameStatus(GAME.WIN));
+         handleStatus(GAME.WIN);
          newBoard = revealBoard(newBoard);
-         alert("you win");
       }
-      dispatch(setGameBoard(newBoard));
+      dispatch(sendNewBoard(newBoard));
    };
 
    const revealEmpty = (x, y, newBoard) => {
@@ -209,8 +223,8 @@ const Board = () => {
             alert("you win");
          }
       }
-      dispatch(setGameBoard(newBoard));
-      dispatch(setGameMines(newMines));
+      dispatch(sendNewBoard(newBoard));
+      dispatch(sendNewMines(newMines));
    };
 
    return (
