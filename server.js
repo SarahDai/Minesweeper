@@ -1,3 +1,5 @@
+// import {  }
+
 /** SERVER CONFIGURATION */
 const express = require("express");
 const app = express();
@@ -34,6 +36,8 @@ io.on("connection", client => {
     
     client.emit("hello", "hello client");
     client.emit("client id", client.id);
+    client.emit("init board", )
+
 
     client.on("join", username => {
         client.emit("set connected");
@@ -53,8 +57,7 @@ io.on("connection", client => {
             messages.push(username + " has left the chat");
             io.sockets.emit("all messages", messages);
         }
-    })
-
+    });
 
     /**
      * // Send to this client only

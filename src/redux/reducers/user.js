@@ -1,6 +1,7 @@
 import {
    LOGIN_SUCCESS, ADD_TIME_ID, STORE_USER_LIST, LOGOUT, 
-   CLEAN_TIME_ID, SET_STATUS, SET_PAGE
+   CLEAN_TIME_ID, SET_STATUS, SET_PAGE, SET_ALL_MESSAGES,
+   SET_CONNECTED, SET_CLIENT_ID
 } from "../actionConstants";
 import { PAGE } from "../storeConstants";
 
@@ -19,6 +20,9 @@ export const INITIAL_STATE = {
       password: "user"
    }],
    page: PAGE.GAME,
+   isConnected: true,
+   messages: [],
+   clientID: "",
 }
 
 export const userReducer = (state=INITIAL_STATE, action) => {
@@ -62,6 +66,21 @@ export const userReducer = (state=INITIAL_STATE, action) => {
             userList: [
                ...action.payload.userList
             ]
+         }
+      case SET_ALL_MESSAGES:
+         return {
+            ...state,
+            messages: action.payload.messages
+         }
+      case SET_CONNECTED:
+         return {
+            ...state,
+            isConnected: true
+         }
+      case SET_CLIENT_ID:
+         return {
+            ...state,
+            clientID: action.payload.clientID
          }
       default:
          return state;

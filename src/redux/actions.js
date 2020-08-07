@@ -3,11 +3,16 @@ import {
     LOGOUT, ADD_TIME_ID, LOGIN_NON_EXIST_USER_FAILURE,
     CLEAN_TIME_ID, LOGIN_NETWORK_ERROR, SET_STATUS,
     STORE_USER_LIST, SET_GAME_STATUS, SET_PAGE,
-    SET_GAME_BOARD, SET_GAME_MINES
+    SET_GAME_BOARD, SET_GAME_MINES, SET_ALL_MESSAGES,
+    SET_CONNECTED,
+    SET_CLIENT_ID,
+    NEW_BOARD
 } from "./actionConstants";
 import store from "./store";
 import { STATUS, SIGN_UP_STATE } from "./storeConstants";
 import firebase from "../fbConfig";
+import { joinChat } from "../client";
+import { initBoard } from "../components/Board";
 
 /** Login **/
 export const loginSuccess = username => {
@@ -181,3 +186,42 @@ export const setGameBoard = board => ({
         board
     }
 });
+
+export const setAllMessages = messages => ({
+    type: SET_ALL_MESSAGES,
+    payload: {
+        messages
+    }
+});
+
+export const sendAllMessages = messages => (
+    dispatch => setAllMessages(messages)
+);
+
+export const setConnected = () => ({
+    type: SET_CONNECTED
+});
+
+export const sendConnected = username => (
+    dispatch => joinChat(username)
+);
+
+export const setClientID = cid => ({
+    type: SET_CLIENT_ID,
+    payload: {
+        clientID: cid
+    }
+});
+
+export const newBoard = () => {
+    const width = store.getState().game.width;
+    const height = store.getState().game.height;
+    const mines = store.getState().game.mines;
+    return (
+    {
+        type: NEW_BOARD,
+        payload: {
+            board: initBoard(width, height, mines)
+        }
+    })
+};

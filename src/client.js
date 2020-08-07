@@ -1,5 +1,5 @@
 import store from "./redux/store";
-import {newMessage, setConnected} from "./redux/actions";
+import { setAllMessages, setConnected, setClientID } from "./redux/actions";
 
 
 /** CLIENT CONFIGURATION - connect to the server */
@@ -17,8 +17,12 @@ socket.on("hello", msg => {
     console.log("server said: " + msg);
 });
 
+socket.on("client id", cid => {
+    store.dispatch(setClientID(cid));
+});
+
 socket.on("all messages", msg => {
-    store.dispatch(newMessage(msg));
+    store.dispatch(setAllMessages(msg));
 });
 
 socket.on("set connected", () => {
@@ -29,7 +33,7 @@ export const joinChat = username => {
     socket.emit("join", username);
 };
 
-export const newMsg = msg => {
+export const newMessage = msg => {
     socket.emit("new message", msg);
 };
 
