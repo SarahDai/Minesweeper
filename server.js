@@ -28,7 +28,6 @@ server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 let messages = [];
 let clients = {};
-let boards = [];
 let pair_book = {};
 let board_pair = {};
 let mines_pair = {};
