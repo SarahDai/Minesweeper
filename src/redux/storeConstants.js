@@ -17,21 +17,20 @@ export const SIGN_UP_STATE = {
 export const STATUS = {
     LOADING: "loading",
     SUCCESS: "success",
-    FAIL: "fail",
+    FAIL: "fail"
 };
 
 export const PAGE = {
     LOGIN: "log in",
     SIGN_UP: "sign up",
     INVALID: "invalid",
-    GAME: "game",
+    GAME: "game"
 };
 
 export const GAME = {
     LOSE: "lose",
     WIN: "win",
-    IN_PROGRESS: "in progress",
-    TIE: "tie",
+    IN_PROGRESS: "in progress"
 };
 
 export const PLAYER_STATUS = {

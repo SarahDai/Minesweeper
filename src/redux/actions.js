@@ -3,11 +3,14 @@ import {
     LOGOUT, ADD_TIME_ID, LOGIN_NON_EXIST_USER_FAILURE,
     CLEAN_TIME_ID, LOGIN_NETWORK_ERROR, SET_STATUS,
     STORE_USER_LIST, SET_GAME_STATUS, SET_PAGE,
-    SET_GAME_BOARD, SET_GAME_MINES
+    SET_GAME_BOARD, SET_GAME_MINES, SET_ALL_MESSAGES,
+    SET_CONNECTED, SET_CLIENT_ID, SET_GAME_PAIR,
 } from "./actionConstants";
 import store from "./store";
 import { STATUS, SIGN_UP_STATE } from "./storeConstants";
 import firebase from "../fbConfig";
+import { joinChat, updateBoard, updateMines, updatePairStatus } from "../client";
+import { initBoard } from "../components/Board";
 
 /** Login **/
 export const loginSuccess = username => {
@@ -179,5 +182,57 @@ export const setGameBoard = board => ({
     type: SET_GAME_BOARD,
     payload: {
         board
+    }
+});
+
+export const setAllMessages = messages => ({
+    type: SET_ALL_MESSAGES,
+    payload: {
+        messages
+    }
+});
+
+export const sendAllMessages = messages => (
+    dispatch => setAllMessages(messages)
+);
+
+export const setConnected = () => ({
+    type: SET_CONNECTED
+});
+
+export const sendConnected = username => (
+    dispatch => joinChat(username)
+);
+
+export const setClientID = cid => ({
+    type: SET_CLIENT_ID,
+    payload: {
+        clientID: cid
+    }
+});
+
+export const getNewBoard = () => {
+    const width = store.getState().game.width;
+    const height = store.getState().game.height;
+    const mines = store.getState().game.mines;
+    return initBoard(width, height, mines);
+};
+
+export const sendNewBoard = newBoard => (
+    dispatch => updateBoard(newBoard)
+);
+
+export const sendNewMines = newMines => (
+    dispatch => updateMines(newMines)
+);
+
+export const sendPairStatus = newStatus => (
+    dispatch => updatePairStatus(newStatus)
+);
+
+export const setGamePair = pairCid => ({
+    type: SET_GAME_PAIR,
+    payload: {
+        pair: pairCid
     }
 });

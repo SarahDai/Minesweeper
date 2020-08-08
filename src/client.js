@@ -1,6 +1,5 @@
 import store from "./redux/store";
-import {newMessage, setConnected} from "./redux/actions";
-
+import { setAllMessages, setConnected, getNewBoard, setClientID, setGameBoard, setGamePair, setGameMines, setGameStatus } from "./redux/actions";
 
 /** CLIENT CONFIGURATION - connect to the server */
 const socketIOClient = require("socket.io-client");
@@ -17,20 +16,69 @@ socket.on("hello", msg => {
     console.log("server said: " + msg);
 });
 
+socket.on("client id", cid => {
+    store.dispatch(setClientID(cid));
+});
+
+socket.on("get init board", cid => {
+    if (store.getState().user.clientID === cid) {
+        const newBoard = getNewBoard();
+        const newMines = store.getState().game.mines;
+        const newStatus = store.getState().game.status;
+        socket.emit("update pair board", newBoard);
+        socket.emit("update pair mines", newMines);
+        socket.emit("update pair status", newStatus);
+    }
+});
+
 socket.on("all messages", msg => {
-    store.dispatch(newMessage(msg));
+    store.dispatch(setAllMessages(msg));
 });
 
 socket.on("set connected", () => {
     store.dispatch(setConnected());
-})
+});
+
+socket.on("set pair board", board => {
+    console.log("client pair board");
+    store.dispatch(setGameBoard(board));
+});
+
+socket.on("set pair mines", mines => {
+    store.dispatch(setGameMines(mines));
+});
+
+socket.on("set pair status", status => {
+    store.dispatch(setGameStatus(status));
+});
+
+socket.on("set pair up", (p1, p2) => {
+    const cur = store.getState().user.clientID;
+    if (cur === p1) {
+        store.dispatch(setGamePair(p2));
+    } else if (cur === p2) {
+        store.dispatch(setGamePair(p1));
+    }
+});
 
 export const joinChat = username => {
     socket.emit("join", username);
 };
 
-export const newMsg = msg => {
+export const newMessage = msg => {
     socket.emit("new message", msg);
+};
+
+export const updateBoard = board => {
+    socket.emit("update pair board", board);
+};
+
+export const updateMines = mines => {
+    socket.emit("update pair mines", mines);
+};
+
+export const updatePairStatus = status => {
+    socket.emit("update pair status", status);
 };
 
 /**

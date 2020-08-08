@@ -2,28 +2,110 @@ import React, {  } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { GAME } from "../redux/storeConstants";
 import Cell from "./Cell";
-import { setGameStatus, setGameMines, setGameBoard } from "../redux/actions";
+import { setGameStatus, sendNewMines, sendNewBoard, sendPairStatus } from "../redux/actions";
+
+export const initBoard = (width, height, mines) => {
+   let newBoard = createEmptyArray(width, height);
+   newBoard = plantMines(width, height, mines, newBoard);
+   newBoard = getNeighbors(width, height, newBoard);
+   return newBoard;
+};
+
+export const createEmptyArray = (width, height) => {
+   let newBoard = [];
+   for (let i = 0; i < height; i++) {
+      newBoard.push([]);
+      for (let j = 0; j < width; j++) {
+         newBoard[i][j] = {
+            x: i,
+            y: j,
+            isMine: false,
+            neighbor: 0,
+            isRevealed: false,
+            isEmpty: false,
+            isFlagged: false,
+         };
+      }
+   }
+   return newBoard;
+};
+
+export const plantMines = (width, height, mines, newBoard) => {
+   let randX = 0;
+   let randY = 0;
+   let minesPlanted = 0;
+   while (minesPlanted < mines) {
+      randX = getRand(width);
+      randY = getRand(height);
+      // console.log(JSON.stringify(newBoard));
+      if (!newBoard[randX][randY].isMine) {
+         newBoard[randX][randY].isMine = true;
+         minesPlanted++;
+      }
+   }
+   return newBoard;
+};
+
+export const getNeighbors = (width, height, newBoard) => {
+   for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+         if (!newBoard[i][j].isMine) {
+            let mine = 0;
+            const area = traverseBoard(width, height, newBoard[i][j].x, newBoard[i][j].y, newBoard);
+            area.forEach(value => {
+               if (value.isMine) {
+                  mine++;
+               }
+            });
+            if (mine === 0) {
+               newBoard[i][j].isEmpty = true;
+            }
+            newBoard[i][j].neighbor = mine;
+         }
+      }
+   }
+   return newBoard;
+};
+
+export const traverseBoard = (width, height, x, y, newBoard) => {
+   const cur = [];
+   if (x > 0) {
+      cur.push(newBoard[x - 1][y]);
+   }
+   if (x < height - 1) {
+      cur.push(newBoard[x + 1][y]);
+   }
+   if (y > 0) {
+      cur.push(newBoard[x][y - 1]);
+   }
+   if (y < width - 1) {
+      cur.push(newBoard[x][y + 1]);
+   }
+   if (x > 0 && y > 0) {
+      cur.push(newBoard[x - 1][y - 1]);
+   }
+   if (x > 0 && y < width - 1) {
+      cur.push(newBoard[x - 1][y + 1]);
+   }
+   if (x < height - 1 && y < width - 1) {
+      cur.push(newBoard[x + 1][y + 1]);
+   }
+   if (x < height - 1 && y > 0) {
+      cur.push(newBoard[x + 1][y - 1]);
+   }
+   return cur;
+};
+
+export const getRand = (val) => {
+   return Math.floor((Math.random() * 1000 + 1) % val);
+};
 
 let firstLoad = true;
 
 const Board = () => {
-   const height = useSelector(state => state.game.height);
-   const width = useSelector(state => state.game.width);
    const mines = useSelector(state => state.game.mines);
    const board = useSelector(state => state.game.board);
    const dispatch = useDispatch();
-
-   const initBoard = () => {
-      let newBoard = createEmptyArray();
-      newBoard = plantMines(newBoard);
-      newBoard = getNeighbors(newBoard);
-      dispatch(setGameBoard(newBoard));
-      return newBoard;
-   };
-
-   const getRand = (val) => {
-      return Math.floor((Math.random() * 1000 + 1) % val);
-   };
 
    const getTypes = (type, newBoard) => {
       let arr = [];
@@ -36,93 +118,7 @@ const Board = () => {
               }
           });
       });
-      console.log(arr);
       return arr;
-   };
-
-   const createEmptyArray = () => {
-      let newBoard = [];
-      for (let i = 0; i < height; i++) {
-         newBoard.push([]);
-         for (let j = 0; j < width; j++) {
-            newBoard[i][j] = {
-               x: i,
-               y: j,
-               isMine: false,
-               neighbor: 0,
-               isRevealed: false,
-               isEmpty: false,
-               isFlagged: false,
-            };
-         }
-      }
-      return newBoard;
-   };
-   
-   const plantMines = (newBoard) => {
-      let randX = 0;
-      let randY = 0;
-      let minesPlanted = 0;
-      while (minesPlanted < mines) {
-         randX = getRand(width);
-         randY = getRand(height);
-         // console.log(JSON.stringify(newBoard));
-         if (!newBoard[randX][randY].isMine) {
-            newBoard[randX][randY].isMine = true;
-            minesPlanted++;
-         }
-      }
-      return newBoard;
-   };
-
-   const getNeighbors = (newBoard) => {
-      for (let i = 0; i < height; i++) {
-         for (let j = 0; j < width; j++) {
-            if (!newBoard[i][j].isMine) {
-               let mine = 0;
-               const area = traverseBoard(newBoard[i][j].x, newBoard[i][j].y, newBoard);
-               area.forEach(value => {
-                  if (value.isMine) {
-                     mine++;
-                  }
-               });
-               if (mine === 0) {
-                  newBoard[i][j].isEmpty = true;
-               }
-               newBoard[i][j].neighbor = mine;
-            }
-         }
-      }
-      return newBoard;
-   };
-
-   const traverseBoard = (x, y, newBoard) => {
-      const cur = [];
-      if (x > 0) {
-         cur.push(newBoard[x - 1][y]);
-      }
-      if (x < height - 1) {
-         cur.push(newBoard[x + 1][y]);
-      }
-      if (y > 0) {
-         cur.push(newBoard[x][y - 1]);
-      }
-      if (y < width - 1) {
-         cur.push(newBoard[x][y + 1]);
-      }
-      if (x > 0 && y > 0) {
-         cur.push(newBoard[x - 1][y - 1]);
-      }
-      if (x > 0 && y < width - 1) {
-         cur.push(newBoard[x - 1][y + 1]);
-      }
-      if (x < height - 1 && y < width - 1) {
-         cur.push(newBoard[x + 1][y + 1]);
-      }
-      if (x < height - 1 && y > 0) {
-         cur.push(newBoard[x + 1][y - 1]);
-      }
-      return cur;
    };
 
    const renderBoard = () => {
@@ -153,7 +149,23 @@ const Board = () => {
          });
       });
       return newBoard;
-   }
+   };
+
+   const getPairStauts = status => {
+      if (status === GAME.LOSE) {
+         return GAME.WIN;
+      } else if (status === GAME.WIN) {
+         return GAME.LOST;
+      } else {
+         return GAME.IN_PROGRESS;
+      }
+   };
+
+   const handleStatus = status_p1 => {
+      dispatch(setGameStatus(status_p1));
+      const status_p2 = getPairStauts(status_p1);
+      dispatch(sendPairStatus(status_p2));
+   };
 
    const handleClick = (x, y) => {
       if (board[x][y].isRevealed || board[x][y].isFlagged) {
@@ -161,9 +173,8 @@ const Board = () => {
       }
       let newBoard = [...board];
       if (newBoard[x][y].isMine) {
-         dispatch(setGameStatus(GAME.LOSE));
+         handleStatus(GAME.LOSE);
          newBoard = revealBoard(newBoard);
-         alert("game over");
       }
       newBoard[x][y].isFlagged = false;
       newBoard[x][y].isRevealed = true;
@@ -171,12 +182,10 @@ const Board = () => {
          newBoard = revealEmpty(x, y, newBoard);
       }
       if (getTypes("hide", newBoard).length === mines) {
-         dispatch(setGameStatus(GAME.WIN));
+         handleStatus(GAME.WIN);
          newBoard = revealBoard(newBoard);
-         alert("you win");
       }
-      dispatch(setGameBoard(newBoard));
-      // dispatch(setGameMines(mines - getTypes("flag", newBoard).length));
+      dispatch(sendNewBoard(newBoard));
    };
 
    const revealEmpty = (x, y, newBoard) => {
@@ -214,8 +223,8 @@ const Board = () => {
             alert("you win");
          }
       }
-      dispatch(setGameBoard(newBoard));
-      dispatch(setGameMines(newMines));
+      dispatch(sendNewBoard(newBoard));
+      dispatch(sendNewMines(newMines));
    };
 
    return (

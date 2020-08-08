@@ -28,15 +28,62 @@ server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 let messages = [];
 let clients = {};
+let pair_book = {};
+let board_pair = {};
+let mines_pair = {};
+let client_list = [];
 
 io.on("connection", client => {
     // Send messages to and receive messages from the client in here
-    
+    if (!client_list.includes(client.id)) {
+        client_list.push(client.id);
+    }
+
     client.emit("hello", "hello client");
     client.emit("client id", client.id);
 
+    if (client_list.length > 0 &&
+        client_list.length % 2 == 0 &&
+        !pair_book[client.id]) {
+        const length = client_list.length;
+        const p2 = client_list[length - 2];
+        const p1 = client_list[length - 1];
+        pair_book[p2] = p1;
+        pair_book[p1] = p2;    
+        client.emit("set pair up", p1, p2);
+        io.to(p2).emit("set pair up", p1, p2);
+        client.emit("get init board", p1);
+    }
+
+    client.on("update pair board", board => {
+        console.log("update board");
+        const p1 = client.id;
+        const p2 = pair_book[p1];
+        board_pair[p1] = board;
+        board_pair[p2] = board;
+        client.emit("set pair board", board);
+        io.to(p2).emit("set pair board", board);
+    });
+
+    client.on("update pair mines", mines => {
+        console.log("update mines");
+        const p1 = client.id;
+        const p2 = pair_book[p1];
+        mines_pair[p1] = mines;
+        mines_pair[p2] = mines;
+        client.emit("set pair mines", mines);
+        io.to(p2).emit("set pair mines", mines);
+    });
+
+    client.on("update pair status", status => {
+        console.log("update pair status");
+        const p1 = client.id;
+        const p2 = pair_book[p1];
+        io.to(p2).emit("set pair status", status);
+    });
+
     client.on("join", username => {
-        client.emit("set connected");
+        io.sockets.emit("set connected");
         clients[client.id] = username;
         messages.push(username + " has joined the chat");
         io.sockets.emit("all messages", messages);
@@ -53,8 +100,7 @@ io.on("connection", client => {
             messages.push(username + " has left the chat");
             io.sockets.emit("all messages", messages);
         }
-    })
-
+    });
 
     /**
      * // Send to this client only
