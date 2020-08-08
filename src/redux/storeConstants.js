@@ -33,3 +33,8 @@ export const GAME = {
     IN_PROGRESS: "in progress",
     TIE: "tie",
 };
+
+export const PLAYER_STATUS = {
+    AVAILABLE: "Available",
+    IN_GAME: "In a game",
+}
