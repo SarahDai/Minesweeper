@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Row, Alert } from "react-bootstrap";
 import Board from "./Board";
 import { useSelector } from "react-redux";
-import { GAME } from '../redux/storeConstants';
+import { GAME } from '../../redux/storeConstants';
 
 const Game = () => {
    const clientID = useSelector(state => state.user.clientID);

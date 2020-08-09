@@ -1,20 +1,41 @@
 /* GLOBAL STYLES
 -------------------------------------------------- */
 body {
-   /* padding-top: 3rem;
-   padding-bottom: 3rem;
-   color: #5a5a5a; */
+   margin: 20px;
+   padding: 0;
+   font-size: 18px;
+   font-family: 'Google Sans',Roboto,Arial,sans-serif;
+   background: linear-gradient(0deg, #d9cfe0, #e7e1ee, #f9f8fa);
+}
+
+h1 {
+   font-size: 2.75em;
+   letter-spacing: 2px;
+   font-weight: bold;
+   color:rgb(65, 60, 71) !important
+}
+
+h2 {
+   font-size: 2.3em;
 }
 
 /* Specific Feature
 ------------------------- */
-.card-header {
+/* .card-header {
    display: flex;
    flex-direction: column;
+} */
+.homepage-header {
+   padding-top: 2em;
+   padding-bottom: 1em;
+}
+
+.fa-flag {
+   color: rosybrown !important
 }
 
 .nav-font {
-   font-size: 1.5rem;
+   font-size: 0;
 }
 
 .btn-secondary:focus, .btn-secondary:hover:not(:disabled) {
@@ -26,7 +47,7 @@ body {
 }
 
 .login-bg-color {
-   background-color: #0b9bb2;
+   background-color: #dde4e6;
 }
 
 .login-button-margin {
@@ -46,11 +67,10 @@ body {
   box-sizing: border-box;
 }
 
-body {
-   margin: 20px;
-   padding: 0;
-   font-family: sans-serif;
-   background: linear-gradient(0deg, #d9cfe0, #e7e1ee, #d9cfe0);
+
+
+.left-padding {
+   padding-left: 0.5em;
 }
 
 .clear {

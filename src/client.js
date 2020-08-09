@@ -1,5 +1,6 @@
 import store from "./redux/store";
-import { setAllMessages, setConnected, getNewBoard, setClientID, setGameBoard, setGamePair, setGameMines, setGameStatus } from "./redux/actions";
+import { setAllMessages, setConnected, getNewBoard, setClientID, setGameBoard, setGamePair, setGameMines, setGameStatus, validateUser } from "./redux/actions";
+import { loginResponse, registerReponse, getAllUsernames } from "./redux/actions/connectActions";
 
 /** CLIENT CONFIGURATION - connect to the server */
 const socketIOClient = require("socket.io-client");
@@ -12,55 +13,100 @@ let socket = socketIOClient.connect(host, {secure: true});
 // Checks which host we're connected to (for troubleshooting);
 console.log("connected to " + host);
 
-socket.on("hello", msg => {
-    console.log("server said: " + msg);
+// Print out a notification from the server (for debuging)
+socket.on("notification", message => {
+    console.log(message);
 });
 
-socket.on("client id", cid => {
-    store.dispatch(setClientID(cid));
-});
+// Request to get all existing usernames in the database
+export const getUsernames = () => {
+    socket.emit("request all existing usernames");
 
-socket.on("get init board", cid => {
-    if (store.getState().user.clientID === cid) {
-        const newBoard = getNewBoard();
-        const newMines = store.getState().game.mines;
-        const newStatus = store.getState().game.status;
-        socket.emit("update pair board", newBoard);
-        socket.emit("update pair mines", newMines);
-        socket.emit("update pair status", newStatus);
-    }
-});
+    socket.on("all existing usernames", allUsernames => {
+        store.dispatch(getAllUsernames(allUsernames));
+    })
+}
 
-socket.on("all messages", msg => {
-    store.dispatch(setAllMessages(msg));
-});
+export const joinLobby = (username, password) => {
+    socket.emit("request to login", username, password);
 
-socket.on("set connected", () => {
-    store.dispatch(setConnected());
-});
+    socket.on("login response", response => {
+        store.dispatch(loginResponse(response));
+    });
+}
 
-socket.on("set pair board", board => {
-    console.log("client pair board");
-    store.dispatch(setGameBoard(board));
-});
+export const register = (username, password) => {
+    socket.emit("request to register", username, password);
 
-socket.on("set pair mines", mines => {
-    store.dispatch(setGameMines(mines));
-});
+    socket.on("register response", response => {
+        console.log("register", response.registerStatus)
+        store.dispatch(registerReponse(response));
+    })
+}
 
-socket.on("set pair status", status => {
-    store.dispatch(setGameStatus(status));
-});
 
-socket.on("set pair up", (p1, p2) => {
-    const cur = store.getState().user.clientID;
-    if (cur === p1) {
-        store.dispatch(setGamePair(p2));
-    } else if (cur === p2) {
-        store.dispatch(setGamePair(p1));
-    }
-});
 
+
+
+
+
+
+
+
+
+
+
+
+// socket.on("hello", msg => {
+//     console.log("server said: " + msg);
+// });
+
+// socket.on("client id", cid => {
+//     store.dispatch(setClientID(cid));
+// });
+
+// socket.on("get init board", cid => {
+//     if (store.getState().user.clientID === cid) {
+//         const newBoard = getNewBoard();
+//         const newMines = store.getState().game.mines;
+//         const newStatus = store.getState().game.status;
+//         socket.emit("update pair board", newBoard);
+//         socket.emit("update pair mines", newMines);
+//         socket.emit("update pair status", newStatus);
+//     }
+// });
+
+// socket.on("all messages", msg => {
+//     store.dispatch(setAllMessages(msg));
+// });
+
+// socket.on("set connected", () => {
+//     store.dispatch(setConnected());
+// });
+
+// socket.on("set pair board", board => {
+//     console.log("client pair board");
+//     store.dispatch(setGameBoard(board));
+// });
+
+// socket.on("set pair mines", mines => {
+//     store.dispatch(setGameMines(mines));
+// });
+
+// socket.on("set pair status", status => {
+//     store.dispatch(setGameStatus(status));
+// });
+
+// socket.on("set pair up", (p1, p2) => {
+//     const cur = store.getState().user.clientID;
+//     if (cur === p1) {
+//         store.dispatch(setGamePair(p2));
+//     } else if (cur === p2) {
+//         store.dispatch(setGamePair(p1));
+//     }
+// });
+
+// /** Login to Server **/
 export const joinChat = username => {
     socket.emit("join", username);
 };

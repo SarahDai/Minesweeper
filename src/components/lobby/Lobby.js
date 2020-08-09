@@ -1,7 +1,7 @@
 import React from "react";
 
-const Lobby = () => {
+const Lobby = () => 
+    <p>Test Lobby</p>
 
-}
 
 export default Lobby;

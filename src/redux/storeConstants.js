@@ -1,4 +1,5 @@
 export const LOGIN_STATE = {
+    LOGIN_REQUESTED: "login requested",
     LOGGED_IN: "logged in",
     LOGGED_OUT: "logged out",
     LOGGED_NON_EXIST_USER_FAILURE: "logged non exist user failure",
@@ -7,10 +8,11 @@ export const LOGIN_STATE = {
 };
 
 export const SIGN_UP_STATE = {
+    SIGNED_UP_CLOSED: "signed up closed",
     SIGNED_UP_SUCCESS: "signed up success",
     SIGNED_UP_ADD_FAILURE: "signed up add failure",
     SIGNED_UP_EXIST_FAILURE: "signed up exist failure",
-    SIGNED_UP_START: "signed up start",
+    SIGNED_UP_REQUESTED: "signed up requested",
     NETWORK_ERROR: "network error"
 };
 
@@ -24,6 +26,7 @@ export const PAGE = {
     LOGIN: "log in",
     SIGN_UP: "sign up",
     INVALID: "invalid",
+    LOBBY: "lobby",
     GAME: "game"
 };
 

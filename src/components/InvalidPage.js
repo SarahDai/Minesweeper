@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Col, Row, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { setPage } from "../redux/actions";
+import { setPage } from "../redux/actions/connectActions";
 import { PAGE } from "../redux/storeConstants";
 
 

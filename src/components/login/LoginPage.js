@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Card, Col, Row, Button, Alert } from "react-bootstrap";
-import { Label, Input } from "reactstrap";
+import { Card, Button } from "react-bootstrap";
+import { Label, Input, Row, Col, Alert } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { 
-   validateUser, loginNetworkError, exist, 
-   loginNonExistUserFailure, logout, setPage
-} from "../redux/actions";
-import { LOGIN_STATE, PAGE } from "../redux/storeConstants";
-import { ALERT_MSG_TIME, EMPTY } from "../views/App";
+import { requestLogin, setPage } from "../../redux/actions/connectActions";
+import { LOGIN_STATE, PAGE } from "../../redux/storeConstants";
+import { ALERT_MSG_TIME, EMPTY } from "../../views/App";
+import Loading from "../Loading";
 
 let beginEdit = false;
 
@@ -15,19 +13,11 @@ const Login = () => {
    const [username, setUsername] = useState(EMPTY);
    const [password, setPassword] = useState(EMPTY);
    const [showAlert, setShowAlert] = useState(false);
-   const loginState = useSelector(state => state.login);
+
+   const loginState = useSelector(state => state.user.loginStatus);
    const dispatch = useDispatch();
 
-   let network = navigator.onLine;
    let canLogin = username.length > 0 && password.length > 0;
-
-   useEffect(() => {
-      if (network) {
-         dispatch(logout());
-      } else {
-         dispatch(loginNetworkError());
-      }
-   }, [network, dispatch]);
 
    const clearForm = () => {
       beginEdit = false;
@@ -37,18 +27,18 @@ const Login = () => {
 
    const handleSubmit = () => {
       setShowAlert(true);
-      setInterval(()=>setShowAlert(false), ALERT_MSG_TIME);
       clearForm();
    }
 
-   const handleLogin = () => {
-      if (loginState !== LOGIN_STATE.NETWORK_ERROR) {
-         if (!exist(username)) {
-            dispatch(loginNonExistUserFailure());
-         } else {
-            dispatch(validateUser(username, password));
-         }
+   useEffect(() => {
+      if (showAlert) {
+         const timer = setTimeout(() => setShowAlert(false), ALERT_MSG_TIME);
+         return () => clearTimeout(timer);
       }
+   }, [showAlert])
+
+   const handleLogin = () => {
+      dispatch(requestLogin(username, password))
       handleSubmit();
    }
 
@@ -63,13 +53,13 @@ const Login = () => {
       if (!beginEdit) {
          if (loginState === LOGIN_STATE.NETWORK_ERROR) {
             return (
-               <Alert variant="danger">
+               <Alert color="danger">
                   Unable to connect to the server! Please check your internet connection and try again.
                </Alert>
             );
          } else if (loginState === LOGIN_STATE.LOGGED_NON_EXIST_USER_FAILURE) {
             return (
-               <Alert variant="danger">
+               <Alert color="danger">
                   This user has not been signed up, please sign up with it or login with another user.
                </Alert>
             );
@@ -82,7 +72,7 @@ const Login = () => {
          } else if (loginState === LOGIN_STATE.LOGGED_IN) {
             return (
                <Alert variant="success">
-                  Successfully logged in!.
+                  Successfully logged in!
                </Alert>
             );
          }
@@ -90,32 +80,41 @@ const Login = () => {
    }
 
    return (
-      <Card 
-         className="text-light margin-auto margin-top-5 login-bg-color">
-         <Card.Header className="text-center display-3 text-light">
-            Login
+      <>
+      <Card className="margin-top-4 login-bg-color">
+         <Card.Header className="text-center">
+            <h2>Login</h2>
          </Card.Header>
          <Card.Body>
+         {
+            showAlert &&
+            <Row>
+               <Col xl={4} lg={3} sm={0}/>
+               <Col xl={6} lg={9} sm={12}>
+                  {handleAlert()}
+               </Col>
+               <Col xl={2} />
+            </Row>
+         }
          <br/>
          <Row>
             <Col xl={1} sm={0}/>
             <Col xl={3} lg={3} sm={12}>
                <Label for="username"
-                      className="login-font-size text-light">
+                        className="login-font-size">
                   Username:
                </Label>
-               
             </Col>
             <Col xl={6} lg={9} sm={12}>
                <Input type="text" id="username"
-                      name="username" value={username}
-                      onKeyUp={e => handleKeyPress(e)}
-                      aria-label="input-username"
-                      className="login-font-size"
-                      onChange={e => {
-                         beginEdit = true;
-                         setUsername(e.target.value);
-                      }}
+                        name="username" value={username}
+                        onKeyUp={e => handleKeyPress(e)}
+                        aria-label="input-username"
+                        className="login-font-size"
+                        onChange={e => {
+                           beginEdit = true;
+                           setUsername(e.target.value);
+                        }}
                />
             </Col>
          </Row>
@@ -124,35 +123,24 @@ const Login = () => {
             <Col xl={1} sm={0}/>
             <Col xl={3} lg={3} sm={12}>
                <Label for="password"
-                      className="login-font-size text-light">
+                        className="login-font-size">
                   Password:
                </Label>
             </Col>
             <Col xl={6} lg={9} sm={12}>
                <Input type="password" id="password"
-                      name="password" value={password}
-                      onKeyUp={e => handleKeyPress(e)}
-                      aria-label="input-password"
-                      className="login-font-size"
-                      onChange={e => {
-                         beginEdit = true;
-                         setPassword(e.target.value);
-                      }}
+                        name="password" value={password}
+                        onKeyUp={e => handleKeyPress(e)}
+                        aria-label="input-password"
+                        className="login-font-size"
+                        onChange={e => {
+                           beginEdit = true;
+                           setPassword(e.target.value);
+                        }}
                />
             </Col>
          </Row>
          <br />
-         {
-            showAlert?
-            <Row>
-               <Col xl={4} lg={3} sm={0}/>
-               <Col xl={6} lg={9} sm={12}>
-                  {handleAlert()}
-               </Col>
-               <Col xl={2} />
-            </Row>
-            :""
-         }
          </Card.Body>
          <Card.Footer>
          <Row>
@@ -176,6 +164,11 @@ const Login = () => {
          </Row>
          </Card.Footer>   
       </Card>
+      {
+         loginState === LOGIN_STATE.LOGIN_REQUESTED &&
+         <Loading />
+      }
+      </>
    );
 }
 

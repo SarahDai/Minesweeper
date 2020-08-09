@@ -1,38 +1,37 @@
-import React, { useEffect } from 'react';
-import { Container } from 'reactstrap';
-import { useDispatch, useSelector } from 'react-redux';
-// import { getUserList } from "../redux/actions";
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { PAGE } from "../redux/storeConstants";
-import LoginPage from "../components/LoginPage";
-import SignUpPage from "../components/SignUpPage";
+import LoginPage from "../components/login/LoginPage";
+import SignUpPage from "../components/login/SignUpPage";
 import InvalidPage from "../components/InvalidPage";
-import Game from "../components/Game";
+import Game from "../components/game/Game";
+import Lobby from "../components/lobby/Lobby";
+import Header from "../components/Header";
 
 const App = () => {
   const page = useSelector(state => state.user.page);
-  const dispatch = useDispatch();
-   
-  useEffect(() => {
-    // dispatch(getUserList());
-  }, [dispatch, page]);
 
-  const getPage = () => {
-    if (page === PAGE.LOGIN) {
-      return <LoginPage/>;
-    } else if (page === PAGE.SIGN_UP) {
-      return <SignUpPage/>;
-    } else if (page === PAGE.GAME) {
-      return <Game/>
-    } else {
-      return <InvalidPage/>
+  const display = () => {
+    switch(page) {
+      case PAGE.SIGN_UP:
+        return <SignUpPage />;
+      case PAGE.LOBBY:
+        return <Lobby />;
+      case PAGE.GAME:
+        return <Game />;
+      case PAGE.INVALID:
+        return <InvalidPage />;
+      default:
+      case PAGE.LOGIN:
+        return <LoginPage />;
     }
-  };
-  
+  }
+
   return (
-    <Container fluid>  
-    {/* {getPage()} */}
-    <LoginPage />
-    </Container>
+    <>
+      <Header />
+      {display()}
+    </>
   );
 };
 

@@ -4,7 +4,23 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const path = require("path");
+const firebase = require("firebase/app");
+require("firebase/firestore");
 const { isPrimitive } = require("util");
+
+//Initialize firebase 
+const firebaseConfig = {
+    apiKey: "AIzaSyAItQWqUPCI47I9uoF9t4AjQ3BTyohLkUk",
+    authDomain: "final-project-c335d.firebaseapp.com",
+    databaseURL: "https://final-project-c335d.firebaseio.com",
+    projectId: "final-project-c335d",
+    storageBucket: "final-project-c335d.appspot.com",
+    messagingSenderId: "497781284991",
+    appId: "1:497781284991:web:802ac0c6ef5e64140c1f4a",
+    measurementId: "G-BK2GDML896"
+ }
+ 
+ firebase.initializeApp(firebaseConfig);
 
 // Choose a port, default is 4002 (could be almost anything)
 const PORT = process.env.PORT || 4002;
@@ -26,6 +42,35 @@ app.get('*', (req, res) => {
 // Listen for client connections
 server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
+const database = firebase.firestore();
+
+const LOGIN_STATE = {
+    LOGIN_REQUESTED: "login requested",
+    LOGGED_IN: "logged in",
+    LOGGED_OUT: "logged out",
+    LOGGED_NON_EXIST_USER_FAILURE: "logged non exist user failure",
+    LOGGED_INVALID_PASSWORD_FAILURE: "logged invalid password failure",
+    NETWORK_ERROR: "network error"
+};
+
+const PAGE = {
+    LOGIN: "log in",
+    SIGN_UP: "sign up",
+    INVALID: "invalid",
+    LOBBY: "lobby",
+    GAME: "game"
+};
+
+const SIGN_UP_STATE = {
+    SIGNED_UP_CLOSED: "signed up closed",
+    SIGNED_UP_SUCCESS: "signed up success",
+    SIGNED_UP_ADD_FAILURE: "signed up add failure",
+    SIGNED_UP_EXIST_FAILURE: "signed up exist failure",
+    SIGNED_UP_REQUESTED: "signed up requested",
+    NETWORK_ERROR: "network error"
+};
+
+
 let messages = [];
 let clients = {};
 let pair_book = {};
@@ -33,74 +78,229 @@ let board_pair = {};
 let mines_pair = {};
 let client_list = [];
 
-io.on("connection", client => {
-    // Send messages to and receive messages from the client in here
-    if (!client_list.includes(client.id)) {
-        client_list.push(client.id);
-    }
+let onlinePlayers = {};
 
-    client.emit("hello", "hello client");
-    client.emit("client id", client.id);
+//Validate the user's credentials: username && password
+const validateUser = async (username, password, clientId) => {
+    let response = {};
+    const users = database.collection("user");
 
-    if (client_list.length > 0 &&
-        client_list.length % 2 == 0 &&
-        !pair_book[client.id]) {
-        const length = client_list.length;
-        const p2 = client_list[length - 2];
-        const p1 = client_list[length - 1];
-        pair_book[p2] = p1;
-        pair_book[p1] = p2;    
-        client.emit("set pair up", p1, p2);
-        io.to(p2).emit("set pair up", p1, p2);
-        client.emit("get init board", p1);
-    }
+    try {
+        const querySnapshot = await users.where("username", "==", username).get();
 
-    client.on("update pair board", board => {
-        console.log("update board");
-        const p1 = client.id;
-        const p2 = pair_book[p1];
-        board_pair[p1] = board;
-        board_pair[p2] = board;
-        client.emit("set pair board", board);
-        io.to(p2).emit("set pair board", board);
-    });
-
-    client.on("update pair mines", mines => {
-        console.log("update mines");
-        const p1 = client.id;
-        const p2 = pair_book[p1];
-        mines_pair[p1] = mines;
-        mines_pair[p2] = mines;
-        client.emit("set pair mines", mines);
-        io.to(p2).emit("set pair mines", mines);
-    });
-
-    client.on("update pair status", status => {
-        console.log("update pair status");
-        const p1 = client.id;
-        const p2 = pair_book[p1];
-        io.to(p2).emit("set pair status", status);
-    });
-
-    client.on("join", username => {
-        io.sockets.emit("set connected");
-        clients[client.id] = username;
-        messages.push(username + " has joined the chat");
-        io.sockets.emit("all messages", messages);
-    });
-
-    client.on("new message", msg => {
-        messages.push(clients[client.id] + ": " + msg)
-        io.sockets.emit("all messages", messages);
-    });
-
-    client.on("disconnect", () => {
-        if (clients.hasOwnProperty(client.id)) {
-            const username = clients[client.id];
-            messages.push(username + " has left the chat");
-            io.sockets.emit("all messages", messages);
+        // Username existing in the system
+        if (querySnapshot.size === 1) {
+            const doc = querySnapshot.docs[0];
+            if (doc.data().password === password) {
+                const user = {
+                    id: doc.id,
+                    username: doc.data().username,
+                    status: doc.data().gamingStatus,
+                    win: doc.data().win,
+                    lose: doc.data().lose,
+                    onboardingComplete: doc.data().onboardingComplete,
+                    gamingStatus: doc.data().gamingStatus
+                }
+                addOnlinePlayer(user, clientId);
+                return {
+                    user: "user",
+                    loginStatus: LOGIN_STATE.LOGGED_IN,
+                    page: PAGE.LOBBY
+                }
+            } else {
+                return {
+                    user: {},
+                    loginStatus: LOGIN_STATE.LOGGED_INVALID_PASSWORD_FAILURE,
+                    page: PAGE.LOGIN
+                }
+            }
+        } else {  //Username not existing in the system
+            return {
+                user: {},
+                loginStatus: LOGIN_STATE.LOGGED_NON_EXIST_USER_FAILURE,
+                page: PAGE.LOGIN
+            }
         }
-    });
+    } catch (error) {
+        console.log("LOGIN NETWORK ERROR: " + error);
+        return {
+            user: {},
+            loginStatus: LOGIN_STATE.NETWORK_ERROR,
+            page: PAGE.LOGIN
+        }
+    }
+}
+
+//Get all usernames in the database system
+const getAllUsernames = async () => {
+    const users = database.collection("user");
+    let allUsernames = [];
+
+    try {
+        const querySnapshot = await users.get();
+        if (querySnapshot.size > 0) {
+            querySnapshot.forEach(doc => {
+                allUsernames.push(doc.data().username)
+            });
+        } else {
+            console.log("No registed users in the system yet.")
+        }
+        return allUsernames;
+    } catch (error) {
+        console.log("GET USERNAMES NETWORK ERROR: " + error);
+    } 
+}
+
+//Add newly registered user to the database
+const addNewUser = async (username, password, clientId) => {
+    const users = database.collection("user");
+
+    try {
+        const result = await users.add({
+            username: username,
+            password: password,
+            onboardingComplete: false,
+            win: (Number)(0),
+            lose: (Number)(0),
+            gamingStatus: "available"
+        })
+
+        let newUser = {
+            id: result.id,
+            username: username,
+            status: "available",
+            win: (Number)(0),
+            lose: (Number)(0),
+            onboardingComplete: false
+        }
+        // addOnlinePlayer(newUser, clientId);
+        return {
+            // user: newUser,
+            // loginStatus: LOGIN_STATE.LOGGED_IN,
+            registerStatus: SIGN_UP_STATE.SIGNED_UP_SUCCESS,
+            // page: PAGE.LOBBY
+        }
+    } catch (error) {
+        console.log("ADD NEW USER ERROR: " + error);
+        return {
+            // user: {},
+            registerStatus: SIGN_UP_STATE.NETWORK_ERROR,
+            // loginStatus: LOGIN_STATE.LOGGED_OUT,
+            // page: PAGE.SIGN_UP
+        }
+    }
+} 
+
+//Add a client to the online players object
+const addOnlinePlayer = (user, clientId) => {
+    onlinePlayers[clientId] = user;
+    console.log(onlinePlayers);
+    io.sockets.emit("online players update", onlinePlayers);
+}
+
+io.on("connection", client => {
+    // Emit a message to all clients (io.socketS)
+    io.sockets.emit("notification", client.id + " has connected to the server");
+
+    // When a client requests login to join the Lobby
+    client.on("request to login", (username, password) => {
+        // Emit a message to just this client
+        validateUser(username, password, client.id).then(
+            response => client.emit("login response", response)
+        )
+    })
+
+    //When a client requests all existing usernames in the system
+    client.on("request all existing usernames", () => {
+        getAllUsernames().then(
+            data => client.emit("all existing usernames", data)
+        )
+    })
+
+    //When a client requests to register
+    client.on("request to register", (username, password) => {
+        addNewUser(username, password, client.id).then(
+            response => client.emit("register response", response)
+        )
+    })
+
+
+
+
+
+
+
+
+
+
+
+    // // Send messages to and receive messages from the client in here
+    // if (!client_list.includes(client.id)) {
+    //     client_list.push(client.id);
+    // }
+
+    // client.emit("hello", "hello client");
+    // client.emit("client id", client.id);
+
+    // if (client_list.length > 0 &&
+    //     client_list.length % 2 == 0 &&
+    //     !pair_book[client.id]) {
+    //     const length = client_list.length;
+    //     const p2 = client_list[length - 2];
+    //     const p1 = client_list[length - 1];
+    //     pair_book[p2] = p1;
+    //     pair_book[p1] = p2;    
+    //     client.emit("set pair up", p1, p2);
+    //     io.to(p2).emit("set pair up", p1, p2);
+    //     client.emit("get init board", p1);
+    // }
+
+    // client.on("update pair board", board => {
+    //     console.log("update board");
+    //     const p1 = client.id;
+    //     const p2 = pair_book[p1];
+    //     board_pair[p1] = board;
+    //     board_pair[p2] = board;
+    //     client.emit("set pair board", board);
+    //     io.to(p2).emit("set pair board", board);
+    // });
+
+    // client.on("update pair mines", mines => {
+    //     console.log("update mines");
+    //     const p1 = client.id;
+    //     const p2 = pair_book[p1];
+    //     mines_pair[p1] = mines;
+    //     mines_pair[p2] = mines;
+    //     client.emit("set pair mines", mines);
+    //     io.to(p2).emit("set pair mines", mines);
+    // });
+
+    // client.on("update pair status", status => {
+    //     console.log("update pair status");
+    //     const p1 = client.id;
+    //     const p2 = pair_book[p1];
+    //     io.to(p2).emit("set pair status", status);
+    // });
+
+    // client.on("join", username => {
+    //     io.sockets.emit("set connected");
+    //     clients[client.id] = username;
+    //     messages.push(username + " has joined the chat");
+    //     io.sockets.emit("all messages", messages);
+    // });
+
+    // client.on("new message", msg => {
+    //     messages.push(clients[client.id] + ": " + msg)
+    //     io.sockets.emit("all messages", messages);
+    // });
+
+    // client.on("disconnect", () => {
+    //     if (clients.hasOwnProperty(client.id)) {
+    //         const username = clients[client.id];
+    //         messages.push(username + " has left the chat");
+    //         io.sockets.emit("all messages", messages);
+    //     }
+    // });
 
     /**
      * // Send to this client only

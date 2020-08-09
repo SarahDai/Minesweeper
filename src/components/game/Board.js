@@ -1,8 +1,8 @@
 import React, {  } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { GAME } from "../redux/storeConstants";
+import { GAME } from "../../redux/storeConstants";
 import Cell from "./Cell";
-import { setGameStatus, sendNewMines, sendNewBoard, sendPairStatus } from "../redux/actions";
+import { setGameStatus, sendNewMines, sendNewBoard, sendPairStatus } from "../../redux/actions";
 
 export const initBoard = (width, height, mines) => {
    let newBoard = createEmptyArray(width, height);
