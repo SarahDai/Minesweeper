@@ -1,6 +1,8 @@
 import store from "./redux/store";
 import { setAllMessages, setConnected, getNewBoard, setClientID, setGameBoard, setGamePair, setGameMines, setGameStatus, validateUser } from "./redux/actions";
-import { loginResponse, registerReponse, getAllUsernames } from "./redux/actions/connectActions";
+import { loginResponse, registerReponse, getAllUsernames, waitForResponse,
+    receivedInvitation, updatePlayers, acceptedInvitation, declinedInvitation 
+     } from "./redux/actions/connectActions";
 
 /** CLIENT CONFIGURATION - connect to the server */
 const socketIOClient = require("socket.io-client");
@@ -27,6 +29,10 @@ export const getUsernames = () => {
     })
 }
 
+socket.on("online players update", players => {
+    store.dispatch(updatePlayers(players))
+})
+
 export const joinLobby = (username, password) => {
     socket.emit("request to login", username, password);
 
@@ -43,6 +49,35 @@ export const register = (username, password) => {
         store.dispatch(registerReponse(response));
     })
 }
+
+export const sendInvitationToServer = (invitationFrom, invitationTo) => {
+    socket.emit("send game invitation", invitationFrom, invitationTo);
+
+    socket.on("successfully sent invitation to receiver", () => {
+        store.dispatch(waitForResponse());
+    })
+
+    socket.on("invitation accepted", () => {
+        store.dispatch(acceptedInvitation())
+    })
+
+    socket.on("invitation declined", () => {
+        store.dispatch(declinedInvitation())
+    })
+}
+
+socket.on("receive invitation", invitationFrom => {
+    store.dispatch(receivedInvitation(invitationFrom))
+})
+
+export const acceptInvitationToServer = invitationFrom => {
+    socket.emit("accept invitation", invitationFrom);
+}
+
+export const declineInvitationToServer = invitationFrom => {
+    socket.emit("decline invitation", invitationFrom)
+}
+
 
 
 

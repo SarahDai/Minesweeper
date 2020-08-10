@@ -38,5 +38,14 @@ export const GAME = {
 
 export const PLAYER_STATUS = {
     AVAILABLE: "Available",
+    PENDING: "Pending",
     IN_GAME: "In a game",
+}
+
+export const INVITATION_STATUS = {
+    CONNECT_TO_SERVER: "Connect to server",
+    WAIT_FOR_RESPONSE: "Wait for response",
+    RECEIVE_INVITATION: "Receive invitation",
+    INVITATION_ACCEPTED: "Invitation accepted",
+    INVITATION_DECLINED: "Invitation declined"
 }

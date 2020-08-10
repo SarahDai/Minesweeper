@@ -25,6 +25,10 @@ h2 {
    display: flex;
    flex-direction: column;
 } */
+.bold {
+   font-weight: bold;
+}
+
 .homepage-header {
    padding-top: 2em;
    padding-bottom: 1em;

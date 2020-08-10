@@ -70,6 +70,12 @@ const SIGN_UP_STATE = {
     NETWORK_ERROR: "network error"
 };
 
+const PLAYER_STATUS = {
+    AVAILABLE: "Available",
+    PENDING: "Pending",
+    IN_GAME: "In a game",
+}
+
 
 let messages = [];
 let clients = {};
@@ -82,7 +88,6 @@ let onlinePlayers = {};
 
 //Validate the user's credentials: username && password
 const validateUser = async (username, password, clientId) => {
-    let response = {};
     const users = database.collection("user");
 
     try {
@@ -93,7 +98,8 @@ const validateUser = async (username, password, clientId) => {
             const doc = querySnapshot.docs[0];
             if (doc.data().password === password) {
                 const user = {
-                    id: doc.id,
+                    id: clientId,
+                    docId: doc.id,
                     username: doc.data().username,
                     status: doc.data().gamingStatus,
                     win: doc.data().win,
@@ -101,9 +107,9 @@ const validateUser = async (username, password, clientId) => {
                     onboardingComplete: doc.data().onboardingComplete,
                     gamingStatus: doc.data().gamingStatus
                 }
-                addOnlinePlayer(user, clientId);
+                addOnlinePlayer(user, username);
                 return {
-                    user: "user",
+                    user: user,
                     loginStatus: LOGIN_STATE.LOGGED_IN,
                     page: PAGE.LOBBY
                 }
@@ -152,7 +158,7 @@ const getAllUsernames = async () => {
 }
 
 //Add newly registered user to the database
-const addNewUser = async (username, password, clientId) => {
+const addNewUser = async (username, password) => {
     const users = database.collection("user");
 
     try {
@@ -162,40 +168,48 @@ const addNewUser = async (username, password, clientId) => {
             onboardingComplete: false,
             win: (Number)(0),
             lose: (Number)(0),
-            gamingStatus: "available"
+            gamingStatus: PLAYER_STATUS.AVAILABLE
         })
-
-        let newUser = {
-            id: result.id,
-            username: username,
-            status: "available",
-            win: (Number)(0),
-            lose: (Number)(0),
-            onboardingComplete: false
-        }
-        // addOnlinePlayer(newUser, clientId);
         return {
-            // user: newUser,
-            // loginStatus: LOGIN_STATE.LOGGED_IN,
             registerStatus: SIGN_UP_STATE.SIGNED_UP_SUCCESS,
-            // page: PAGE.LOBBY
         }
     } catch (error) {
         console.log("ADD NEW USER ERROR: " + error);
         return {
-            // user: {},
             registerStatus: SIGN_UP_STATE.NETWORK_ERROR,
-            // loginStatus: LOGIN_STATE.LOGGED_OUT,
-            // page: PAGE.SIGN_UP
         }
     }
 } 
 
 //Add a client to the online players object
-const addOnlinePlayer = (user, clientId) => {
-    onlinePlayers[clientId] = user;
+const addOnlinePlayer = (user, username) => {
+    onlinePlayers[username] = user;
     console.log(onlinePlayers);
     io.sockets.emit("online players update", onlinePlayers);
+}
+
+//When an invitation is initialized, update two players gaming status to pending
+const pendingGamingStatus = async (requestFrom, requestTo) => {
+    const requestFromDocId = onlinePlayers[requestFrom].docId;
+    const requestToDocId = onlinePlayers[requestTo].docId;
+    const requestFromPlayer = database.collection("user").doc(requestFromDocId);
+    const requestToPlayer = database.collection("user").doc(requestToDocId);
+
+    try { 
+        const resultFrom = await requestFromPlayer.set({
+            gamingStatus: PLAYER_STATUS.PENDING
+        }, {merge: true});
+
+        const resultTo = await requestToPlayer.set({
+            gamingStatus: PLAYER_STATUS.PENDING
+        }, {merge: true});
+        onlinePlayers[requestFrom].status = PLAYER_STATUS.PENDING;
+        onlinePlayers[requestTo].status = PLAYER_STATUS.PENDING;
+        io.sockets.emit("online players update", onlinePlayers);
+
+    } catch (error) {
+        console.log("UPDATE STATUS ERROR: " + error)
+    }
 }
 
 io.on("connection", client => {
@@ -219,11 +233,33 @@ io.on("connection", client => {
 
     //When a client requests to register
     client.on("request to register", (username, password) => {
-        addNewUser(username, password, client.id).then(
+        addNewUser(username, password).then(
             response => client.emit("register response", response)
         )
     })
 
+    //When a client sends an invitation to another player
+    client.on("send game invitation", (invitationFrom, invitationTo) => {
+        pendingGamingStatus(invitationFrom, invitationTo).then(
+            () => {
+                const requestToClientId = onlinePlayers[invitationTo].id;
+                io.to(requestToClientId).emit("receive invitation", invitationFrom);
+                client.emit("successfully sent invitation to receiver");
+            }
+        )
+    })
+
+    //When a client accept an invitation from another player
+    client.on("accept invitation", invitationFrom => {
+        const requestFromClientId = onlinePlayers[invitationFrom].id;
+        io.to(requestFromClientId).emit("invitation accepted")
+    })
+
+    //When a client declines an invitation from another player
+    client.on("decline invitation", invitationFrom => {
+        const requestFromClientId = onlinePlayers[invitationFrom].id;
+        io.to(requestFromClientId).emit("invitation declined")
+    })
 
 
 

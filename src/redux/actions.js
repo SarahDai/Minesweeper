@@ -10,7 +10,7 @@ import store from "./store";
 import { STATUS, SIGN_UP_STATE } from "./storeConstants";
 import firebase from "../fbConfig";
 import { joinChat, updateBoard, updateMines, updatePairStatus } from "../client";
-import { initBoard } from "../components/Board";
+import { initBoard } from "../components/game/Board";
 
 /** Login **/
 export const loginSuccess = username => {

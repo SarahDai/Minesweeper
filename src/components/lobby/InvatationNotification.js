@@ -1,22 +1,49 @@
 import React from "react";
-import { Modal, ModalHeader, ModalFooter, Button } from "reactstrap";
+import { Modal, ModalHeader, ModalFooter, Button, ModalBody } from "reactstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { INVITATION_STATUS } from "../../redux/storeConstants";
+import { acceptInvitation, declineInvitation} from "../../redux/actions/connectActions";
 
 const InvatationNotification = () => {
-    const acceptInvitation = () => {
+    const self = useSelector(state => state.user.user.username);
+    const invitationTo = useSelector(state => state.invitation.invitationTo);
+    const invitationFrom = useSelector(state => state.invitation.invitationFrom);
+    const invitationStatus = useSelector(state => state.invitation.status);
 
+    const dispatch = useDispatch();
+
+    const accept = () => {
+        dispatch(acceptInvitation(invitationFrom));
     }
 
-    const declineInvitation = () => {
+    const decline = () => {
+        dispatch(declineInvitation(invitationFrom));
+    }
 
+    const displayContent = () => {
+        switch (invitationStatus) {
+            case INVITATION_STATUS.RECEIVE_INVITATION:
+                return <ModalBody>You received an invitation from {invitationFrom}.</ModalBody>
+            case INVITATION_STATUS.INVITATION_ACCEPTED:
+                return <ModalBody>You accepted {invitationFrom}'s invitation. <br />Head you to the game. Enjoy!</ModalBody>
+            case INVITATION_STATUS.INVITATION_DECLINED:
+                return <ModalBody>You declined {invitationFrom}'s invitation. Head you to the lobby to find your opponent.</ModalBody>
+            default:
+                return "";
+        }
     }
 
     return (
-        <Modal centered>
-            <ModalHeader>{requestFrom} sent you a new Minesweeper game inviatation.</ModalHeader>
-            <ModalFooter>
-                <Button color="success" onClick={() => acceptInvitation()}>Accept</Button>{' '}
-                <Button color="secondary" onClick={() => declineInvitation()}>Decline</Button>
-            </ModalFooter>
+        <Modal centered isOpen={self === invitationTo}>
+            <ModalHeader>New Invitation</ModalHeader>
+            {displayContent()}
+            {
+                invitationStatus === INVITATION_STATUS.RECEIVE_INVITATION &&
+                <ModalFooter>
+                    <Button color="success" onClick={() => accept()}>Accept</Button>{' '}
+                    <Button color="secondary" onClick={() => decline()}>Decline</Button>
+                </ModalFooter>
+            }
         </Modal>
     )
 

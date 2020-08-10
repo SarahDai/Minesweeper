@@ -1,5 +1,7 @@
-import { REQUEST_TO_LOGIN, LOGIN_RESPONSE, REQUEST_TO_REGISTER, REGISTER_RESPONSE, GET_ALL_USERNAMES, SET_PAGE } from "../actionConstants";
-import { joinLobby, register, getUsernames } from "../../client";
+import { REQUEST_TO_LOGIN, LOGIN_RESPONSE, REQUEST_TO_REGISTER, REGISTER_RESPONSE, GET_ALL_USERNAMES, SET_PAGE, INVITATION_SEND_TO_SERVER, WAIT_FOR_RESPONSE, RECEIVE_INVITATION, UPDATE_PLAYERS, INVITATION_ACCEPTED, INVITATION_DECLINED } from "../actionConstants";
+import { joinLobby, register, getUsernames, sendInvitationToServer,
+    acceptInvitationToServer, declineInvitationToServer } from "../../client";
+import store from "../store";
 
 const requestedLogin = () => ({
     type: REQUEST_TO_LOGIN
@@ -35,10 +37,7 @@ export const requestRegister = (username, password) => {
 export const registerReponse = response => ({
     type: REGISTER_RESPONSE,
     payload: {
-        // user: response.user,
         registerStatus: response.registerStatus,
-        // page: response.page,
-        // loginStatus: response.loginStatus
     }
 })
 
@@ -55,10 +54,73 @@ export const getAllUsernames = allUsernames => ({
     }
 })
 
+export const updatePlayers = players => ({
+    type: UPDATE_PLAYERS,
+    payload: {
+        players
+    }
+})
+
 export const setPage = page => ({
     type: SET_PAGE,
     payload: {
         page
     }
 })
+
+const requestedInvitation = (invitationFrom, invitationTo) => ({
+    type: INVITATION_SEND_TO_SERVER,
+    payload: {
+        invitationFrom,
+        invitationTo
+    }
+})
+
+export const sendInvitation = (invitationFrom, invitationTo) => {
+    return dispatch => {
+        dispatch(requestedInvitation(invitationFrom, invitationTo));
+        sendInvitationToServer(invitationFrom, invitationTo);
+    }
+}
+
+export const waitForResponse = () => ({
+    type: WAIT_FOR_RESPONSE
+})
+
+export const receivedInvitation = invitationFrom => {
+    const self = store.getState().user.user.username;
+    return ({
+        type: RECEIVE_INVITATION,
+        payload: {
+            invitationFrom: invitationFrom,
+            invitationTo: self
+        }
+    })
+}
+
+export const acceptInvitation = invitationFrom => {
+    return dispatch => {
+        dispatch(acceptedInvitation());
+        acceptInvitationToServer(invitationFrom);
+    }
+}
+
+export const declineInvitation = invitationFrom => {
+    return dispatch => {
+        dispatch(declinedInvitation());
+        declineInvitationToServer(invitationFrom);
+    }
+}
+
+export const acceptedInvitation = () => ({
+    type: INVITATION_ACCEPTED
+})
+
+export const declinedInvitation = () => ({
+    type: INVITATION_DECLINED
+})
+
+
+
+
 

@@ -12,17 +12,18 @@ const OnlinePlayers = () => {
                 <thead>
                     <tr>
                         <th>Player</th>
-                        <th>Status</th>
                         <th>Win</th>
                         <th>Lose</th>
+                        <th>Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
-                        onlinePlayers.map((player, index) => {
+                        Object.keys(onlinePlayers).map((player, index) => 
                             <Player key={`player-${index}`} 
-                                    player={player} />
-                        })
+                                    player={onlinePlayers[player]} />
+                        )
                     }
                 </tbody>
             </Table>
