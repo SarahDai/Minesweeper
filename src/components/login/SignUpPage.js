@@ -181,18 +181,18 @@ const SignUpPage = () => {
          <Row>
             <Col lg={2} sm={0}/>
             <Col lg={3} sm={6}>
-               <Button disabled={!canSignUp}
-                  className="login-button-margin login-font-size" block
-                  variant="light" onClick={()=>handleSignUp()}>
-                  Sign Up
-               </Button>
-            </Col>
-            <Col lg={2} />
-            <Col lg={3} sm={6}>
                <Button 
                   className="login-button-margin login-font-size" block
                   variant="light" onClick={()=>dispatch(setPage(PAGE.LOGIN))}>
                   Login
+               </Button>
+            </Col>
+            <Col lg={2} />
+            <Col lg={3} sm={6}>
+               <Button disabled={!canSignUp}
+                  className="login-button-margin login-font-size" block
+                  variant="light" onClick={()=>handleSignUp()}>
+                  Sign Up
                </Button>
             </Col>
             <Col lg={2} sm={0}/>

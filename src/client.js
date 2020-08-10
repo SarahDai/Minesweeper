@@ -2,7 +2,7 @@ import store from "./redux/store";
 import { setAllMessages, setConnected, getNewBoard, setClientID, setGameBoard, setGamePair, setGameMines, setGameStatus, validateUser } from "./redux/actions";
 import { loginResponse, registerReponse, getAllUsernames, waitForResponse,
     receivedInvitation, updatePlayers, acceptedInvitation, declinedInvitation,
-    setPage, closedInvitation 
+    setPage, closedInvitation, loggedOut, updatedOnboardingStatus 
      } from "./redux/actions/connectActions";
 import { PAGE } from "../src/redux/storeConstants";
 
@@ -44,6 +44,23 @@ export const joinLobby = (username, password) => {
     socket.on("login response", response => {
         store.dispatch(loginResponse(response));
     });
+}
+
+// Request to logout 
+export const setLogoutToServer = () => {
+    socket.emit("logout");
+
+    socket.on("receive logout request", () => {
+        store.dispatch(loggedOut());
+    })
+}
+
+export const setOnboardingToServer = (username, status) => {
+    socket.emit("update onboarding status", username, status);
+
+    socket.on("updated onboarding status", () => {
+        store.dispatch(updatedOnboardingStatus(status));
+    })
 }
 
 // Request to register with valid username-pwd
@@ -147,7 +164,6 @@ export const updateBoard = board => {
     socket.emit("update pair board", board);
 };
 
-
 // Request to update pair player's mine locations
 export const updateMines = mines => {
     socket.emit("update pair mines", mines);
@@ -177,32 +193,3 @@ export const newMessage = msg => {
 // socket.on("client id", cid => {
 //     store.dispatch(setClientID(cid));
 // });
-
-
-// /** Login to Server **/
-export const joinChat = username => {
-    socket.emit("join", username);
-};
-
-
-
-/**
- * Send and receive messages
- * 
- * // Emit a message and wait for a reponse. Call this in an async action.
- * export const myFunction = callbackFunc => {
- *    socket.emit("message for the server", data);
- *    
- *    socket.on("message from the server", result => {
- *       callbackFunc(result);
- *    })
- * 
- * }
- * 
- * // Listen for a particular message
- * socket.on("message received", msg => {
- *    //do something
- * })
- */
-
-

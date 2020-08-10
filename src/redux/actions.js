@@ -9,7 +9,7 @@ import {
 import store from "./store";
 import { STATUS, SIGN_UP_STATE } from "./storeConstants";
 import firebase from "../fbConfig";
-import { joinChat, updateBoard, updateMines, updatePairStatus } from "../client";
+import { updateBoard, updateMines, updatePairStatus } from "../client";
 import { initBoard } from "../components/game/Board";
 
 /** Login **/
@@ -200,9 +200,9 @@ export const setConnected = () => ({
     type: SET_CONNECTED
 });
 
-export const sendConnected = username => (
-    dispatch => joinChat(username)
-);
+// export const sendConnected = username => (
+//     dispatch => joinChat(username)
+// );
 
 export const setClientID = cid => ({
     type: SET_CLIENT_ID,

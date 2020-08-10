@@ -146,18 +146,18 @@ const Login = () => {
          <Row>
             <Col lg={2} sm={0}/>
             <Col lg={3} sm={6}>
-               <Button 
-                  className="login-button-margin login-font-size" block
-                  variant="light" onClick={()=>dispatch(setPage(PAGE.SIGN_UP))}>
-                  Sign Up
-               </Button>
-            </Col>
-            <Col lg={2} />
-            <Col lg={3} sm={6}>
                <Button disabled={!canLogin}
                   className="login-button-margin login-font-size" block
                   variant="light" onClick={(e)=>handleLogin(e)}>
                   Login
+               </Button>
+            </Col>
+            <Col lg={2} />
+            <Col lg={3} sm={6}>
+               <Button 
+                  className="login-button-margin login-font-size" block
+                  variant="light" onClick={()=>dispatch(setPage(PAGE.SIGN_UP))}>
+                  Sign Up
                </Button>
             </Col>
             <Col lg={2} sm={0}/>

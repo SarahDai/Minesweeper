@@ -1,10 +1,11 @@
 import { REQUEST_TO_LOGIN, LOGIN_RESPONSE, REQUEST_TO_REGISTER, REGISTER_RESPONSE, 
     GET_ALL_USERNAMES, SET_PAGE, INVITATION_SEND_TO_SERVER, WAIT_FOR_RESPONSE, 
     RECEIVE_INVITATION, UPDATE_PLAYERS, INVITATION_ACCEPTED, INVITATION_DECLINED, 
-    CLOSE_INVITATION } from "../actionConstants";
+    CLOSE_INVITATION, LOGOUT, SET_ONBOARDING_STATUS } from "../actionConstants";
 import { joinLobby, register, getUsernames, sendInvitationToServer,
     acceptInvitationToServer, declineInvitationToServer,
-    startGameToServer, releaseInvitationToServer } from "../../client";
+    startGameToServer, releaseInvitationToServer, setLogoutToServer,
+    setOnboardingToServer } from "../../client";
 import store from "../store";
 
 const requestedLogin = () => ({
@@ -26,6 +27,16 @@ export const loginResponse = response => ({
         page: response.page
     }
 })
+
+export const loggedOut = () => ({
+    type: LOGOUT
+})
+
+export const logout = () => {
+    return dispatch => {
+        setLogoutToServer();
+    }
+}
 
 const requestedRegister = () => ({
     type: REQUEST_TO_REGISTER
@@ -139,6 +150,19 @@ export const releaseInvitation = (invitationFrom, invitationTo) => {
         releaseInvitationToServer(invitationFrom, invitationTo);
     }
 }
+
+export const updatedOnboardingStatus = status => ({
+    type: SET_ONBOARDING_STATUS,
+    payload: status
+})
+
+export const setOnboarding = (username, status) => {
+    return dispatch => {
+        setOnboardingToServer(username, status);
+    }
+}
+
+
 
 
 

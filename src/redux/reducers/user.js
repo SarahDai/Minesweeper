@@ -1,4 +1,5 @@
-import { REQUEST_TO_LOGIN, LOGIN_RESPONSE, REQUEST_TO_REGISTER, REGISTER_RESPONSE, GET_ALL_USERNAMES, SET_PAGE, UPDATE_PLAYERS } from "../actionConstants";
+import { REQUEST_TO_LOGIN, LOGIN_RESPONSE, REQUEST_TO_REGISTER, REGISTER_RESPONSE, 
+   GET_ALL_USERNAMES, SET_PAGE, UPDATE_PLAYERS, LOGOUT, SET_ONBOARDING_STATUS } from "../actionConstants";
 import { LOGIN_STATE, PAGE, SIGN_UP_STATE } from "../storeConstants";
 
 const INITIAL_STATE = {
@@ -30,6 +31,15 @@ export const userReducer = (state = INITIAL_STATE, action) => {
 
          }
       }
+      case SET_ONBOARDING_STATUS: {
+         return {
+            ...state,
+            user: {
+               ...state.user,
+               onboardingComplete: action.payload
+            }
+         }
+      }
       case REQUEST_TO_REGISTER: {
          return {
             ...state,
@@ -59,6 +69,9 @@ export const userReducer = (state = INITIAL_STATE, action) => {
             ...state,
             onlinePlayers: action.payload.players
          }
+      }
+      case LOGOUT: {
+         return INITIAL_STATE;
       }
       default:
          return state;

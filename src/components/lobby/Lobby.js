@@ -1,5 +1,5 @@
 import React from "react";
-// import OnboardingSlides from "../onboarding/OnboardingSlides";
+import OnboardingSlides from "../onboarding/OnboardingSlides";
 import OnlinePlayers from "./OnlinePlayers";
 import { useSelector } from "react-redux";
 import SendRequest from "./SendRequest";
@@ -27,7 +27,7 @@ const Lobby = () => {
     }
 
     return (
-        // onboardingComplete?
+        onboardingComplete?
         <>
             <Row>
                 <Col xs={{size: 6, offset: 3}}>
@@ -38,9 +38,8 @@ const Lobby = () => {
                 </Col>
             </Row>
         </>
-        // :
-        // <OnboardingSlides />
-
+        :
+        <OnboardingSlides />
     )
 }
 

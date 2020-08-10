@@ -82,11 +82,10 @@ let clients = {};
 let pair_book = {};
 let board_pair = {};
 let mines_pair = {};
-let client_list = [];
 
 let onlinePlayers = {};
 
-//Validate the user's credentials: username && password
+// Validate the user's credentials: username && password
 const validateUser = async (username, password, clientId) => {
     const users = database.collection("user");
 
@@ -137,7 +136,7 @@ const validateUser = async (username, password, clientId) => {
     }
 }
 
-//Get all usernames in the database system
+// Get all usernames in the database system
 const getAllUsernames = async () => {
     const users = database.collection("user");
     let allUsernames = [];
@@ -157,7 +156,7 @@ const getAllUsernames = async () => {
     } 
 }
 
-//Add newly registered user to the database
+// Add newly registered user to the database
 const addNewUser = async (username, password) => {
     const users = database.collection("user");
 
@@ -181,14 +180,47 @@ const addNewUser = async (username, password) => {
     }
 } 
 
-//Add a client to the online players object
+// Add a client to the online players object
 const addOnlinePlayer = (user, username) => {
     onlinePlayers[username] = user;
     console.log(onlinePlayers);
     io.sockets.emit("online players update", onlinePlayers);
 }
 
-//When an invitation is initialized, update two players gaming status to pending
+// Update the online players object when a player logged out
+const playerLogOut = player => {
+    delete onlinePlayers[player];
+    io.sockets.emit("online players update", onlinePlayers);
+}
+
+// Removes disconnected clients from the players object
+const cleanUpPlayers = () => {
+    const connectedClients = Object.keys(io.sockets.connected);
+    const playerUsernames = Object.keys(onlinePlayers);
+    for (let player of playerUsernames) {
+        if (!connectedClients.includes(onlinePlayers[player].id))
+            delete players[player];
+    }
+}
+
+// When a player requests to update onboarding status
+const updateOnboardingStatus = async (username, status) => {
+    const docId = onlinePlayers[username].docId;
+    const userDoc = database.collection("user").doc(docId);
+
+    try {
+        const result = await userDoc.set({
+            onboardingComplete: status
+        }, {merge: true});
+
+        onlinePlayers[username].onboardingComplete = status;
+        io.sockets.emit("online players update", onlinePlayers);
+    } catch (error) {
+        console.log("UPDATE ONBOARDING STATUS ERROR: " + error);
+    }
+}
+
+// When an invitation is initialized, update two players gaming status to pending
 const updateGamingStatus = async (requestFrom, requestTo, status) => {
     const requestFromDocId = onlinePlayers[requestFrom].docId;
     const requestToDocId = onlinePlayers[requestTo].docId;
@@ -218,9 +250,23 @@ io.on("connection", client => {
 
     // When a client requests login to join the Lobby
     client.on("request to login", (username, password) => {
+        cleanUpPlayers();
         // Emit a message to just this client
         validateUser(username, password, client.id).then(
             response => client.emit("login response", response)
+        )
+    })
+
+    // When a client request to logout
+    client.on("logout", () => {
+        playerLogOut();
+        client.emit("receive logout request");
+    })
+
+    // When a client request to update onboarding status
+    client.on("update onboarding status", (username, status) => {
+        updateOnboardingStatus(username, status).then(
+            () => client.emit("updated onboarding status")
         )
     })
 

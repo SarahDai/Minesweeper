@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Slide from "./Slide";
 import SlideIndicator from "./SlideIndicator";
-import { completeOnboarding } from "../../redux/actions";
+import { setOnboarding } from "../../redux/actions/connectActions";
 
 const TOTAL_SLIDES = 3;
 
 const OnboardingSlides = () => {
     const [activeSlide, setActiveSlide] = useState(1);
 
+    const self = useSelector(state => state.user.user.username);
     const dispatch = useDispatch();
 
     const setSlideState = id => {
@@ -19,7 +20,7 @@ const OnboardingSlides = () => {
 
     const nextSlide = () => {
         let id = activeSlide;
-        id < TOTAL_SLIDES ? setActiveSlide(id + 1) : dispatch(completeOnboarding());
+        id < TOTAL_SLIDES ? setActiveSlide(id + 1) : dispatch(setOnboarding(self, true));
     }
 
     const generateSlideIndicators = () => {
@@ -64,7 +65,7 @@ const OnboardingSlides = () => {
                 </div>
             </Slide>
             <div className="slides-controls">
-                <button className="align-left control-btn" onClick={() => dispatch(completeOnboarding())}>Skip</button>
+                <button className="align-left control-btn" onClick={() => dispatch(setOnboarding(self, true))}>Skip</button>
                 <div className="align-center">
                     {generateSlideIndicators()}
                 </div>
