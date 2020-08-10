@@ -39,9 +39,6 @@ export const userReducer = (state = INITIAL_STATE, action) => {
       case REGISTER_RESPONSE: {
          return {
             ...state,
-            // user: action.payload.user,
-            // loginStatus: action.payload.loginStatus,
-            // page: action.payload.page,
             registerStatus: action.payload.registerStatus
          }
       }

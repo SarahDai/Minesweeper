@@ -1,8 +1,10 @@
 import store from "./redux/store";
 import { setAllMessages, setConnected, getNewBoard, setClientID, setGameBoard, setGamePair, setGameMines, setGameStatus, validateUser } from "./redux/actions";
 import { loginResponse, registerReponse, getAllUsernames, waitForResponse,
-    receivedInvitation, updatePlayers, acceptedInvitation, declinedInvitation 
+    receivedInvitation, updatePlayers, acceptedInvitation, declinedInvitation,
+    setPage, closedInvitation 
      } from "./redux/actions/connectActions";
+import { PAGE } from "../src/redux/storeConstants";
 
 /** CLIENT CONFIGURATION - connect to the server */
 const socketIOClient = require("socket.io-client");
@@ -29,10 +31,13 @@ export const getUsernames = () => {
     })
 }
 
+// Update all online players information
 socket.on("online players update", players => {
     store.dispatch(updatePlayers(players))
 })
 
+
+// Request to login to join the game lobby
 export const joinLobby = (username, password) => {
     socket.emit("request to login", username, password);
 
@@ -41,6 +46,7 @@ export const joinLobby = (username, password) => {
     });
 }
 
+// Request to register with valid username-pwd
 export const register = (username, password) => {
     socket.emit("request to register", username, password);
 
@@ -50,6 +56,7 @@ export const register = (username, password) => {
     })
 }
 
+// Request game invitation to another player
 export const sendInvitationToServer = (invitationFrom, invitationTo) => {
     socket.emit("send game invitation", invitationFrom, invitationTo);
 
@@ -66,50 +73,90 @@ export const sendInvitationToServer = (invitationFrom, invitationTo) => {
     })
 }
 
+// Receive game invitation from the sender
 socket.on("receive invitation", invitationFrom => {
     store.dispatch(receivedInvitation(invitationFrom))
 })
 
+// The invitation receiver sent accept response to server
 export const acceptInvitationToServer = invitationFrom => {
     socket.emit("accept invitation", invitationFrom);
 }
 
+// The invitation receiver sent declined response to server
 export const declineInvitationToServer = invitationFrom => {
     socket.emit("decline invitation", invitationFrom)
 }
 
+// Send release invitation notice to server by declined invitation
+export const releaseInvitationToServer = (invitationFrom, invitationTo) => {
+    socket.emit("release invitation", invitationFrom, invitationTo);
+}
+
+// Release the player's invitation status
+socket.on("invitation released", () => {
+    store.dispatch(closedInvitation());
+})
+
+// Send start game notice to server by accepted invitation
+export const startGameToServer = (invitationFrom, invitationTo) => {
+    socket.emit("start game", invitationFrom, invitationTo);
+}
+
+// Start the game by changing to game page
+socket.on("received start game request", () => {
+    store.dispatch(closedInvitation());
+    store.dispatch(setPage(PAGE.GAME));
+})
+
+// Pair up the two players
+socket.on("set pair up", player => {
+    store.dispatch(setGamePair(player));
+});
 
 
+// Get the initial board from one player
+socket.on("get init board", () => {
+    const newBoard = getNewBoard();
+    const newMines = store.getState().game.mines;
+    const newStatus = store.getState().game.status;
+    socket.emit("update pair board", newBoard);
+    socket.emit("update pair mines", newMines);
+    socket.emit("update pair status", newStatus);
+});
+
+// Set the pair player's board
+socket.on("set pair board", board => {
+    console.log("client pair board");
+    store.dispatch(setGameBoard(board));
+});
 
 
+// Set the pair player's mine locations
+socket.on("set pair mines", mines => {
+    store.dispatch(setGameMines(mines));
+});
+
+// Set the pair player's status
+socket.on("set pair status", status => {
+    store.dispatch(setGameStatus(status));
+});
+
+// Request to update pair player's board
+export const updateBoard = board => {
+    socket.emit("update pair board", board);
+};
 
 
+// Request to update pair player's mine locations
+export const updateMines = mines => {
+    socket.emit("update pair mines", mines);
+};
 
-
-
-
-
-
-
-
-// socket.on("hello", msg => {
-//     console.log("server said: " + msg);
-// });
-
-// socket.on("client id", cid => {
-//     store.dispatch(setClientID(cid));
-// });
-
-// socket.on("get init board", cid => {
-//     if (store.getState().user.clientID === cid) {
-//         const newBoard = getNewBoard();
-//         const newMines = store.getState().game.mines;
-//         const newStatus = store.getState().game.status;
-//         socket.emit("update pair board", newBoard);
-//         socket.emit("update pair mines", newMines);
-//         socket.emit("update pair status", newStatus);
-//     }
-// });
+// Request to update pair player's status
+export const updatePairStatus = status => {
+    socket.emit("update pair status", status);
+};
 
 // socket.on("all messages", msg => {
 //     store.dispatch(setAllMessages(msg));
@@ -119,48 +166,25 @@ export const declineInvitationToServer = invitationFrom => {
 //     store.dispatch(setConnected());
 // });
 
-// socket.on("set pair board", board => {
-//     console.log("client pair board");
-//     store.dispatch(setGameBoard(board));
+export const newMessage = msg => {
+    socket.emit("new message", msg);
+};
+
+// socket.on("hello", msg => {
+//     console.log("server said: " + msg);
 // });
 
-// socket.on("set pair mines", mines => {
-//     store.dispatch(setGameMines(mines));
+// socket.on("client id", cid => {
+//     store.dispatch(setClientID(cid));
 // });
 
-// socket.on("set pair status", status => {
-//     store.dispatch(setGameStatus(status));
-// });
-
-// socket.on("set pair up", (p1, p2) => {
-//     const cur = store.getState().user.clientID;
-//     if (cur === p1) {
-//         store.dispatch(setGamePair(p2));
-//     } else if (cur === p2) {
-//         store.dispatch(setGamePair(p1));
-//     }
-// });
 
 // /** Login to Server **/
 export const joinChat = username => {
     socket.emit("join", username);
 };
 
-export const newMessage = msg => {
-    socket.emit("new message", msg);
-};
 
-export const updateBoard = board => {
-    socket.emit("update pair board", board);
-};
-
-export const updateMines = mines => {
-    socket.emit("update pair mines", mines);
-};
-
-export const updatePairStatus = status => {
-    socket.emit("update pair status", status);
-};
 
 /**
  * Send and receive messages

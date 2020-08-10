@@ -230,9 +230,9 @@ export const sendPairStatus = newStatus => (
     dispatch => updatePairStatus(newStatus)
 );
 
-export const setGamePair = pairCid => ({
+export const setGamePair = pair => ({
     type: SET_GAME_PAIR,
     payload: {
-        pair: pairCid
+        pair: pair
     }
 });

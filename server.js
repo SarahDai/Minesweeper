@@ -189,7 +189,7 @@ const addOnlinePlayer = (user, username) => {
 }
 
 //When an invitation is initialized, update two players gaming status to pending
-const pendingGamingStatus = async (requestFrom, requestTo) => {
+const updateGamingStatus = async (requestFrom, requestTo, status) => {
     const requestFromDocId = onlinePlayers[requestFrom].docId;
     const requestToDocId = onlinePlayers[requestTo].docId;
     const requestFromPlayer = database.collection("user").doc(requestFromDocId);
@@ -197,14 +197,14 @@ const pendingGamingStatus = async (requestFrom, requestTo) => {
 
     try { 
         const resultFrom = await requestFromPlayer.set({
-            gamingStatus: PLAYER_STATUS.PENDING
+            gamingStatus: status
         }, {merge: true});
 
         const resultTo = await requestToPlayer.set({
-            gamingStatus: PLAYER_STATUS.PENDING
+            gamingStatus: status
         }, {merge: true});
-        onlinePlayers[requestFrom].status = PLAYER_STATUS.PENDING;
-        onlinePlayers[requestTo].status = PLAYER_STATUS.PENDING;
+        onlinePlayers[requestFrom].status = status;
+        onlinePlayers[requestTo].status = status;
         io.sockets.emit("online players update", onlinePlayers);
 
     } catch (error) {
@@ -240,7 +240,7 @@ io.on("connection", client => {
 
     //When a client sends an invitation to another player
     client.on("send game invitation", (invitationFrom, invitationTo) => {
-        pendingGamingStatus(invitationFrom, invitationTo).then(
+        updateGamingStatus(invitationFrom, invitationTo, PLAYER_STATUS.PENDING).then(
             () => {
                 const requestToClientId = onlinePlayers[invitationTo].id;
                 io.to(requestToClientId).emit("receive invitation", invitationFrom);
@@ -261,15 +261,61 @@ io.on("connection", client => {
         io.to(requestFromClientId).emit("invitation declined")
     })
 
+    //When an invitation is released (a declined invitation)
+    client.on("release invitation", (invitationFrom, invitationTo) => {
+        updateGamingStatus(invitationFrom, invitationTo, PLAYER_STATUS.AVAILABLE).then(
+            () => {
+                const requestFromClientId = onlinePlayers[invitationFrom].id;
+                const requestToClientId = onlinePlayers[invitationTo].id;
+                io.to(requestToClientId).emit("invitation released");
+                io.to(requestFromClientId).emit("invitation released");
+            }
+        )
+    })
 
+    //When a client asks for starting a game
+    client.on("start game", (invitationFrom, invitationTo) => {
+        updateGamingStatus(invitationFrom, invitationTo, PLAYER_STATUS.IN_GAME).then(
+            () => {
+                const requestFromClientId = onlinePlayers[invitationFrom].id;
+                const requestToClientId = onlinePlayers[invitationTo].id;
+                pair_book[requestFromClientId] = requestToClientId;
+                pair_book[requestToClientId] = requestFromClientId;
+                io.to(requestFromClientId).emit("set pair up", invitationTo);
+                io.to(requestFromClientId).emit("get init board");
+                io.to(requestFromClientId).emit("received start game request");
+                io.to(requestToClientId).emit("set pair up", invitationFrom);
+                io.to(requestToClientId).emit("received start game request");
+            }
+        )
+    })
 
+    client.on("update pair board", board => {
+        console.log("update board");
+        const p1 = client.id;
+        const p2 = pair_book[p1];
+        board_pair[p1] = board;
+        board_pair[p2] = board;
+        client.emit("set pair board", board);
+        io.to(p2).emit("set pair board", board);
+    });
 
+    client.on("update pair mines", mines => {
+        console.log("update mines");
+        const p1 = client.id;
+        const p2 = pair_book[p1];
+        mines_pair[p1] = mines;
+        mines_pair[p2] = mines;
+        client.emit("set pair mines", mines);
+        io.to(p2).emit("set pair mines", mines);
+    });
 
-
-
-
-
-
+    client.on("update pair status", status => {
+        console.log("update pair status: ", status);
+        const p1 = client.id;
+        const p2 = pair_book[p1];
+        io.to(p2).emit("set pair status", status);
+    });
     // // Send messages to and receive messages from the client in here
     // if (!client_list.includes(client.id)) {
     //     client_list.push(client.id);
@@ -291,32 +337,13 @@ io.on("connection", client => {
     //     client.emit("get init board", p1);
     // }
 
-    // client.on("update pair board", board => {
-    //     console.log("update board");
-    //     const p1 = client.id;
-    //     const p2 = pair_book[p1];
-    //     board_pair[p1] = board;
-    //     board_pair[p2] = board;
-    //     client.emit("set pair board", board);
-    //     io.to(p2).emit("set pair board", board);
-    // });
 
-    // client.on("update pair mines", mines => {
-    //     console.log("update mines");
-    //     const p1 = client.id;
-    //     const p2 = pair_book[p1];
-    //     mines_pair[p1] = mines;
-    //     mines_pair[p2] = mines;
-    //     client.emit("set pair mines", mines);
-    //     io.to(p2).emit("set pair mines", mines);
-    // });
 
-    // client.on("update pair status", status => {
-    //     console.log("update pair status");
-    //     const p1 = client.id;
-    //     const p2 = pair_book[p1];
-    //     io.to(p2).emit("set pair status", status);
-    // });
+
+
+
+
+    // ------------------------------------------------------ //
 
     // client.on("join", username => {
     //     io.sockets.emit("set connected");

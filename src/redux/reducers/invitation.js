@@ -1,4 +1,4 @@
-import { INVITATION_SEND_TO_SERVER, WAIT_FOR_RESPONSE, RECEIVE_INVITATION, INVITATION_ACCEPTED, INVITATION_DECLINED } from "../actionConstants";
+import { INVITATION_SEND_TO_SERVER, WAIT_FOR_RESPONSE, RECEIVE_INVITATION, INVITATION_ACCEPTED, INVITATION_DECLINED, CLOSE_INVITATION } from "../actionConstants";
 import { INVITATION_STATUS } from "../storeConstants";
 
 const INITIAL_STATE = {
@@ -37,6 +37,10 @@ export const invitationReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 status: INVITATION_STATUS.INVITATION_DECLINED
+            }
+        case CLOSE_INVITATION:
+            return {
+                ...INITIAL_STATE
             }
         default:
             return state;

@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, ModalHeader, ModalFooter, Button, ModalBody } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { INVITATION_STATUS } from "../../redux/storeConstants";
-import { acceptInvitation, declineInvitation} from "../../redux/actions/connectActions";
+import { acceptInvitation, declineInvitation, startGame, releaseInvitation } from "../../redux/actions/connectActions";
 
 const InvatationNotification = () => {
     const self = useSelector(state => state.user.user.username);
@@ -14,20 +14,22 @@ const InvatationNotification = () => {
 
     const accept = () => {
         dispatch(acceptInvitation(invitationFrom));
+        setTimeout(() => dispatch(startGame(invitationFrom, invitationTo)), 1000);
     }
 
     const decline = () => {
         dispatch(declineInvitation(invitationFrom));
+        setTimeout(() => dispatch(releaseInvitation(invitationFrom, invitationTo), 1000));
     }
 
     const displayContent = () => {
         switch (invitationStatus) {
             case INVITATION_STATUS.RECEIVE_INVITATION:
-                return <ModalBody>You received an invitation from {invitationFrom}.</ModalBody>
+                return <ModalBody>You received an invitation from <span className="bold">{invitationFrom}</span>.</ModalBody>
             case INVITATION_STATUS.INVITATION_ACCEPTED:
-                return <ModalBody>You accepted {invitationFrom}'s invitation. <br />Head you to the game. Enjoy!</ModalBody>
+                return <ModalBody>You accepted <span className="bold">{invitationFrom}</span>'s invitation. <br />Head you to the game. Enjoy!</ModalBody>
             case INVITATION_STATUS.INVITATION_DECLINED:
-                return <ModalBody>You declined {invitationFrom}'s invitation. Head you to the lobby to find your opponent.</ModalBody>
+                return <ModalBody>You declined <span className="bold">{invitationFrom}</span>'s invitation. Head you to the lobby to find your opponent.</ModalBody>
             default:
                 return "";
         }
@@ -46,7 +48,6 @@ const InvatationNotification = () => {
             }
         </Modal>
     )
-
 }
 
 export default InvatationNotification;

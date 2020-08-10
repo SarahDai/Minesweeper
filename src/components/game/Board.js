@@ -155,7 +155,7 @@ const Board = () => {
       if (status === GAME.LOSE) {
          return GAME.WIN;
       } else if (status === GAME.WIN) {
-         return GAME.LOST;
+         return GAME.LOSE;
       } else {
          return GAME.IN_PROGRESS;
       }

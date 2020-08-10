@@ -1,6 +1,10 @@
-import { REQUEST_TO_LOGIN, LOGIN_RESPONSE, REQUEST_TO_REGISTER, REGISTER_RESPONSE, GET_ALL_USERNAMES, SET_PAGE, INVITATION_SEND_TO_SERVER, WAIT_FOR_RESPONSE, RECEIVE_INVITATION, UPDATE_PLAYERS, INVITATION_ACCEPTED, INVITATION_DECLINED } from "../actionConstants";
+import { REQUEST_TO_LOGIN, LOGIN_RESPONSE, REQUEST_TO_REGISTER, REGISTER_RESPONSE, 
+    GET_ALL_USERNAMES, SET_PAGE, INVITATION_SEND_TO_SERVER, WAIT_FOR_RESPONSE, 
+    RECEIVE_INVITATION, UPDATE_PLAYERS, INVITATION_ACCEPTED, INVITATION_DECLINED, 
+    CLOSE_INVITATION } from "../actionConstants";
 import { joinLobby, register, getUsernames, sendInvitationToServer,
-    acceptInvitationToServer, declineInvitationToServer } from "../../client";
+    acceptInvitationToServer, declineInvitationToServer,
+    startGameToServer, releaseInvitationToServer } from "../../client";
 import store from "../store";
 
 const requestedLogin = () => ({
@@ -119,6 +123,22 @@ export const acceptedInvitation = () => ({
 export const declinedInvitation = () => ({
     type: INVITATION_DECLINED
 })
+
+export const closedInvitation = () => ({
+    type: CLOSE_INVITATION
+})
+
+export const startGame = (invitationFrom, invitationTo) => {
+    return dispatch => {
+        startGameToServer(invitationFrom, invitationTo);
+    }
+}
+
+export const releaseInvitation = (invitationFrom, invitationTo) => {
+    return dispatch => {
+        releaseInvitationToServer(invitationFrom, invitationTo);
+    }
+}
 
 
 
