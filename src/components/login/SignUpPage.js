@@ -180,7 +180,7 @@ const SignUpPage = () => {
          <br/>
          <Row>
             <Col sm={12}>
-               <Button 
+               <Button variant="light"
                   className="text-primary link-style" block
                   onClick={()=>dispatch(setPage(PAGE.LOGIN))}>
                   Already have an account? Sign in here.

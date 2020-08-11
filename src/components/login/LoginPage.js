@@ -150,6 +150,7 @@ const Login = () => {
          <Row>
             <Col sm={12}>
                <Button 
+                  variant="light"
                   className="text-primary link-style" block
                   onClick={()=>dispatch(setPage(PAGE.SIGN_UP))}>
                   Don't have an account? Create one now.
