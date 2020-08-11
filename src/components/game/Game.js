@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Row, Alert } from "react-bootstrap";
+import { Card, Row, Alert, Col } from "react-bootstrap";
 import Board from "./Board";
 import { useSelector } from "react-redux";
 import { GAME } from '../../redux/storeConstants';
@@ -21,10 +21,12 @@ const Game = () => {
    return (
       <Card className="margin-top-5">
          <Card.Header>
-            <Row><h1>{"Hello " + self + "!"}</h1></Row>
-            <Row><h1>{"Pair: " + pair}</h1></Row>
+            <Row>
+               <Col><h1>{self}</h1></Col>
+               <Col><h1>{"Status: " + status}</h1></Col>
+               <Col><h1>{pair}</h1></Col>
+            </Row>
             <Row><h1>{"Mines: " + mines}</h1></Row>
-            <Row><h1>{"Status: " + status}</h1></Row>
          </Card.Header>
          <Card.Body>
             <div className="game">

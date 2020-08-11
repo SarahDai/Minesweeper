@@ -1,7 +1,7 @@
 import { REQUEST_TO_LOGIN, LOGIN_RESPONSE, REQUEST_TO_REGISTER, REGISTER_RESPONSE, 
     GET_ALL_USERNAMES, SET_PAGE, INVITATION_SEND_TO_SERVER, WAIT_FOR_RESPONSE, 
     RECEIVE_INVITATION, UPDATE_PLAYERS, INVITATION_ACCEPTED, INVITATION_DECLINED, 
-    CLOSE_INVITATION, LOGOUT, SET_ONBOARDING_STATUS } from "../actionConstants";
+    CLOSE_INVITATION, LOGOUT, SET_ONBOARDING_STATUS, UPDATE_NOTIFICATIONS } from "../actionConstants";
 import { joinLobby, register, getUsernames, sendInvitationToServer,
     acceptInvitationToServer, declineInvitationToServer,
     startGameToServer, releaseInvitationToServer, setLogoutToServer,
@@ -32,9 +32,9 @@ export const loggedOut = () => ({
     type: LOGOUT
 })
 
-export const logout = () => {
+export const logout = username => {
     return dispatch => {
-        setLogoutToServer();
+        setLogoutToServer(username);
     }
 }
 
@@ -73,6 +73,13 @@ export const updatePlayers = players => ({
     type: UPDATE_PLAYERS,
     payload: {
         players
+    }
+})
+
+export const updateNotifications = notifications => ({
+    type: UPDATE_NOTIFICATIONS,
+    payload: {
+        notifications
     }
 })
 

@@ -4,12 +4,14 @@ import {
     CLEAN_TIME_ID, LOGIN_NETWORK_ERROR, SET_STATUS,
     STORE_USER_LIST, SET_GAME_STATUS, SET_PAGE,
     SET_GAME_BOARD, SET_GAME_MINES, SET_ALL_MESSAGES,
-    SET_CONNECTED, SET_CLIENT_ID, SET_GAME_PAIR,
+    SET_CONNECTED, SET_CLIENT_ID, SET_GAME_PAIR, UPDATE_WIN,
+    UPDATE_LOSE
 } from "./actionConstants";
 import store from "./store";
 import { STATUS, SIGN_UP_STATE } from "./storeConstants";
 import firebase from "../fbConfig";
-import { updateBoard, updateMines, updatePairStatus } from "../client";
+import { updateBoard, updateMines, updatePairStatus, sendWinStatusToServer,
+    sendLoseStatusToServer } from "../client";
 import { initBoard } from "../components/game/Board";
 
 /** Login **/
@@ -229,6 +231,26 @@ export const sendNewMines = newMines => (
 export const sendPairStatus = newStatus => (
     dispatch => updatePairStatus(newStatus)
 );
+
+export const updateWinStatus = () => ({
+    type: UPDATE_WIN
+})
+
+export const setGameWin = player => {
+    return dispatch => {
+        sendWinStatusToServer(player);
+    }
+}
+
+export const updateLoseStatus = () => ({
+    type: UPDATE_LOSE
+})
+
+export const setGameLose = player => {
+    return dispatch => {
+        sendLoseStatusToServer(player);
+    }
+}
 
 export const setGamePair = pair => ({
     type: SET_GAME_PAIR,

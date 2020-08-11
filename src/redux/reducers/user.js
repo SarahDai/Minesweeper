@@ -1,5 +1,5 @@
 import { REQUEST_TO_LOGIN, LOGIN_RESPONSE, REQUEST_TO_REGISTER, REGISTER_RESPONSE, 
-   GET_ALL_USERNAMES, SET_PAGE, UPDATE_PLAYERS, LOGOUT, SET_ONBOARDING_STATUS } from "../actionConstants";
+   GET_ALL_USERNAMES, SET_PAGE, UPDATE_PLAYERS, LOGOUT, SET_ONBOARDING_STATUS, UPDATE_NOTIFICATIONS, UPDATE_WIN, UPDATE_LOSE } from "../actionConstants";
 import { LOGIN_STATE, PAGE, SIGN_UP_STATE } from "../storeConstants";
 
 const INITIAL_STATE = {
@@ -9,7 +9,7 @@ const INITIAL_STATE = {
    page: PAGE.LOGIN,
    existingUsernames: [],
    onlinePlayers: {},
-   notifications: {}
+   notifications: []
 }
 
 export const userReducer = (state = INITIAL_STATE, action) => {
@@ -70,8 +70,32 @@ export const userReducer = (state = INITIAL_STATE, action) => {
             onlinePlayers: action.payload.players
          }
       }
+      case UPDATE_NOTIFICATIONS: {
+         return {
+            ...state,
+            notifications: action.payload.notifications
+         }
+      }
       case LOGOUT: {
          return INITIAL_STATE;
+      }
+      case UPDATE_WIN: {
+         return {
+            ...state,
+            user: {
+               ...state.user,
+               win: state.user.win + 1
+            }
+         }
+      }
+      case UPDATE_LOSE: {
+         return {
+            ...state,
+            user: {
+               ...state.user,
+               lose: state.user.lose + 1
+            }
+         }
       }
       default:
          return state;

@@ -1,5 +1,6 @@
 import { GAME } from "../storeConstants";
-import { SET_GAME_STATUS, SET_GAME_MINES, SET_GAME_BOARD, SET_GAME_PAIR } from "../actionConstants";
+import { SET_GAME_STATUS, SET_GAME_MINES, SET_GAME_BOARD, SET_GAME_PAIR, 
+   UPDATE_WIN, UPDATE_LOSE } from "../actionConstants";
 
 export const INITIAL_STATE = {
    height: 8,
@@ -17,6 +18,16 @@ export const gameReducer = (state=INITIAL_STATE, action) => {
             ...state,
             status: action.payload.status
          };
+      case UPDATE_WIN:
+         return {
+            ...state,
+            status: GAME.WIN
+         }
+      case UPDATE_LOSE:
+         return {
+            ...state,
+            status: GAME.LOSE
+         }
       case SET_GAME_MINES:
          return {
             ...state,

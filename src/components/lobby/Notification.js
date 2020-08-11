@@ -1,14 +1,20 @@
 import React from "react";
-import { Toast, ToastHeader } from "reactstrap";
+import { Card, CardBody, CardHeader } from "reactstrap";
 
 const Notification = props => {
+    console.log()
     return (
-        <Toast className="notification">
-            <ToastHeader id="notification-header">
-                {props.notification.type + " " + props.notification.time}
-            </ToastHeader>
-            <ToastBody id="notification-content">{props.notification.content}</ToastBody>
-        </Toast>
+        <div>
+            <Card>
+                <CardHeader>
+                    {props.notification.type}{" "}
+                    {new Date(props.notification.time).toLocaleString()}
+                </CardHeader>
+                <CardBody>
+                    {props.notification.content}
+                </CardBody>
+            </Card>
+        </div>
     )
 }
 

@@ -2,7 +2,8 @@ import React, {  } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { GAME } from "../../redux/storeConstants";
 import Cell from "./Cell";
-import { setGameStatus, sendNewMines, sendNewBoard, sendPairStatus } from "../../redux/actions";
+import { setGameStatus, sendNewMines, sendNewBoard, setGameWin, setGameLose } from "../../redux/actions";
+import { startGameToServer } from '../../client';
 
 export const initBoard = (width, height, mines) => {
    let newBoard = createEmptyArray(width, height);
@@ -103,8 +104,10 @@ export const getRand = (val) => {
 let firstLoad = true;
 
 const Board = () => {
+   const self = useSelector(state => state.user.user.username);
    const mines = useSelector(state => state.game.mines);
    const board = useSelector(state => state.game.board);
+   const pair = useSelector(state => state.game.pair);
    const dispatch = useDispatch();
 
    const getTypes = (type, newBoard) => {
@@ -151,21 +154,31 @@ const Board = () => {
       return newBoard;
    };
 
-   const getPairStauts = status => {
-      if (status === GAME.LOSE) {
-         return GAME.WIN;
-      } else if (status === GAME.WIN) {
-         return GAME.LOSE;
-      } else {
-         return GAME.IN_PROGRESS;
-      }
-   };
+   // const getPairStauts = status => {
+   //    if (status === GAME.LOSE) {
+   //       return GAME.WIN;
+   //    } else if (status === GAME.WIN) {
+   //       return GAME.LOSE;
+   //    } else {
+   //       return GAME.IN_PROGRESS;
+   //    }
+   // };
 
-   const handleStatus = status_p1 => {
-      dispatch(setGameStatus(status_p1));
-      const status_p2 = getPairStauts(status_p1);
-      dispatch(sendPairStatus(status_p2));
-   };
+   // const handleStatus = status_p1 => {
+   //    dispatch(setGameStatus(status_p1));
+   //    const status_p2 = getPairStauts(status_p1);
+   //    dispatch(sendPairStatus(status_p2));
+   // };
+
+   const handleWin = () => {
+      dispatch(setGameWin(self));
+      dispatch(setGameLose(pair));
+   }
+
+   const handleLose = () => {
+      dispatch(setGameLose(self));
+      dispatch(setGameWin(pair));
+   }
 
    const handleClick = (x, y) => {
       if (board[x][y].isRevealed || board[x][y].isFlagged) {
@@ -173,7 +186,8 @@ const Board = () => {
       }
       let newBoard = [...board];
       if (newBoard[x][y].isMine) {
-         handleStatus(GAME.LOSE);
+         // handleStatus(GAME.LOSE);
+         handleLose();
          newBoard = revealBoard(newBoard);
       }
       newBoard[x][y].isFlagged = false;
@@ -182,7 +196,8 @@ const Board = () => {
          newBoard = revealEmpty(x, y, newBoard);
       }
       if (getTypes("hide", newBoard).length === mines) {
-         handleStatus(GAME.WIN);
+         // handleStatus(GAME.WIN);
+         handleWin();
          newBoard = revealBoard(newBoard);
       }
       dispatch(sendNewBoard(newBoard));

@@ -1,8 +1,8 @@
 import store from "./redux/store";
-import { setAllMessages, setConnected, getNewBoard, setClientID, setGameBoard, setGamePair, setGameMines, setGameStatus, validateUser } from "./redux/actions";
+import { setAllMessages, setConnected, getNewBoard, setClientID, setGameBoard, setGamePair, setGameMines, setGameStatus, validateUser, updateWinStatus, updateLoseStatus } from "./redux/actions";
 import { loginResponse, registerReponse, getAllUsernames, waitForResponse,
     receivedInvitation, updatePlayers, acceptedInvitation, declinedInvitation,
-    setPage, closedInvitation, loggedOut, updatedOnboardingStatus 
+    setPage, closedInvitation, loggedOut, updatedOnboardingStatus, updateNotifications,
      } from "./redux/actions/connectActions";
 import { PAGE } from "../src/redux/storeConstants";
 
@@ -36,6 +36,11 @@ socket.on("online players update", players => {
     store.dispatch(updatePlayers(players))
 })
 
+// Update notifications
+socket.on("all notifications", notifications => {
+    store.dispatch(updateNotifications(notifications));
+})
+
 
 // Request to login to join the game lobby
 export const joinLobby = (username, password) => {
@@ -47,8 +52,8 @@ export const joinLobby = (username, password) => {
 }
 
 // Request to logout 
-export const setLogoutToServer = () => {
-    socket.emit("logout");
+export const setLogoutToServer = (username) => {
+    socket.emit("logout", username);
 
     socket.on("receive logout request", () => {
         store.dispatch(loggedOut());
@@ -174,6 +179,23 @@ export const updatePairStatus = status => {
     socket.emit("update pair status", status);
 };
 
+// Request to update win status
+export const sendWinStatusToServer = player => {
+    socket.emit("update win status", player);
+}
+
+socket.on("updated win status", () => {
+    store.dispatch(updateWinStatus());
+})
+
+export const sendLoseStatusToServer = player => {
+    socket.emit("update lose status", player);
+}
+
+socket.on("updated lose status", () => {
+    store.dispatch(updateLoseStatus());
+})
+
 // socket.on("all messages", msg => {
 //     store.dispatch(setAllMessages(msg));
 // });
@@ -185,10 +207,6 @@ export const updatePairStatus = status => {
 export const newMessage = msg => {
     socket.emit("new message", msg);
 };
-
-// socket.on("hello", msg => {
-//     console.log("server said: " + msg);
-// });
 
 // socket.on("client id", cid => {
 //     store.dispatch(setClientID(cid));

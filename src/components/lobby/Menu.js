@@ -13,7 +13,7 @@ const Menu = () => {
     const dispatch = useDispatch();
 
     const handleLogout = () => {
-        dispatch(logout());
+        dispatch(logout(self));
     }
 
     const handleHelp = () => {

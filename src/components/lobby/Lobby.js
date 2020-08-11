@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import SendRequest from "./SendRequest";
 import InvitationNotification from "./InvatationNotification";
 import { Row, Col} from "reactstrap";
+import SystemNotification from "./SystemNotification";
 
 
 const Lobby = () => {
@@ -30,10 +31,11 @@ const Lobby = () => {
         onboardingComplete?
         <>
             <Row>
-                <Col xs={{size: 6, offset: 3}}>
-                    <OnlinePlayers />
+                <Col xs="12" md="5">
+                    <SystemNotification />
                 </Col>
-                <Col>
+                <Col xs="12" md="7">
+                    <OnlinePlayers />
                     {displayModal()}
                 </Col>
             </Row>
