@@ -2,7 +2,7 @@ import store from "./redux/store";
 import { setAllMessages, setConnected, getNewBoard, setClientID, setGameBoard, setGamePair, setGameMines, setGameStatus, validateUser, updateWinStatus, updateLoseStatus } from "./redux/actions";
 import { loginResponse, registerReponse, getAllUsernames, waitForResponse,
     receivedInvitation, updatePlayers, acceptedInvitation, declinedInvitation,
-    setPage, closedInvitation, loggedOut, updatedOnboardingStatus, updateNotifications,
+    setPage, closedInvitation, loggedOut, updatedOnboardingStatus, updateNotifications, setgameClosed,
      } from "./redux/actions/connectActions";
 import { PAGE } from "../src/redux/storeConstants";
 
@@ -86,6 +86,12 @@ export const sendInvitationToServer = (invitationFrom, invitationTo) => {
         store.dispatch(waitForResponse());
     })
 
+    //TODO
+    socket.on("receiver offline", () => {
+        store.dispatch(declinedInvitation());
+        setTimeout(store.dispatch(closedInvitation()), 500);
+    })
+
     socket.on("invitation accepted", () => {
         store.dispatch(acceptedInvitation())
     })
@@ -129,6 +135,16 @@ export const startGameToServer = (invitationFrom, invitationTo) => {
 socket.on("received start game request", () => {
     store.dispatch(closedInvitation());
     store.dispatch(setPage(PAGE.GAME));
+})
+
+// Close the game by changing to lobby page
+export const closeGameToServer = player => {
+    socket.emit("close game", player);
+}
+
+socket.on("received close game request", () => {
+    store.dispatch(setgameClosed());
+    store.dispatch(setPage(PAGE.LOBBY));
 })
 
 // Pair up the two players

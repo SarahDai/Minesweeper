@@ -1,11 +1,11 @@
 import { REQUEST_TO_LOGIN, LOGIN_RESPONSE, REQUEST_TO_REGISTER, REGISTER_RESPONSE, 
     GET_ALL_USERNAMES, SET_PAGE, INVITATION_SEND_TO_SERVER, WAIT_FOR_RESPONSE, 
     RECEIVE_INVITATION, UPDATE_PLAYERS, INVITATION_ACCEPTED, INVITATION_DECLINED, 
-    CLOSE_INVITATION, LOGOUT, SET_ONBOARDING_STATUS, UPDATE_NOTIFICATIONS } from "../actionConstants";
+    CLOSE_INVITATION, LOGOUT, SET_ONBOARDING_STATUS, UPDATE_NOTIFICATIONS, GAME_OVER } from "../actionConstants";
 import { joinLobby, register, getUsernames, sendInvitationToServer,
     acceptInvitationToServer, declineInvitationToServer,
     startGameToServer, releaseInvitationToServer, setLogoutToServer,
-    setOnboardingToServer } from "../../client";
+    setOnboardingToServer, closeGameToServer } from "../../client";
 import store from "../store";
 
 const requestedLogin = () => ({
@@ -155,6 +155,17 @@ export const startGame = (invitationFrom, invitationTo) => {
 export const releaseInvitation = (invitationFrom, invitationTo) => {
     return dispatch => {
         releaseInvitationToServer(invitationFrom, invitationTo);
+    }
+}
+
+export const setgameClosed = () => ({
+    type: GAME_OVER
+})
+
+export const closeGame = () => {
+    const self = store.getState().user.user.username;
+    return dispatch => {
+        closeGameToServer(self)
     }
 }
 
