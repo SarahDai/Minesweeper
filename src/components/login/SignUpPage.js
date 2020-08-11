@@ -99,6 +99,7 @@ const SignUpPage = () => {
             <Col sm={10}>
                <Input type="text" id="username"
                       name="username" value={username}
+                      className="input-size"
                       onKeyUp={e => handleKeyPress(e)}
                       aria-label="input-username"
                       valid={username.length > 0 && !isExisting(username, existingUsernames)}
@@ -119,6 +120,7 @@ const SignUpPage = () => {
             <Col sm={1}/>
             <Col sm={10}>
                <Input type="password" id="password1"
+                      className="input-size"
                       name="password" value={password1}
                       onKeyUp={e => handleKeyPress(e)}
                       aria-label="input-password"
@@ -136,6 +138,7 @@ const SignUpPage = () => {
             <Col sm={1}/>
             <Col sm={10}>
                <Input type="password" id="password2"
+                      className="input-size"
                       name="password" value={password2}
                       onKeyUp={e => handleKeyPress(e)}
                       aria-label="input-password"
@@ -167,20 +170,21 @@ const SignUpPage = () => {
             <Col sm={1}/>
             <Col sm={10}>
                <Button disabled={!canSignUp}
-                  className="login-button-margin login-font-size" block
+                  className="login-button-margin login-font-size input-size" block
                   variant="primary" onClick={()=>handleSignUp()}>
                   Finish
                </Button>
             </Col>
             <Col sm={1}/>
          </Row>
-         <br/>
          <Row>
-            <a 
-               className="text-primary" block
-               onClick={()=>dispatch(setPage(PAGE.LOGIN))}>
-               <h5>Already have an account? Sign in here.</h5>
-            </a>
+            <Col sm={12}>
+               <Button variant="light"
+                  className="text-primary link-style" block
+                  onClick={()=>dispatch(setPage(PAGE.LOGIN))}>
+                  Already have an account? Sign in here.
+               </Button>
+            </Col>
          </Row>
          </Card.Footer>   
       </Card>

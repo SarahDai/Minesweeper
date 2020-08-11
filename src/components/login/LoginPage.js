@@ -101,6 +101,7 @@ const Login = () => {
             <Col sm={1}/>
             <Col sm={10}>
                <Input type="text" id="username"
+                        className="input-size"
                         name="username" value={username}
                         onKeyUp={e => handleKeyPress(e)}
                         aria-label="input-username"
@@ -118,6 +119,7 @@ const Login = () => {
             <Col sm={1}/>
             <Col sm={10}>
                <Input type="password" id="password"
+                        className="input-size"
                         name="password" value={password}
                         onKeyUp={e => handleKeyPress(e)}
                         aria-label="input-password"
@@ -137,20 +139,22 @@ const Login = () => {
             <Col sm={1}/>
             <Col sm={10}>
                <Button disabled={!canLogin}
-                  className="login-button-margin login-font-size" block
+                  className="login-button-margin login-font-size input-size" block
                   variant="primary" onClick={(e)=>handleLogin(e)}>
                   Sign In
                </Button>
             </Col>
             <Col sm={1} />
          </Row>
-         <br/>
          <Row>
-            <a 
-               className="text-primary" block
-               onClick={()=>dispatch(setPage(PAGE.SIGN_UP))}>
-               <h5>Don't have an account? Create one now.</h5>
-            </a>
+            <Col sm={12}>
+               <Button 
+                  variant="light"
+                  className="text-primary link-style" block
+                  onClick={()=>dispatch(setPage(PAGE.SIGN_UP))}>
+                  Don't have an account? Create one now.
+               </Button>
+            </Col>
          </Row>
          </Card.Footer>   
       </Card>

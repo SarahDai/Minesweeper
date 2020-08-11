@@ -50,8 +50,9 @@ h2 {
    background-color: #17a2b8;
 }
 
-.login-font-size {
-   font-size: 1.8rem;
+.input-size {
+   font-size: 1.3rem;
+   border-radius: 0.5rem;
 }
 
 .login-bg-color {
@@ -61,6 +62,7 @@ h2 {
 .login-button-margin {
    justify-content: center;
    align-items: center;
+   margin-bottom: 1rem;
 }
 
 .margin-auto {
@@ -197,4 +199,9 @@ h2 {
 
 .notification-list {
    column-count: 1;
+}
+
+.link-style {
+   border: none;
+   background: none;
 }

@@ -213,6 +213,9 @@ const cleanUpPlayers = () => {
     }
 }
 
+// Return true if the player is online
+const playerIsOnline = player => Object.keys(onlinePlayers).includes(player);
+
 // Process notifications
 const processNotifications = (type, msg) => {
     const newNotification = {
@@ -338,14 +341,25 @@ io.on("connection", client => {
 
     // When a client sends an invitation to another player
     client.on("send game invitation", (invitationFrom, invitationTo) => {
+        cleanUpPlayers();
         updateGamingStatus(invitationFrom, PLAYER_STATUS.PENDING).then(
-            () => updateGamingStatus(invitationTo, PLAYER_STATUS.PENDING).then(
             () => {
-                const requestToClientId = onlinePlayers[invitationTo].id;
-                io.to(requestToClientId).emit("receive invitation", invitationFrom);
-                client.emit("successfully sent invitation to receiver");
-            }
-        ))
+                if (playerIsOnline(invitationTo)) {
+                    updateGamingStatus(invitationTo, PLAYER_STATUS.PENDING).then(
+                        () => {
+                            const requestToClientId = onlinePlayers[invitationTo].id;
+                            io.to(requestToClientId).emit("receive invitation", invitationFrom);
+                            client.emit("successfully sent invitation to receiver");
+                        })
+                } else {
+                    updateGamingStatus(invitationFrom, PLAYER_STATUS.AVAILABLE).then(
+                        () => {
+                            client.emit("receiver offline");
+                        }
+                    )
+                }
+
+            })
     })
 
     // When a client accept an invitation from another player

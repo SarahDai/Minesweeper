@@ -86,6 +86,12 @@ export const sendInvitationToServer = (invitationFrom, invitationTo) => {
         store.dispatch(waitForResponse());
     })
 
+    //TODO
+    socket.on("receiver offline", () => {
+        store.dispatch(declinedInvitation());
+        setTimeout(store.dispatch(closedInvitation()), 500);
+    })
+
     socket.on("invitation accepted", () => {
         store.dispatch(acceptedInvitation())
     })
