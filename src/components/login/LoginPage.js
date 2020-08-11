@@ -101,6 +101,7 @@ const Login = () => {
             <Col sm={1}/>
             <Col sm={10}>
                <Input type="text" id="username"
+                        className="input-size"
                         name="username" value={username}
                         onKeyUp={e => handleKeyPress(e)}
                         aria-label="input-username"
@@ -118,6 +119,7 @@ const Login = () => {
             <Col sm={1}/>
             <Col sm={10}>
                <Input type="password" id="password"
+                        className="input-size"
                         name="password" value={password}
                         onKeyUp={e => handleKeyPress(e)}
                         aria-label="input-password"
