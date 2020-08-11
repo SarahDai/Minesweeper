@@ -146,7 +146,6 @@ const Login = () => {
             </Col>
             <Col sm={1} />
          </Row>
-         <br/>
          <Row>
             <Col sm={12}>
                <Button 
