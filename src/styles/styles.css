@@ -8,12 +8,12 @@ body {
    /* background: linear-gradient(0deg, #d9cfe0, #e7e1ee, #f9f8fa); */
 }
 
-h1 {
+/* h1 {
    font-size: 2.75em;
    letter-spacing: 2px;
    font-weight: bold;
    color:rgb(65, 60, 71) !important
-}
+} */
 
 h2 {
    font-size: 2.3em;
@@ -25,6 +25,10 @@ h2 {
    display: flex;
    flex-direction: column;
 } */
+
+.width-30 {
+   width: 30rem;
+}
 .bold {
    font-weight: bold;
 }
@@ -51,7 +55,7 @@ h2 {
 }
 
 .login-bg-color {
-   background-color: #dde4e6;
+   background-color: none;
 }
 
 .login-button-margin {

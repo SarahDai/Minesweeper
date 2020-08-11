@@ -84,9 +84,9 @@ const SignUpPage = () => {
 
    return (
       <Card 
-         className="text-light margin-auto margin-top-4">
-         <Card.Header className="text-center display-3 text-dark">
-            Sign Up
+         className="margin-auto margin-top-4 width-30">
+         <Card.Header className="text-center text-dark">
+            <h1>Create your account</h1>
          </Card.Header>
          <Card.Body>
          <br/>
@@ -95,67 +95,51 @@ const SignUpPage = () => {
             <Spinner color="success" style={{width: "6rem", height: "6rem"}} />
          }
          <Row>
-            <Col xl={1} sm={0}/>
-            <Col xl={3} lg={3} sm={12}>
-               <Label for="username"
-                      className="login-font-size text-dark">
-                  Username:
-               </Label>
-            </Col>
-            <Col xl={6} lg={9} sm={12}>
+         <Col sm={1}/>
+            <Col sm={10}>
                <Input type="text" id="username"
                       name="username" value={username}
                       onKeyUp={e => handleKeyPress(e)}
                       aria-label="input-username"
-                      className="login-font-size"
                       valid={username.length > 0 && !isExisting(username, existingUsernames)}
                       invalid={isExisting(username, existingUsernames)}
                       onChange={e => {
                          beginEdit = true;
                          setUsername(e.target.value);
                       }}
+                      placeholder="Username"
                />
                <FormFeedback valid>Sweet! that username is available </FormFeedback>
                <FormFeedback>Oh noes! that name is already taken</FormFeedback>
             </Col>
+            <Col sm={1}/>
          </Row>
          <br />
          <Row>
-            <Col xl={1} sm={0}/>
-            <Col xl={3} lg={3} sm={12}>
-               <Label for="password1"
-                      className="login-font-size text-dark">
-                  Password:
-               </Label>
-            </Col>
-            <Col xl={6} lg={9} sm={12}>
+            <Col sm={1}/>
+            <Col sm={10}>
                <Input type="password" id="password1"
                       name="password" value={password1}
                       onKeyUp={e => handleKeyPress(e)}
                       aria-label="input-password"
-                      className="login-font-size"
+                      placeholder="Password"
                       onChange={e => {
                          beginEdit = true;
                          setPassword1(e.target.value);
                       }}
                />
             </Col>
+            <Col sm={1}/>
          </Row>
          <br />
          <Row>
-            <Col xl={1} sm={0}/>
-            <Col xl={3} lg={3} sm={12}>
-               <Label for="password2"
-                      className="login-font-size text-dark">
-                  Confirm Password:
-               </Label>
-            </Col>
-            <Col xl={6} lg={9} sm={12}>
+            <Col sm={1}/>
+            <Col sm={10}>
                <Input type="password" id="password2"
                       name="password" value={password2}
                       onKeyUp={e => handleKeyPress(e)}
                       aria-label="input-password"
-                      className="login-font-size"
+                      placeholder="Confirm your password"
                       invalid={password2.length > 0 && password1 !== password2}
                       onChange={e => {
                          beginEdit = true;
@@ -164,6 +148,7 @@ const SignUpPage = () => {
                />
                <FormFeedback>Password doesn't match.</FormFeedback>
             </Col>
+            <Col sm={1}/>
          </Row>
          <br />
          {
@@ -179,23 +164,23 @@ const SignUpPage = () => {
          </Card.Body>
          <Card.Footer>
          <Row>
-            <Col lg={2} sm={0}/>
-            <Col lg={3} sm={6}>
-               <Button 
-                  className="login-button-margin login-font-size" block
-                  variant="light" onClick={()=>dispatch(setPage(PAGE.LOGIN))}>
-                  Login
-               </Button>
-            </Col>
-            <Col lg={2} />
-            <Col lg={3} sm={6}>
+            <Col sm={1}/>
+            <Col sm={10}>
                <Button disabled={!canSignUp}
                   className="login-button-margin login-font-size" block
-                  variant="light" onClick={()=>handleSignUp()}>
-                  Sign Up
+                  variant="primary" onClick={()=>handleSignUp()}>
+                  Finish
                </Button>
             </Col>
-            <Col lg={2} sm={0}/>
+            <Col sm={1}/>
+         </Row>
+         <br/>
+         <Row>
+            <a 
+               className="text-primary" block
+               onClick={()=>dispatch(setPage(PAGE.LOGIN))}>
+               <h5>Already have an account? Sign in here.</h5>
+            </a>
          </Row>
          </Card.Footer>   
       </Card>

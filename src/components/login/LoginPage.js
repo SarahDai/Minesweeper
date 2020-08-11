@@ -81,9 +81,9 @@ const Login = () => {
 
    return (
       <>
-      <Card className="margin-top-4 login-bg-color">
-         <Card.Header className="text-center">
-            <h2>Login</h2>
+      <Card className="margin-auto margin-top-4 width-30">
+         <Card.Header className="text-center text-dark">
+            <h1>Please sign in</h1>
          </Card.Header>
          <Card.Body>
          {
@@ -98,69 +98,59 @@ const Login = () => {
          }
          <br/>
          <Row>
-            <Col xl={1} sm={0}/>
-            <Col xl={3} lg={3} sm={12}>
-               <Label for="username"
-                        className="login-font-size">
-                  Username:
-               </Label>
-            </Col>
-            <Col xl={6} lg={9} sm={12}>
+            <Col sm={1}/>
+            <Col sm={10}>
                <Input type="text" id="username"
                         name="username" value={username}
                         onKeyUp={e => handleKeyPress(e)}
                         aria-label="input-username"
-                        className="login-font-size"
+                        placeholder="Username"
                         onChange={e => {
                            beginEdit = true;
                            setUsername(e.target.value);
                         }}
                />
             </Col>
+            <Col sm={1}/>
          </Row>
          <br />
          <Row>
-            <Col xl={1} sm={0}/>
-            <Col xl={3} lg={3} sm={12}>
-               <Label for="password"
-                        className="login-font-size">
-                  Password:
-               </Label>
-            </Col>
-            <Col xl={6} lg={9} sm={12}>
+            <Col sm={1}/>
+            <Col sm={10}>
                <Input type="password" id="password"
                         name="password" value={password}
                         onKeyUp={e => handleKeyPress(e)}
                         aria-label="input-password"
-                        className="login-font-size"
+                        placeholder="Password"
                         onChange={e => {
                            beginEdit = true;
                            setPassword(e.target.value);
                         }}
                />
             </Col>
+            <Col sm={1}/>
          </Row>
          <br />
          </Card.Body>
          <Card.Footer>
          <Row>
-            <Col lg={2} sm={0}/>
-            <Col lg={3} sm={6}>
+            <Col sm={1}/>
+            <Col sm={10}>
                <Button disabled={!canLogin}
                   className="login-button-margin login-font-size" block
-                  variant="light" onClick={(e)=>handleLogin(e)}>
-                  Login
+                  variant="primary" onClick={(e)=>handleLogin(e)}>
+                  Sign In
                </Button>
             </Col>
-            <Col lg={2} />
-            <Col lg={3} sm={6}>
-               <Button 
-                  className="login-button-margin login-font-size" block
-                  variant="light" onClick={()=>dispatch(setPage(PAGE.SIGN_UP))}>
-                  Sign Up
-               </Button>
-            </Col>
-            <Col lg={2} sm={0}/>
+            <Col sm={1} />
+         </Row>
+         <br/>
+         <Row>
+            <a 
+               className="text-primary" block
+               onClick={()=>dispatch(setPage(PAGE.SIGN_UP))}>
+               <h5>Don't have an account? Create one now.</h5>
+            </a>
          </Row>
          </Card.Footer>   
       </Card>
