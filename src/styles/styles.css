@@ -99,12 +99,12 @@ h2 {
   height: 400px;
   margin: 0 auto;
   padding: 20px;
-  background: #48E5C2;
+  background: rosybrown;
 }
 
 .game .cell {
    background: #FCFAF9;
-   border: 1px solid #48E5C2;
+   border: 1px solid rosybrown;
    border-radius: 4px;
    float: left;
    line-height: 45px;

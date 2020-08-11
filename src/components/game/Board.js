@@ -101,13 +101,13 @@ export const getRand = (val) => {
    return Math.floor((Math.random() * 1000 + 1) % val);
 };
 
-let firstLoad = true;
-
 const Board = () => {
    const self = useSelector(state => state.user.user.username);
    const mines = useSelector(state => state.game.mines);
    const board = useSelector(state => state.game.board);
    const pair = useSelector(state => state.game.pair);
+   const width = useSelector(state => state.game.width);
+   const height = useSelector(state => state.game.height);
    const dispatch = useDispatch();
 
    const getTypes = (type, newBoard) => {
@@ -125,12 +125,7 @@ const Board = () => {
    };
 
    const renderBoard = () => {
-      let newBoard = board;
-      if (firstLoad) {
-         firstLoad = false;
-         newBoard = initBoard();  
-      }
-      return newBoard.map((row) => {
+      return board.map((row) => {
          return row.map((item) => {
             return (
                <div key={item.x * row.length + item.y}>
@@ -185,6 +180,7 @@ const Board = () => {
          return null;
       }
       let newBoard = [...board];
+      console.log(JSON.stringify(newBoard));
       if (newBoard[x][y].isMine) {
          // handleStatus(GAME.LOSE);
          handleLose();
@@ -204,7 +200,7 @@ const Board = () => {
    };
 
    const revealEmpty = (x, y, newBoard) => {
-      let area = traverseBoard(x, y, newBoard);
+      let area = traverseBoard(width, height, x, y, newBoard);
       area.forEach(value => {
          if (!value.isFlagged && !value.isRevealed && (value.isEmpty || !value.isMine)) {
             newBoard[value.x][value.y].isRevealed = true;

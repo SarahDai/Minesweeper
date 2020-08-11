@@ -15,11 +15,17 @@ const Game = () => {
       <Card className="margin-top-5">
          <Card.Header>
             <Row>
-               <Col><h1>{self}</h1></Col>
-               <Col><h1>{"Status: " + status}</h1></Col>
-               <Col><h1>{pair}</h1></Col>
+               <h1>{self}</h1>
             </Row>
-            <Row><h1>{"Mines: " + mines}</h1></Row>
+            <Row>
+               <h1>{"Status: " + status}</h1>
+            </Row>
+            <Row>
+               <h1>{pair}</h1>
+            </Row>
+            <Row>
+               <h1>{"Mines: " + mines}</h1>
+            </Row>
          </Card.Header>
          <Card.Body>
             <div className="game">
