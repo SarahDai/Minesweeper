@@ -199,3 +199,8 @@ h2 {
 .notification-list {
    column-count: 1;
 }
+
+.link-style {
+   border: none;
+   background: none;
+}

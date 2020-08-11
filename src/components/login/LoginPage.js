@@ -139,7 +139,7 @@ const Login = () => {
             <Col sm={1}/>
             <Col sm={10}>
                <Button disabled={!canLogin}
-                  className="login-button-margin login-font-size" block
+                  className="login-button-margin login-font-size input-size" block
                   variant="primary" onClick={(e)=>handleLogin(e)}>
                   Sign In
                </Button>
@@ -148,11 +148,13 @@ const Login = () => {
          </Row>
          <br/>
          <Row>
-            <a 
-               className="text-primary" block
-               onClick={()=>dispatch(setPage(PAGE.SIGN_UP))}>
-               <h5>Don't have an account? Create one now.</h5>
-            </a>
+            <Col sm={12}>
+               <Button 
+                  className="text-primary link-style" block
+                  onClick={()=>dispatch(setPage(PAGE.SIGN_UP))}>
+                  Don't have an account? Create one now.
+               </Button>
+            </Col>
          </Row>
          </Card.Footer>   
       </Card>

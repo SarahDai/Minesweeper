@@ -170,7 +170,7 @@ const SignUpPage = () => {
             <Col sm={1}/>
             <Col sm={10}>
                <Button disabled={!canSignUp}
-                  className="login-button-margin login-font-size" block
+                  className="login-button-margin login-font-size input-size" block
                   variant="primary" onClick={()=>handleSignUp()}>
                   Finish
                </Button>
@@ -179,11 +179,13 @@ const SignUpPage = () => {
          </Row>
          <br/>
          <Row>
-            <a 
-               className="text-primary" block
-               onClick={()=>dispatch(setPage(PAGE.LOGIN))}>
-               <h5>Already have an account? Sign in here.</h5>
-            </a>
+            <Col sm={12}>
+               <Button 
+                  className="text-primary link-style" block
+                  onClick={()=>dispatch(setPage(PAGE.LOGIN))}>
+                  Already have an account? Sign in here.
+               </Button>
+            </Col>
          </Row>
          </Card.Footer>   
       </Card>
