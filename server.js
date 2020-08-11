@@ -243,22 +243,22 @@ const updateOnboardingStatus = async (username, status) => {
 }
 
 // When an invitation is initialized, update two players gaming status to pending
-const updateGamingStatus = async (requestFrom, requestTo, status) => {
+const updateGamingStatus = async (requestFrom, status) => {
     const requestFromDocId = onlinePlayers[requestFrom].docId;
-    const requestToDocId = onlinePlayers[requestTo].docId;
+    // const requestToDocId = onlinePlayers[requestTo].docId;
     const requestFromPlayer = database.collection("user").doc(requestFromDocId);
-    const requestToPlayer = database.collection("user").doc(requestToDocId);
+    // const requestToPlayer = database.collection("user").doc(requestToDocId);
 
     try { 
         const resultFrom = await requestFromPlayer.set({
             gamingStatus: status
         }, {merge: true});
 
-        const resultTo = await requestToPlayer.set({
-            gamingStatus: status
-        }, {merge: true});
+        // const resultTo = await requestToPlayer.set({
+        //     gamingStatus: status
+        // }, {merge: true});
         onlinePlayers[requestFrom].status = status;
-        onlinePlayers[requestTo].status = status;
+        // onlinePlayers[requestTo].status = status;
         io.sockets.emit("online players update", onlinePlayers);
 
     } catch (error) {
@@ -338,13 +338,14 @@ io.on("connection", client => {
 
     // When a client sends an invitation to another player
     client.on("send game invitation", (invitationFrom, invitationTo) => {
-        updateGamingStatus(invitationFrom, invitationTo, PLAYER_STATUS.PENDING).then(
+        updateGamingStatus(invitationFrom, PLAYER_STATUS.PENDING).then(
+            () => updateGamingStatus(invitationTo, PLAYER_STATUS.PENDING).then(
             () => {
                 const requestToClientId = onlinePlayers[invitationTo].id;
                 io.to(requestToClientId).emit("receive invitation", invitationFrom);
                 client.emit("successfully sent invitation to receiver");
             }
-        )
+        ))
     })
 
     // When a client accept an invitation from another player
@@ -361,19 +362,21 @@ io.on("connection", client => {
 
     // When an invitation is released (a declined invitation)
     client.on("release invitation", (invitationFrom, invitationTo) => {
-        updateGamingStatus(invitationFrom, invitationTo, PLAYER_STATUS.AVAILABLE).then(
+        updateGamingStatus(invitationFrom, PLAYER_STATUS.AVAILABLE).then(
+            () => updateGamingStatus(invitationTo, PLAYER_STATUS.AVAILABLE).then(
             () => {
                 const requestFromClientId = onlinePlayers[invitationFrom].id;
                 const requestToClientId = onlinePlayers[invitationTo].id;
                 io.to(requestToClientId).emit("invitation released");
                 io.to(requestFromClientId).emit("invitation released");
             }
-        )
+        ))
     })
 
     // When a client asks for starting a game
     client.on("start game", (invitationFrom, invitationTo) => {
-        updateGamingStatus(invitationFrom, invitationTo, PLAYER_STATUS.IN_GAME).then(
+        updateGamingStatus(invitationFrom, PLAYER_STATUS.IN_GAME).then(
+            () => updateGamingStatus(invitationTo, PLAYER_STATUS.IN_GAME).then(
             () => {
                 const requestFromClientId = onlinePlayers[invitationFrom].id;
                 const requestToClientId = onlinePlayers[invitationTo].id;
@@ -384,6 +387,16 @@ io.on("connection", client => {
                 io.to(requestFromClientId).emit("received start game request");
                 io.to(requestToClientId).emit("set pair up", invitationFrom);
                 io.to(requestToClientId).emit("received start game request");
+            }
+        ))
+    })
+
+    // When a game is over and the client asks for closing the game
+    client.on("close game", player => {
+        updateGamingStatus(player, PLAYER_STATUS.AVAILABLE).then(
+            () => {
+                const clientId = onlinePlayers[player].id;
+                io.to(clientId).emit("received close game request")
             }
         )
     })

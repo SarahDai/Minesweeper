@@ -1,6 +1,6 @@
 import { GAME } from "../storeConstants";
 import { SET_GAME_STATUS, SET_GAME_MINES, SET_GAME_BOARD, SET_GAME_PAIR, 
-   UPDATE_WIN, UPDATE_LOSE } from "../actionConstants";
+   UPDATE_WIN, UPDATE_LOSE, GAME_OVER } from "../actionConstants";
 
 export const INITIAL_STATE = {
    height: 8,
@@ -43,6 +43,8 @@ export const gameReducer = (state=INITIAL_STATE, action) => {
             ...state,
             pair: action.payload.pair
          }
+      case GAME_OVER:
+         return INITIAL_STATE
       default:
          return state;
    };

@@ -23,6 +23,7 @@ export const UPDATE_NOTIFICATIONS = "UPDATE_NOTIFICATIONS";
 // game update
 export const UPDATE_WIN = "UPDATE_WIN";
 export const UPDATE_LOSE = "UPDATE_LOSE";
+export const GAME_OVER = "GAME_OVER";
 
 
 
