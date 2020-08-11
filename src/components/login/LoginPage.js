@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button } from "react-bootstrap";
-import { Label, Input, Row, Col, Alert } from "reactstrap";
+import { Card, Button, Alert } from "react-bootstrap";
+import { Label, Input, Row, Col } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { requestLogin, setPage } from "../../redux/actions/connectActions";
 import { LOGIN_STATE, PAGE } from "../../redux/storeConstants";
@@ -50,16 +50,17 @@ const Login = () => {
    }
 
    const handleAlert = () => {
+      console.log(loginState);
       if (!beginEdit) {
          if (loginState === LOGIN_STATE.NETWORK_ERROR) {
             return (
-               <Alert color="danger">
+               <Alert variant="danger">
                   Unable to connect to the server! Please check your internet connection and try again.
                </Alert>
             );
          } else if (loginState === LOGIN_STATE.LOGGED_NON_EXIST_USER_FAILURE) {
             return (
-               <Alert color="danger">
+               <Alert variant="danger">
                   This user has not been signed up, please sign up with it or login with another user.
                </Alert>
             );
@@ -88,15 +89,14 @@ const Login = () => {
          <Card.Body>
          {
             showAlert &&
-            <Row>
-               <Col xl={4} lg={3} sm={0}/>
-               <Col xl={6} lg={9} sm={12}>
+            <Row className="margin-bottom-1">
+               <Col sm={1}/>
+               <Col sm={10}>
                   {handleAlert()}
                </Col>
-               <Col xl={2} />
+               <Col sm={1} />
             </Row>
          }
-         <br/>
          <Row>
             <Col sm={1}/>
             <Col sm={10}>
@@ -132,7 +132,6 @@ const Login = () => {
             </Col>
             <Col sm={1}/>
          </Row>
-         <br />
          </Card.Body>
          <Card.Footer>
          <Row>

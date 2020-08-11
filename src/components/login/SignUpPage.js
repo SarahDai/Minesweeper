@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button } from "react-bootstrap";
-import { Label, Input, FormFeedback, Spinner, Alert, Row, Col } from "reactstrap";
+import { Card, Button, Alert } from "react-bootstrap";
+import { Label, Input, FormFeedback, Spinner, Row, Col } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 // import { setPage } from "../redux/actions";
 import { requestAllUsernames, requestRegister, requestLogin, setPage } from "../../redux/actions/connectActions";
@@ -68,13 +68,13 @@ const SignUpPage = () => {
       if (!beginEdit) {
          if (registerStatus === SIGN_UP_STATE.NETWORK_ERROR) {
             return (
-               <Alert color="danger">
+               <Alert variant="danger">
                   Unable to connect to the server! Please check your internet connection and try again.
                </Alert>
             );
          } else if (registerStatus === SIGN_UP_STATE.SIGNED_UP_SUCCESS) {
             return (
-               <Alert color="success">
+               <Alert variant="success">
                   Successfully signed up! Directing you to the lobby...
                </Alert>
             );
@@ -89,11 +89,27 @@ const SignUpPage = () => {
             <h1>Create your account</h1>
          </Card.Header>
          <Card.Body>
-         <br/>
+         {
+            showAlert &&
+            <Row className="margin-bottom-1">
+               <Col xl={4} lg={3} sm={0}/>
+               <Col xl={6} lg={9} sm={12}>
+                  {handleAlert()}
+               </Col>
+               <Col xl={2} />
+            </Row>
+         }
          {
             registerStatus === SIGN_UP_STATE.SIGNED_UP_REQUESTED &&
-            <Spinner color="success" style={{width: "6rem", height: "6rem"}} />
+            <Row className="margin-bottom-1 margin-auto">
+               <Col sm={4}/>
+               <Col sm={4}>
+                  <Spinner color="success" style={{width: "6rem", height: "6rem"}}/>
+               </Col>
+               <Col sm={4}/>
+            </Row>
          }
+         
          <Row>
          <Col sm={1}/>
             <Col sm={10}>
@@ -153,17 +169,6 @@ const SignUpPage = () => {
             </Col>
             <Col sm={1}/>
          </Row>
-         <br />
-         {
-            showAlert &&
-            <Row>
-               <Col xl={4} lg={3} sm={0}/>
-               <Col xl={6} lg={9} sm={12}>
-                  {handleAlert()}
-               </Col>
-               <Col xl={2} />
-            </Row>
-         }
          </Card.Body>
          <Card.Footer>
          <Row>
