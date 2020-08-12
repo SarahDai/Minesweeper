@@ -47,3 +47,5 @@ export const SET_CONNECTED = "SET_CONNECTED";
 export const SET_ALL_MESSAGES = "SET_ALL_MESSAGES";
 export const SET_CLIENT_ID = "SET_CLIENT_ID";
 export const SET_GAME_PAIR = "SET_GAME_PAIR";
+export const SET_GAME_COLOR = "SET_GAME_COLOR";
+export const SET_GAME_PAIR_COLOR = "SET_GAME_PAIR_COLOR";

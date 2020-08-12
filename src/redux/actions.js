@@ -5,7 +5,7 @@ import {
     STORE_USER_LIST, SET_GAME_STATUS, SET_PAGE,
     SET_GAME_BOARD, SET_GAME_MINES, SET_ALL_MESSAGES,
     SET_CONNECTED, SET_CLIENT_ID, SET_GAME_PAIR, UPDATE_WIN,
-    UPDATE_LOSE
+    UPDATE_LOSE, SET_GAME_COLOR, SET_GAME_PAIR_COLOR
 } from "./actionConstants";
 import store from "./store";
 import { STATUS, SIGN_UP_STATE } from "./storeConstants";
@@ -240,21 +240,35 @@ export const setGameWin = player => {
     return dispatch => {
         sendWinStatusToServer(player);
     }
-}
+};
 
 export const updateLoseStatus = () => ({
     type: UPDATE_LOSE
-})
+});
 
 export const setGameLose = player => {
     return dispatch => {
         sendLoseStatusToServer(player);
     }
-}
+};
 
 export const setGamePair = pair => ({
     type: SET_GAME_PAIR,
     payload: {
-        pair: pair
+        pair
+    }
+});
+
+export const setGameColor = color => ({
+    type: SET_GAME_COLOR,
+    payload: {
+        color
+    }
+});
+
+export const setGamePairColor = pairColor => ({
+    type: SET_GAME_PAIR_COLOR,
+    payload: {
+        pairColor
     }
 });

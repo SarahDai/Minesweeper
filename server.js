@@ -86,7 +86,7 @@ const GAME = {
 const NOTIFICATION_TYPE = {
     SYSTEM: "SYSTEM",
     GAME: "GAME"
-}
+};
 
 let invitation_pair = {};
 let pair_book = {};
@@ -437,9 +437,13 @@ io.on("connection", client => {
                 pair_book[requestFromClientId] = requestToClientId;
                 pair_book[requestToClientId] = requestFromClientId;
                 io.to(requestFromClientId).emit("set pair up", invitationTo);
+                io.to(requestFromClientId).emit("set current color", "red");
+                io.to(requestFromClientId).emit("set pair color", "green");
                 io.to(requestFromClientId).emit("get init board");
                 io.to(requestFromClientId).emit("received start game request");
                 io.to(requestToClientId).emit("set pair up", invitationFrom);
+                io.to(requestToClientId).emit("set current color", "green");
+                io.to(requestToClientId).emit("set pair color", "red");
                 io.to(requestToClientId).emit("received start game request");
             }
         ))
