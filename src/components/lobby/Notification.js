@@ -1,6 +1,5 @@
 import React from "react";
 import { Card, CardBody, CardHeader } from "reactstrap";
-import { useSelector } from "react-redux";
 
 const Notification = props => {
     return (

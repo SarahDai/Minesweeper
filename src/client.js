@@ -1,9 +1,8 @@
 import store from "./redux/store";
 import { 
-    setAllMessages, setConnected, getNewBoard, setClientID, 
-    setGameBoard, setGamePair, setGameMines, setGameStatus, 
-    validateUser, updateWinStatus, updateLoseStatus, setGameColor, 
-    setGamePairColor 
+    getNewBoard, setGameBoard, setGamePair, setGameMines, 
+    setGameStatus, updateWinStatus, updateLoseStatus, 
+    setGameColor, setGamePairColor 
 } from "./redux/actions";
 import { 
     loginResponse, registerReponse, getAllUsernames, 
