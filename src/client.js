@@ -45,11 +45,11 @@ socket.on("all notifications", notifications => {
 // Request to login to join the game lobby
 export const joinLobby = (username, password) => {
     socket.emit("request to login", username, password);
-
-    socket.on("login response", response => {
-        store.dispatch(loginResponse(response));
-    });
 }
+
+socket.on("login response", response => {
+    store.dispatch(loginResponse(response));
+});
 
 // Request to logout 
 export const setLogoutToServer = (username) => {
@@ -98,7 +98,7 @@ export const sendInvitationToServer = (invitationFrom, invitationTo) => {
 // Invitation pending but one player is offline, default set to decline the request
 socket.on("receiver offline", () => {
     store.dispatch(declinedInvitation());
-    setTimeout(store.dispatch(closedInvitation()), 500);
+    setTimeout(() => store.dispatch(closedInvitation()), 1000);
 })
 
 // Receive game invitation from the sender

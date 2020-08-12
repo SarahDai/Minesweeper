@@ -48,6 +48,7 @@ const LOGIN_STATE = {
     LOGIN_REQUESTED: "login requested",
     LOGGED_IN: "logged in",
     LOGGED_OUT: "logged out",
+    ALREADY_LOGGED_IN: "already logged in",
     LOGGED_NON_EXIST_USER_FAILURE: "logged non exist user failure",
     LOGGED_INVALID_PASSWORD_FAILURE: "logged invalid password failure",
     NETWORK_ERROR: "network error"
@@ -328,10 +329,19 @@ io.on("connection", client => {
 
     // When a client requests login to join the Lobby
     client.on("request to login", (username, password) => {
-        // Emit a message to just this client
-        validateUser(username, password, client.id).then(
-            response => client.emit("login response", response)
-        )
+        if (playerIsOnline(username)) {
+            const feedback = {
+                user: {},
+                loginStatus: LOGIN_STATE.ALREADY_LOGGED_IN,
+                page: PAGE.LOGIN
+            }
+            client.emit("login response", feedback);
+        } else {
+            // Emit a message to just this client
+            validateUser(username, password, client.id).then(
+                response => client.emit("login response", response)
+            )
+        }
     })
 
     // When a client request to logout
@@ -492,7 +502,9 @@ io.on("connection", client => {
     // Update disconnect information
     client.on("disconnect", () => {
         const username = getClientUsername(client.id);
-        processNotifications(NOTIFICATION_TYPE.SYSTEM, username + " is offline.");
+        if (username !== "") {
+            processNotifications(NOTIFICATION_TYPE.SYSTEM, username + " is offline.");
+        }
         console.log(invitation_pair);
         if (invitation_pair.hasOwnProperty(client.id)) {
             const pairClientId = invitation_pair[client.id];

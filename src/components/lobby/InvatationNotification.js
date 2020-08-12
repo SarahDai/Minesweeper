@@ -19,7 +19,7 @@ const InvatationNotification = () => {
 
     const decline = () => {
         dispatch(declineInvitation(invitationFrom));
-        setTimeout(() => dispatch(releaseInvitation(invitationFrom, invitationTo), 500));
+        setTimeout(() => dispatch(releaseInvitation(invitationFrom, invitationTo), 1000));
     }
 
     const displayContent = () => {
