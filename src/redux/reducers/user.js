@@ -28,7 +28,6 @@ export const userReducer = (state = INITIAL_STATE, action) => {
             loginStatus: action.payload.loginStatus,
             page: action.payload.page,
             registerStatus: SIGN_UP_STATE.SIGNED_UP_CLOSED
-
          }
       }
       case SET_ONBOARDING_STATUS: {

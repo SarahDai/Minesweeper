@@ -5,7 +5,7 @@ const Loading = () =>
     <Modal className="loading">
         <ModalBody>
             <Spinner className="spinner" color="info" size="xl" />
-            <p>Fetching... please hold</p>
+            <p>Logging in... please hold</p>
         </ModalBody>
     </Modal>
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Alert } from "react-bootstrap";
-import { Label, Input, Row, Col } from "reactstrap";
+import { Input, Row, Col } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { requestLogin, setPage } from "../../redux/actions/connectActions";
 import { LOGIN_STATE, PAGE } from "../../redux/storeConstants";
@@ -76,6 +76,12 @@ const Login = () => {
                   Successfully logged in!
                </Alert>
             );
+         } else if (loginState === LOGIN_STATE.ALREADY_LOGGED_IN) {
+            return (
+               <Alert variant="danger">
+                  Oooops! You've already logged in somewhere. 
+               </Alert>
+            )
          }
       }
    }
