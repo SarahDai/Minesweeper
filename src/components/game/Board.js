@@ -25,6 +25,7 @@ export const createEmptyArray = (width, height) => {
             isRevealed: false,
             isEmpty: false,
             isFlagged: false,
+            color: "", 
          };
       }
    }
@@ -108,6 +109,7 @@ const Board = () => {
    const pair = useSelector(state => state.game.pair);
    const width = useSelector(state => state.game.width);
    const height = useSelector(state => state.game.height);
+   const color = useSelector(state => state.game.color);
    const dispatch = useDispatch();
 
    const getTypes = (type, newBoard) => {
@@ -180,7 +182,6 @@ const Board = () => {
          return null;
       }
       let newBoard = [...board];
-      console.log(JSON.stringify(newBoard));
       if (newBoard[x][y].isMine) {
          // handleStatus(GAME.LOSE);
          handleLose();
@@ -188,6 +189,7 @@ const Board = () => {
       }
       newBoard[x][y].isFlagged = false;
       newBoard[x][y].isRevealed = true;
+      newBoard[x][y].color = color;
       if (newBoard[x][y].isEmpty) {
          newBoard = revealEmpty(x, y, newBoard);
       }
@@ -197,6 +199,7 @@ const Board = () => {
          newBoard = revealBoard(newBoard);
       }
       dispatch(sendNewBoard(newBoard));
+      renderBoard(newBoard);
    };
 
    const revealEmpty = (x, y, newBoard) => {

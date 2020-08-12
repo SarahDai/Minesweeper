@@ -1,9 +1,17 @@
 import store from "./redux/store";
-import { setAllMessages, setConnected, getNewBoard, setClientID, setGameBoard, setGamePair, setGameMines, setGameStatus, validateUser, updateWinStatus, updateLoseStatus } from "./redux/actions";
-import { loginResponse, registerReponse, getAllUsernames, waitForResponse,
-    receivedInvitation, updatePlayers, acceptedInvitation, declinedInvitation,
-    setPage, closedInvitation, loggedOut, updatedOnboardingStatus, updateNotifications, setgameClosed,
-     } from "./redux/actions/connectActions";
+import { 
+    setAllMessages, setConnected, getNewBoard, setClientID, 
+    setGameBoard, setGamePair, setGameMines, setGameStatus, 
+    validateUser, updateWinStatus, updateLoseStatus, setGameColor, 
+    setGamePairColor 
+} from "./redux/actions";
+import { 
+    loginResponse, registerReponse, getAllUsernames, 
+    waitForResponse, receivedInvitation, updatePlayers, 
+    acceptedInvitation, declinedInvitation, setPage, 
+    closedInvitation, loggedOut, updatedOnboardingStatus, 
+    updateNotifications, setgameClosed
+} from "./redux/actions/connectActions";
 import { PAGE } from "../src/redux/storeConstants";
 
 /** CLIENT CONFIGURATION - connect to the server */
@@ -165,10 +173,8 @@ socket.on("get init board", () => {
 
 // Set the pair player's board
 socket.on("set pair board", board => {
-    console.log("client pair board");
     store.dispatch(setGameBoard(board));
 });
-
 
 // Set the pair player's mine locations
 socket.on("set pair mines", mines => {
@@ -178,6 +184,16 @@ socket.on("set pair mines", mines => {
 // Set the pair player's status
 socket.on("set pair status", status => {
     store.dispatch(setGameStatus(status));
+});
+
+// Set the current player's color
+socket.on("set current color", color => {
+    store.dispatch(setGameColor(color));
+});
+
+// Set the pair player's color
+socket.on("set pair color", color => {
+    store.dispatch(setGamePairColor(color));
 });
 
 // Request to update pair player's board

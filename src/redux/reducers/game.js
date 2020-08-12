@@ -1,6 +1,9 @@
 import { GAME } from "../storeConstants";
-import { SET_GAME_STATUS, SET_GAME_MINES, SET_GAME_BOARD, SET_GAME_PAIR, 
-   UPDATE_WIN, UPDATE_LOSE, GAME_OVER } from "../actionConstants";
+import {
+   SET_GAME_STATUS, SET_GAME_MINES, SET_GAME_BOARD, 
+   SET_GAME_PAIR, UPDATE_WIN, UPDATE_LOSE, GAME_OVER,
+   SET_GAME_COLOR, SET_GAME_PAIR_COLOR 
+} from "../actionConstants";
 
 export const INITIAL_STATE = {
    height: 8,
@@ -8,7 +11,9 @@ export const INITIAL_STATE = {
    mines: 10,
    status: GAME.IN_PROGRESS,
    board: [],
-   pair: ""
+   pair: "",
+   color: "",
+   pairColor: ""
 };
 
 export const gameReducer = (state=INITIAL_STATE, action) => {
@@ -42,6 +47,16 @@ export const gameReducer = (state=INITIAL_STATE, action) => {
          return {
             ...state,
             pair: action.payload.pair
+         }
+      case SET_GAME_COLOR:
+         return {
+            ...state,
+            color: action.payload.color
+         }
+      case SET_GAME_PAIR_COLOR:
+         return {
+            ...state,
+            pairColor: action.payload.pairColor
          }
       case GAME_OVER:
          return INITIAL_STATE
