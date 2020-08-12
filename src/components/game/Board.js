@@ -116,7 +116,7 @@ const Board = () => {
           row.forEach(item => {
               if ((type === "mine" && item.isMine) ||
                   (type === "flag" && item.isFlagged) ||
-                  (type === "hide" && item.isRevealed)) {
+                  (type === "hide" && !item.isRevealed)) {
                   arr.push(item);
               }
           });
