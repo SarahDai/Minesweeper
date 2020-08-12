@@ -17,7 +17,7 @@ const SystemNotification = () => {
                 <Card style={{color: "rosybrown"}} className="margin-bottom-half">
                     <CardHeader tag="h3" className="bold text-centered">SYSTEM Notificition</CardHeader>
                 </Card>
-                <Badge outline color="secondary margin-bottom-half">latest notifications</Badge>
+                <Badge color="secondary margin-bottom-half">latest notifications</Badge>
                 <CardColumns className="notification-list">
                     {
                         getSortedNotifications(notifications).map((notification, index) => 

@@ -233,6 +233,7 @@ const processNotifications = (type, msg) => {
 
 // When a player requests to update onboarding status
 const updateOnboardingStatus = async (username, status) => {
+    if (!playerIsOnline(username)) return;
     const docId = onlinePlayers[username].docId;
     const userDoc = database.collection("user").doc(docId);
 
@@ -250,6 +251,7 @@ const updateOnboardingStatus = async (username, status) => {
 
 // When an invitation is initialized, update two players gaming status to pending
 const updateGamingStatus = async (requestFrom, status) => {
+    if (!playerIsOnline(requestFrom)) return;
     const requestFromDocId = onlinePlayers[requestFrom].docId;
     const requestFromPlayer = database.collection("user").doc(requestFromDocId);
 
@@ -268,6 +270,7 @@ const updateGamingStatus = async (requestFrom, status) => {
 
 // Update player win number in database
 const incrementWinNumber = async player => {
+    if (!playerIsOnline(player)) return;
     const docId = onlinePlayers[player].docId;
     const userDoc = database.collection("user").doc(docId);
 
@@ -284,6 +287,7 @@ const incrementWinNumber = async player => {
 
 // Update player lose number in databse
 const incrementLoseNumber = async player => {
+    if (!playerIsOnline(player)) return;
     const docId = onlinePlayers[player].docId;
     const userDoc = database.collection("user").doc(docId);
 
@@ -451,6 +455,7 @@ io.on("connection", client => {
 
     // When a game is over and the client asks for closing the game
     client.on("close game", player => {
+        if (!playerIsOnline(player)) return;
         updateGamingStatus(player, PLAYER_STATUS.AVAILABLE).then(
             () => {
                 const clientId = onlinePlayers[player].id;
@@ -509,6 +514,7 @@ io.on("connection", client => {
 
     // Update disconnect information
     client.on("disconnect", () => {
+        console.log(client.id + " is disconnected");
         const username = getClientUsername(client.id);
         if (username === "") {
             cleanUpPlayers();
@@ -550,58 +556,4 @@ io.on("connection", client => {
         }
     });
 
-
-    // // Send messages to and receive messages from the client in here
-    // if (!client_list.includes(client.id)) {
-    //     client_list.push(client.id);
-    // }
-
-    // client.emit("hello", "hello client");
-    // client.emit("client id", client.id);
-
-    // if (client_list.length > 0 &&
-    //     client_list.length % 2 == 0 &&
-    //     !pair_book[client.id]) {
-    //     const length = client_list.length;
-    //     const p2 = client_list[length - 2];
-    //     const p1 = client_list[length - 1];
-    //     pair_book[p2] = p1;
-    //     pair_book[p1] = p2;    
-    //     client.emit("set pair up", p1, p2);
-    //     io.to(p2).emit("set pair up", p1, p2);
-    //     client.emit("get init board", p1);
-    // }
-
-
-
-
-
-
-
-    // ------------------------------------------------------ //
-
-    // client.on("join", username => {
-    //     io.sockets.emit("set connected");
-    //     clients[client.id] = username;
-    //     messages.push(username + " has joined the chat");
-    //     io.sockets.emit("all messages", messages);
-    // });
-
-    // client.on("new message", msg => {
-    //     messages.push(clients[client.id] + ": " + msg)
-    //     io.sockets.emit("all messages", messages);
-    // });
-
-    /**
-     * // Send to this client only
-     * client.emit("message name", content)
-     * 
-     * // Send to all connected clients
-     * io.sockets.emit("message name", content)
-     * 
-     * // Listen for a message from a client
-     * client.on("message name", (dataFromClient) => { 
-     *  //do something
-     * })
-     */
 })

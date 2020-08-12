@@ -1,6 +1,5 @@
 import React, {  } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { GAME } from "../../redux/storeConstants";
 import Cell from "./Cell";
 import { setGameStatus, sendNewMines, sendNewBoard, setGameWin, setGameLose } from "../../redux/actions";
 import { startGameToServer } from '../../client';

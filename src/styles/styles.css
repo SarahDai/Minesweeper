@@ -230,6 +230,7 @@ h2 {
 @media screen and (max-width: 768px) {
    .system-notification-frame {
       max-height: 50vh;
+      margin-bottom: 2rem;
    }
 
    .online-player-frame {
@@ -238,7 +239,7 @@ h2 {
 }
 
 .player-border {
-   border-bottom: #212529 solid 1.75px;
+   border: #212529 solid 1.75px;
 }
 .link-style {
    border: none;

@@ -227,19 +227,3 @@ export const sendLoseStatusToServer = player => {
 socket.on("updated lose status", () => {
     store.dispatch(updateLoseStatus());
 })
-
-// socket.on("all messages", msg => {
-//     store.dispatch(setAllMessages(msg));
-// });
-
-// socket.on("set connected", () => {
-//     store.dispatch(setConnected());
-// });
-
-export const newMessage = msg => {
-    socket.emit("new message", msg);
-};
-
-// socket.on("client id", cid => {
-//     store.dispatch(setClientID(cid));
-// });
