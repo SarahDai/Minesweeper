@@ -38,15 +38,14 @@ const OnboardingSlides = () => {
     return (
         <div className="slides-bg">
             <Slide slideStatus={setSlideState(1)} slideId={1}>
-                <h2>Feel bored? Find online players to play with the minesweeper game.</h2>
+                <h3>Feel bored? Find online players to play with the minesweeper game.</h3>
                 <div className="fit my-4">
                     <img src={process.env.PUBLIC_URL + "/onboarding1.png"}
                         className="img-fluid my-4 float-right fit" alt="Find online players to play with the minesweeper game." />
                 </div>
             </Slide>
             <Slide slideStatus={setSlideState(2)} slideId={2}>
-                <h2>Send invitation to your interested parterners.</h2>
-                <p>Click on Send Invitation button to request gaming.</p>
+                <h3>Send invitation to your interested parterners.</h3>
                 <p>If the other player is unfortunately offline when requesting, you would be declined automatically.</p>
                 <div className="fit my-4">
                     <img src={process.env.PUBLIC_URL + "/onboarding2.png"}
@@ -55,7 +54,7 @@ const OnboardingSlides = () => {
                 </div>
             </Slide>
             <Slide slideStatus={setSlideState(3)} slideId={3}>
-                <h2>Minesweeper Expert? Two-player game now.</h2>
+                <h3>Minesweeper Expert? Two-player game now.</h3>
                 <p>Block: show the number of mines adjacent to the block</p>
                 <p>Flag: Put a flag in a zone when you have confirmed that there is a mine.</p>
                 <p>**Important: this time you can unflag your parterner's if you have a more cautious conclusion.</p>
