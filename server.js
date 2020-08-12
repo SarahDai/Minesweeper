@@ -212,6 +212,7 @@ const cleanUpPlayers = () => {
     for (let player of playerUsernames) {
         if (!connectedClients.includes(onlinePlayers[player].id))
             delete onlinePlayers[player];
+            io.sockets.emit("online players update", onlinePlayers);
     }
 }
 
@@ -290,8 +291,10 @@ const incrementLoseNumber = async player => {
         const result = await userDoc.update({
             lose: firebase.firestore.FieldValue.increment(1)
         })
-        onlinePlayers[player].lose = onlinePlayers[player].lose + 1;
-        io.sockets.emit("online players update", onlinePlayers);
+        if (playerIsOnline(player)) {
+            onlinePlayers[player].lose = onlinePlayers[player].lose + 1;
+            io.sockets.emit("online players update", onlinePlayers);
+        }
     } catch (error) {
         console.log("INCREMENT LOSE NUMBER ERROR: " + error);
     }
@@ -430,6 +433,7 @@ io.on("connection", client => {
             () => {
                 const requestFromClientId = onlinePlayers[invitationFrom].id;
                 const requestToClientId = onlinePlayers[invitationTo].id;
+                releaseInvitationPair(requestFromClientId);
                 pair_book[requestFromClientId] = requestToClientId;
                 pair_book[requestToClientId] = requestFromClientId;
                 io.to(requestFromClientId).emit("set pair up", invitationTo);
@@ -502,9 +506,11 @@ io.on("connection", client => {
     // Update disconnect information
     client.on("disconnect", () => {
         const username = getClientUsername(client.id);
-        if (username !== "") {
-            processNotifications(NOTIFICATION_TYPE.SYSTEM, username + " is offline.");
+        if (username === "") {
+            cleanUpPlayers();
+            return;
         }
+        processNotifications(NOTIFICATION_TYPE.SYSTEM, username + " is offline.");
         console.log(invitation_pair);
         if (invitation_pair.hasOwnProperty(client.id)) {
             const pairClientId = invitation_pair[client.id];
@@ -515,6 +521,8 @@ io.on("connection", client => {
                         () => {
                             releaseInvitationPair(client.id);
                             io.to(pairClientId).emit("receiver offline");
+                            cleanUpPlayers();
+                            return;
                         })
                 })
         }
@@ -522,19 +530,20 @@ io.on("connection", client => {
             const pairClientId = pair_book[client.id];
             releaseGamePair(pairClientId);
             const pairUsername = getClientUsername(pairClientId);
+            console.log("pair username", pairUsername);
             incrementLoseNumber(username).then(
                 () => {
                     updateGamingStatus(username, PLAYER_STATUS.AVAILABLE).then(
                         () => {
                             incrementWinNumber(pairUsername).then(
                                 () => {
-                                    io.to(playerClientId).emit("updated win status");
-                                }
-                            )
-                        }
-                    )}
-        )}
-        cleanUpPlayers();
+                                    io.to(pairClientId).emit("updated win status");
+                                    cleanUpPlayers();
+                                    return;
+                                })
+                        })
+                })
+        }
     });
 
 
