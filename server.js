@@ -87,6 +87,7 @@ const NOTIFICATION_TYPE = {
     GAME: "GAME"
 }
 
+let invitation_pair = {};
 let pair_book = {};
 let board_pair = {};
 let mines_pair = {};
@@ -248,27 +249,22 @@ const updateOnboardingStatus = async (username, status) => {
 // When an invitation is initialized, update two players gaming status to pending
 const updateGamingStatus = async (requestFrom, status) => {
     const requestFromDocId = onlinePlayers[requestFrom].docId;
-    // const requestToDocId = onlinePlayers[requestTo].docId;
     const requestFromPlayer = database.collection("user").doc(requestFromDocId);
-    // const requestToPlayer = database.collection("user").doc(requestToDocId);
 
     try { 
         const resultFrom = await requestFromPlayer.set({
             gamingStatus: status
         }, {merge: true});
-
-        // const resultTo = await requestToPlayer.set({
-        //     gamingStatus: status
-        // }, {merge: true});
-        onlinePlayers[requestFrom].status = status;
-        // onlinePlayers[requestTo].status = status;
-        io.sockets.emit("online players update", onlinePlayers);
-
+        if (playerIsOnline(requestFrom)) {
+            onlinePlayers[requestFrom].status = status;
+            io.sockets.emit("online players update", onlinePlayers);
+        }
     } catch (error) {
         console.log("UPDATE STATUS ERROR: " + error)
     }
 }
 
+// Update player win number in database
 const incrementWinNumber = async player => {
     const docId = onlinePlayers[player].docId;
     const userDoc = database.collection("user").doc(docId);
@@ -284,6 +280,7 @@ const incrementWinNumber = async player => {
     }
 }
 
+// Update player lose number in databse
 const incrementLoseNumber = async player => {
     const docId = onlinePlayers[player].docId;
     const userDoc = database.collection("user").doc(docId);
@@ -299,13 +296,38 @@ const incrementLoseNumber = async player => {
     }
 }
 
+const releaseGamePair = winner => {
+    const pair = pair_book[winner];
+    delete pair_book[winner];
+    delete pair_book[pair];
+    delete board_pair[winner];
+    delete board_pair[pair];
+    delete mines_pair[winner];
+    delete mines_pair[pair];
+}
+
+const releaseInvitationPair = player => {
+    const pair = invitation_pair[player];
+    delete invitation_pair[player];
+    delete invitation_pair[pair];
+}
+
+const getClientUsername = clientId => {
+    const playerUsernames = Object.keys(onlinePlayers);
+    for (let player of playerUsernames) {
+        if (onlinePlayers[player].id === clientId) {
+            return player;
+        }
+    }
+    return "";
+}
+
 io.on("connection", client => {
     // Emit a message to all clients (io.socketS)
     io.sockets.emit("notification", client.id + " has connected to the server");
 
     // When a client requests login to join the Lobby
     client.on("request to login", (username, password) => {
-        cleanUpPlayers();
         // Emit a message to just this client
         validateUser(username, password, client.id).then(
             response => client.emit("login response", response)
@@ -341,10 +363,13 @@ io.on("connection", client => {
 
     // When a client sends an invitation to another player
     client.on("send game invitation", (invitationFrom, invitationTo) => {
-        cleanUpPlayers();
         updateGamingStatus(invitationFrom, PLAYER_STATUS.PENDING).then(
             () => {
                 if (playerIsOnline(invitationTo)) {
+                    const requestFromClientId = onlinePlayers[invitationFrom].id;
+                    const requestToClientId = onlinePlayers[invitationTo].id;
+                    invitation_pair[requestFromClientId] = requestToClientId;
+                    invitation_pair[requestToClientId] = requestFromClientId;
                     updateGamingStatus(invitationTo, PLAYER_STATUS.PENDING).then(
                         () => {
                             const requestToClientId = onlinePlayers[invitationTo].id;
@@ -381,6 +406,7 @@ io.on("connection", client => {
             () => {
                 const requestFromClientId = onlinePlayers[invitationFrom].id;
                 const requestToClientId = onlinePlayers[invitationTo].id;
+                releaseInvitationPair(requestFromClientId);
                 io.to(requestToClientId).emit("invitation released");
                 io.to(requestFromClientId).emit("invitation released");
             }
@@ -444,6 +470,7 @@ io.on("connection", client => {
 
     // Update the player's total win number
     client.on("update win status", player => {
+        releaseGamePair(client.id);
         incrementWinNumber(player).then(
             () => {
                 const playerClientId = onlinePlayers[player].id;
@@ -460,8 +487,45 @@ io.on("connection", client => {
                 io.to(playerClientId).emit("updated lose status");
             }
         )
-
     }) 
+
+    // Update disconnect information
+    client.on("disconnect", () => {
+        const username = getClientUsername(client.id);
+        processNotifications(NOTIFICATION_TYPE.SYSTEM, username + " is offline.");
+        console.log(invitation_pair);
+        if (invitation_pair.hasOwnProperty(client.id)) {
+            const pairClientId = invitation_pair[client.id];
+            const pairUsername = getClientUsername(pairClientId);
+            updateGamingStatus(username, PLAYER_STATUS.AVAILABLE).then(
+                () => {
+                    updateGamingStatus(pairUsername, PLAYER_STATUS.AVAILABLE).then(
+                        () => {
+                            releaseInvitationPair(client.id);
+                            io.to(pairClientId).emit("receiver offline");
+                        })
+                })
+        }
+        if (pair_book.hasOwnProperty(client.id)) {
+            const pairClientId = pair_book[client.id];
+            releaseGamePair(pairClientId);
+            const pairUsername = getClientUsername(pairClientId);
+            incrementLoseNumber(username).then(
+                () => {
+                    updateGamingStatus(username, PLAYER_STATUS.AVAILABLE).then(
+                        () => {
+                            incrementWinNumber(pairUsername).then(
+                                () => {
+                                    io.to(playerClientId).emit("updated win status");
+                                }
+                            )
+                        }
+                    )}
+        )}
+        cleanUpPlayers();
+    });
+
+
     // // Send messages to and receive messages from the client in here
     // if (!client_list.includes(client.id)) {
     //     client_list.push(client.id);
@@ -501,14 +565,6 @@ io.on("connection", client => {
     // client.on("new message", msg => {
     //     messages.push(clients[client.id] + ": " + msg)
     //     io.sockets.emit("all messages", messages);
-    // });
-
-    // client.on("disconnect", () => {
-    //     if (clients.hasOwnProperty(client.id)) {
-    //         const username = clients[client.id];
-    //         messages.push(username + " has left the chat");
-    //         io.sockets.emit("all messages", messages);
-    //     }
     // });
 
     /**
