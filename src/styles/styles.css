@@ -8,12 +8,12 @@ body {
    /* background: linear-gradient(0deg, #d9cfe0, #e7e1ee, #f9f8fa); */
 }
 
-/* h1 {
+h4 {
    font-size: 2.75em;
    letter-spacing: 2px;
    font-weight: bold;
    color:rgb(65, 60, 71) !important
-} */
+}
 
 h2 {
    font-size: 2.3em;
@@ -239,8 +239,9 @@ h2 {
 }
 
 .player-border {
-   border: #212529 solid 1.75px;
+   border: #5d6e5d solid 3px;
 }
+
 .link-style {
    border: none;
    background: none;
@@ -292,4 +293,8 @@ h2 {
    .input-size {
       font-size: 1rem;
    }
+}
+
+.border-color-secondary {
+   border: #6c757d solid 1px
 }

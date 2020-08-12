@@ -13,9 +13,9 @@ const Header = () => {
     return (
         <Row className="homepage-header text-left">
             <Col xs="12" md="9">
-                <h1><FontAwesomeIcon className="fa-flag" icon={faFlag} />
+                <h4><FontAwesomeIcon className="fa-flag" icon={faFlag} />
                     <span className="left-padding">Minesweep!</span>
-                </h1>
+                </h4>
             </Col>
             <Col xs="6" md="3" align="right" className="menu">
                 {

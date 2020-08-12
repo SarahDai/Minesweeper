@@ -20,7 +20,9 @@ const SystemNotification = () => {
                 <CardColumns className="notification-list">
                     {
                         getSortedNotifications(notifications).map((notification, index) => 
-                            <Notification key={`msg-${index}`} notification={notification} />
+                            <Notification key={`msg-${index}`} 
+                                          index={index}
+                                          notification={notification} />
                         )
                     }
                 </CardColumns>

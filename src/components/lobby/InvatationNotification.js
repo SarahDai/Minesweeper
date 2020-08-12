@@ -14,12 +14,12 @@ const InvatationNotification = () => {
 
     const accept = () => {
         dispatch(acceptInvitation(invitationFrom));
-        setTimeout(() => dispatch(startGame(invitationFrom, invitationTo)), 800);
+        setTimeout(() => dispatch(startGame(invitationFrom, invitationTo)), 1000);
     }
 
     const decline = () => {
         dispatch(declineInvitation(invitationFrom));
-        setTimeout(() => dispatch(releaseInvitation(invitationFrom, invitationTo), 1200));
+        setTimeout(() => dispatch(releaseInvitation(invitationFrom, invitationTo), 3000));
     }
 
     const displayContent = () => {

@@ -4,7 +4,7 @@ import { Card, CardBody, CardHeader } from "reactstrap";
 const Notification = props => {
     return (
         <div>
-            <Card outline color="secondary">
+            <Card className="boarder-color-secondary">
                 <CardHeader>
                     {props.notification.type}{" "}
                     {new Date(props.notification.time).toLocaleString()}

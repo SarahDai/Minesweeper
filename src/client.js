@@ -92,15 +92,15 @@ export const sendInvitationToServer = (invitationFrom, invitationTo) => {
     socket.on("successfully sent invitation to receiver", () => {
         store.dispatch(waitForResponse());
     })
-
-    socket.on("invitation accepted", () => {
-        store.dispatch(acceptedInvitation())
-    })
-
-    socket.on("invitation declined", () => {
-        store.dispatch(declinedInvitation())
-    })
 }
+
+socket.on("invitation accepted", () => {
+    store.dispatch(acceptedInvitation())
+})
+
+socket.on("invitation declined", () => {
+    store.dispatch(declinedInvitation())
+})
 
 // Invitation pending but one player is offline, default set to decline the request
 socket.on("receiver offline", () => {
