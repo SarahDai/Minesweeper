@@ -166,12 +166,14 @@ const Board = () => {
    //    dispatch(sendPairStatus(status_p2));
    // };
 
-   const handleWin = () => {
+   const handleWin = newBoard => {
+      dispatch(sendNewBoard(newBoard));
       dispatch(setGameWin(self));
       dispatch(setGameLose(pair));
    }
 
-   const handleLose = () => {
+   const handleLose = newBoard => {
+      dispatch(sendNewBoard(newBoard));
       dispatch(setGameLose(self));
       dispatch(setGameWin(pair));
    }
@@ -182,9 +184,8 @@ const Board = () => {
       }
       let newBoard = [...board];
       if (newBoard[x][y].isMine) {
-         // handleStatus(GAME.LOSE);
-         handleLose();
          newBoard = revealBoard(newBoard);
+         return handleLose(newBoard);
       }
       newBoard[x][y].isFlagged = false;
       newBoard[x][y].isRevealed = true;
@@ -193,12 +194,11 @@ const Board = () => {
          newBoard = revealEmpty(x, y, newBoard);
       }
       if (getTypes("hide", newBoard).length === mines) {
-         // handleStatus(GAME.WIN);
-         handleWin();
          newBoard = revealBoard(newBoard);
+         return handleWin(newBoard);
       }
       dispatch(sendNewBoard(newBoard));
-      renderBoard(newBoard);
+      // renderBoard(newBoard);
    };
 
    const revealEmpty = (x, y, newBoard) => {
@@ -233,7 +233,7 @@ const Board = () => {
          const flagArr = getTypes("flag", newBoard);
          if (JSON.stringify(mineArr) === JSON.stringify(flagArr)) {
             newBoard = revealBoard(newBoard);
-            alert("you win");
+            return handleWin(newBoard);
          }
       }
       dispatch(sendNewBoard(newBoard));
