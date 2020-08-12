@@ -77,6 +77,10 @@ h2 {
    margin-bottom: 1rem;
 }
 
+.margin-bottom-half {
+   margin-bottom: 0.5rem;
+}
+
 *, *:before, *:after {
   box-sizing: border-box;
 }
@@ -205,6 +209,37 @@ h2 {
    column-count: 1;
 }
 
+.text-centered {
+   text-align: center;
+}
+
+.system-notification-frame {
+   border:#212529 solid 1.75px;
+   padding: 1em;
+   height: 60vh;
+   overflow: auto;
+}
+
+.online-player-frame {
+   border:#212529 solid 1.75px;
+   padding: 1em;
+   height: 60vh;
+   overflow: auto;
+}
+
+@media screen and (max-width: 768px) {
+   .system-notification-frame {
+      max-height: 50vh;
+   }
+
+   .online-player-frame {
+      max-height: 50vh;
+   }
+}
+
+.player-border {
+   border-bottom: #212529 solid 1.75px;
+}
 .link-style {
    border: none;
    background: none;

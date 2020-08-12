@@ -11,8 +11,6 @@ const getPlayername = (name, target) => {
 const Player = props => {
     const username = useSelector(state => state.user.user.username);
     const dispatch = useDispatch();
-    console.log("username", username)
-    console.log("player", props.player.username)
 
     const displayAction = () => {
         if (props.player.username !== username) {
@@ -32,8 +30,15 @@ const Player = props => {
         dispatch(sendInvitation(username, props.player.username));
     }
 
+    const displayBorder = () => {
+        if (username === props.player.username) {
+            return "player-border";
+        } 
+        return "";
+    }
+
     return (
-        <tr className="player-info">
+        <tr className={"player-info " + displayBorder()}>
             <td>{getPlayername(props.player.username, username)}</td>
             <td>{props.player.win}</td>
             <td>{props.player.lose}</td>

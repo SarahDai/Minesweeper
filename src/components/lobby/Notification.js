@@ -1,11 +1,11 @@
 import React from "react";
 import { Card, CardBody, CardHeader } from "reactstrap";
+import { useSelector } from "react-redux";
 
 const Notification = props => {
-    console.log()
     return (
         <div>
-            <Card>
+            <Card outline color="secondary">
                 <CardHeader>
                     {props.notification.type}{" "}
                     {new Date(props.notification.time).toLocaleString()}

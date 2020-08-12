@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import Notification from "./Notification";
-import { CardColumns } from "reactstrap";
+import { CardColumns, Card, CardHeader, Badge } from "reactstrap";
 
 const getSortedNotifications = notifications => {
     return notifications.sort((a,b) => b.time - a.time);
@@ -13,13 +13,19 @@ const SystemNotification = () => {
 
     return (
         <>
-            <CardColumns className="notification-list">
-                {
-                    getSortedNotifications(notifications).map((notification, index) => 
-                        <Notification key={`msg-${index}`} notification={notification} />
-                    )
-                }
-            </CardColumns>
+            <Card body outline className="system-notification-frame">
+                <Card style={{color: "rosybrown"}} className="margin-bottom-half">
+                    <CardHeader tag="h3" className="bold text-centered">SYSTEM Notificition</CardHeader>
+                </Card>
+                <Badge outline color="secondary margin-bottom-half">latest notifications</Badge>
+                <CardColumns className="notification-list">
+                    {
+                        getSortedNotifications(notifications).map((notification, index) => 
+                            <Notification key={`msg-${index}`} notification={notification} />
+                        )
+                    }
+                </CardColumns>
+            </Card>
         </>
     )
 } 
