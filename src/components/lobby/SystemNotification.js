@@ -9,7 +9,6 @@ const getSortedNotifications = notifications => {
 
 const SystemNotification = () => {
     const notifications = useSelector(state => state.user.notifications);
-    console.log("system notification", notifications);
 
     return (
         <>

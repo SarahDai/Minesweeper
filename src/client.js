@@ -3,7 +3,7 @@ import {
     getNewBoard, setGameBoard, setGamePair, setGameMines, 
     setGameStatus, updateWinStatus, updateLoseStatus, 
     setGameColor, setGamePairColor 
-} from "./redux/actions";
+} from "./redux/actions/gameActions";
 import { 
     loginResponse, registerReponse, getAllUsernames, 
     waitForResponse, receivedInvitation, updatePlayers, 

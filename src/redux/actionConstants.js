@@ -3,6 +3,7 @@ export const REQUEST_TO_LOGIN = "REQUEST_TO_LOGIN";
 export const LOGIN_RESPONSE = "LOGIN_RESPONSE";
 export const LOGOUT = "LOGOUT";
 export const SET_ONBOARDING_STATUS = "SET_ONBOARDING_STATUS";
+export const SET_PAGE = "SET_PAGE";
 
 // register request
 export const GET_ALL_USERNAMES = "GET_ALL_USERNAMES";
@@ -24,28 +25,10 @@ export const UPDATE_NOTIFICATIONS = "UPDATE_NOTIFICATIONS";
 export const UPDATE_WIN = "UPDATE_WIN";
 export const UPDATE_LOSE = "UPDATE_LOSE";
 export const GAME_OVER = "GAME_OVER";
-
-
-
-export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
-export const LOGIN_NON_EXIST_USER_FAILURE = "LOGIN_NON_EXIST_USER_FAILURE";
-export const LOGIN_INVALID_PASSWORD_FAILURE = "LOGIN_INVALID_PASSWORD_FAILURE";
-export const LOGIN_NETWORK_ERROR = "LOGIN_NETWORK_ERROR";
-
-
-export const SIGN_UP_ADD_FAILURE = "SIGN_UP_ADD_FAILURE";
-export const ADD_TIME_ID = "ADD_TIME_ID";
-export const CLEAN_TIME_ID = "CLEAN_TIME_ID";
 export const SET_STATUS = "SET_STATUS";
-export const SET_PAGE = "SET_PAGE";
-export const STORE_USER_LIST = "STORE_USER_LIST";
 export const SET_GAME_STATUS = "SET_GAME_STATUS";
 export const SET_GAME_MINES = "SET_GAME_MINES";
 export const SET_GAME_BOARD = "SET_GAME_BOARD";
-export const NEW_MESSAGE = "NEW_MESSAGE";
-export const SET_CONNECTED = "SET_CONNECTED";
-export const SET_ALL_MESSAGES = "SET_ALL_MESSAGES";
-export const SET_CLIENT_ID = "SET_CLIENT_ID";
 export const SET_GAME_PAIR = "SET_GAME_PAIR";
 export const SET_GAME_COLOR = "SET_GAME_COLOR";
 export const SET_GAME_PAIR_COLOR = "SET_GAME_PAIR_COLOR";

@@ -1,5 +1,6 @@
 import { REQUEST_TO_LOGIN, LOGIN_RESPONSE, REQUEST_TO_REGISTER, REGISTER_RESPONSE, 
-   GET_ALL_USERNAMES, SET_PAGE, UPDATE_PLAYERS, LOGOUT, SET_ONBOARDING_STATUS, UPDATE_NOTIFICATIONS, UPDATE_WIN, UPDATE_LOSE } from "../actionConstants";
+   GET_ALL_USERNAMES, SET_PAGE, UPDATE_PLAYERS, LOGOUT, SET_ONBOARDING_STATUS, 
+   UPDATE_NOTIFICATIONS, UPDATE_WIN, UPDATE_LOSE } from "../actionConstants";
 import { LOGIN_STATE, PAGE, SIGN_UP_STATE } from "../storeConstants";
 
 const INITIAL_STATE = {
@@ -21,7 +22,6 @@ export const userReducer = (state = INITIAL_STATE, action) => {
          }
       }
       case LOGIN_RESPONSE: {
-         console.log("login response", action.payload.user.username)
          return {
             ...state,
             user: action.payload.user,

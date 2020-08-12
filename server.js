@@ -521,7 +521,6 @@ io.on("connection", client => {
             return;
         }
         processNotifications(NOTIFICATION_TYPE.SYSTEM, username + " is offline.");
-        console.log(invitation_pair);
         if (invitation_pair.hasOwnProperty(client.id)) {
             const pairClientId = invitation_pair[client.id];
             const pairUsername = getClientUsername(pairClientId);

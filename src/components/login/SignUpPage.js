@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Card, Button, Alert } from "react-bootstrap";
 import { Input, FormFeedback, Spinner, Row, Col } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
-// import { setPage } from "../redux/actions";
 import { requestAllUsernames, requestRegister, requestLogin, setPage } from "../../redux/actions/connectActions";
 import { SIGN_UP_STATE, PAGE } from "../../redux/storeConstants";
 import { ALERT_MSG_TIME, EMPTY } from "../../views/App";

@@ -1,7 +1,7 @@
 import React, {  } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import Cell from "./Cell";
-import { sendNewMines, sendNewBoard, setGameWin, setGameLose } from "../../redux/actions";
+import { sendNewMines, sendNewBoard, setGameWin, setGameLose } from "../../redux/actions/gameActions";
 
 export const initBoard = (width, height, mines) => {
    let newBoard = createEmptyArray(width, height);
@@ -148,22 +148,6 @@ const Board = () => {
       });
       return newBoard;
    };
-
-   // const getPairStauts = status => {
-   //    if (status === GAME.LOSE) {
-   //       return GAME.WIN;
-   //    } else if (status === GAME.WIN) {
-   //       return GAME.LOSE;
-   //    } else {
-   //       return GAME.IN_PROGRESS;
-   //    }
-   // };
-
-   // const handleStatus = status_p1 => {
-   //    dispatch(setGameStatus(status_p1));
-   //    const status_p2 = getPairStauts(status_p1);
-   //    dispatch(sendPairStatus(status_p2));
-   // };
 
    const handleWin = newBoard => {
       dispatch(sendNewBoard(newBoard));

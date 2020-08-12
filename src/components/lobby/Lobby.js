@@ -14,9 +14,6 @@ const Lobby = () => {
     const invitationTo = useSelector(state => state.invitation.invitationTo);
     const onboardingComplete = useSelector(state => state.user.user.onboardingComplete);
 
-    console.log("lobby invitation to", invitationTo);
-    console.log("lobby invitation from", invitationFrom);
-    console.log("lobby self", self);
     const displayModal = () => {
         if (self === invitationFrom) {
             return <SendRequest />

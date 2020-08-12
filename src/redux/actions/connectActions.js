@@ -8,6 +8,7 @@ import { joinLobby, register, getUsernames, sendInvitationToServer,
     setOnboardingToServer, closeGameToServer } from "../../client";
 import store from "../store";
 
+/** Login **/
 const requestedLogin = () => ({
     type: REQUEST_TO_LOGIN
 })
@@ -38,6 +39,7 @@ export const logout = username => {
     }
 }
 
+/** Sign Up **/
 const requestedRegister = () => ({
     type: REQUEST_TO_REGISTER
 })
@@ -90,6 +92,7 @@ export const setPage = page => ({
     }
 })
 
+/** Invitation **/
 const requestedInvitation = (invitationFrom, invitationTo) => ({
     type: INVITATION_SEND_TO_SERVER,
     payload: {
