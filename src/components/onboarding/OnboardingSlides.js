@@ -38,26 +38,27 @@ const OnboardingSlides = () => {
     return (
         <div className="slides-bg">
             <Slide slideStatus={setSlideState(1)} slideId={1}>
-                <h2>Explore jobs near you</h2>
-                <p>Start your job search based on all your interested programming languages at one time.</p>
+                <h2>Feel bored? Find online players to play with the minesweeper game.</h2>
                 <div className="fit my-4">
                     <img src={process.env.PUBLIC_URL + "/onboarding1.png"}
-                        className="img-fluid my-4 float-right fit" alt="Search jobs based on your interesting programming languages." />
+                        className="img-fluid my-4 float-right fit" alt="Find online players to play with the minesweeper game." />
                 </div>
             </Slide>
             <Slide slideStatus={setSlideState(2)} slideId={2}>
-                <h2>Keep track of what you're thinking of applying to.</h2>
-                <p>Click on Save button to archive the job postings.
-                </p>
+                <h2>Send invitation to your interested parterners.</h2>
+                <p>Click on Send Invitation button to request gaming.</p>
+                <p>If the other player is unfortunately offline when requesting, you would be declined automatically.</p>
                 <div className="fit my-4">
                     <img src={process.env.PUBLIC_URL + "/onboarding2.png"}
                          className="img-fluid"
-                         alt="Click on the Save button would save or delete the job postings." />
+                         alt="Click on the Send Invitation button would request game with the player." />
                 </div>
             </Slide>
             <Slide slideStatus={setSlideState(3)} slideId={3}>
-                <h2>Follow the hot jobs.</h2>
-                <p>Browse the job openings by popularity. Hot jobs!</p>
+                <h2>Minesweeper Expert? Two-player game now.</h2>
+                <p>Block: show the number of mines adjacent to the block</p>
+                <p>Flag: Put a flag in a zone when you have confirmed that there is a mine.</p>
+                <p>**Important: this time you can unflag your parterner's if you have a more cautious conclusion.</p>
                 <div className="fit my-4">
                     <img src={process.env.PUBLIC_URL + "/onboarding3.png"}
                          className="img-fluid"

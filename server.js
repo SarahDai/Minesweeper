@@ -521,38 +521,37 @@ io.on("connection", client => {
             return;
         }
         processNotifications(NOTIFICATION_TYPE.SYSTEM, username + " is offline.");
-        if (invitation_pair.hasOwnProperty(client.id)) {
-            const pairClientId = invitation_pair[client.id];
-            const pairUsername = getClientUsername(pairClientId);
-            updateGamingStatus(username, PLAYER_STATUS.AVAILABLE).then(
-                () => {
-                    updateGamingStatus(pairUsername, PLAYER_STATUS.AVAILABLE).then(
+        updateGamingStatus(username, PLAYER_STATUS.AVAILABLE).then(
+            () => {
+                if (invitation_pair.hasOwnProperty(client.id)) {
+                    const pairClientId = invitation_pair[client.id];
+                    const pairUsername = getClientUsername(pairClientId);
+                        updateGamingStatus(pairUsername, PLAYER_STATUS.AVAILABLE).then(
+                            () => {
+                                releaseInvitationPair(client.id);
+                                io.to(pairClientId).emit("receiver offline");
+                                cleanUpPlayers();
+                                return;
+                            })
+                }
+                if (pair_book.hasOwnProperty(client.id)) {
+                    const pairClientId = pair_book[client.id];
+                    releaseGamePair(pairClientId);
+                    const pairUsername = getClientUsername(pairClientId);
+                    console.log("pair username", pairUsername);
+                    incrementLoseNumber(username).then(
                         () => {
-                            releaseInvitationPair(client.id);
-                            io.to(pairClientId).emit("receiver offline");
-                            cleanUpPlayers();
-                            return;
+                                incrementWinNumber(pairUsername).then(
+                                    () => {
+                                        io.to(pairClientId).emit("updated win status");
+                                        cleanUpPlayers();
+                                        return;
+                                    })
                         })
-                })
-        }
-        if (pair_book.hasOwnProperty(client.id)) {
-            const pairClientId = pair_book[client.id];
-            releaseGamePair(pairClientId);
-            const pairUsername = getClientUsername(pairClientId);
-            console.log("pair username", pairUsername);
-            incrementLoseNumber(username).then(
-                () => {
-                    updateGamingStatus(username, PLAYER_STATUS.AVAILABLE).then(
-                        () => {
-                            incrementWinNumber(pairUsername).then(
-                                () => {
-                                    io.to(pairClientId).emit("updated win status");
-                                    cleanUpPlayers();
-                                    return;
-                                })
-                        })
-                })
-        }
+                }
+            }
+        )
+
     });
 
 })
