@@ -20,11 +20,11 @@ const Game = () => {
          </Card.Header>
          <Card.Body>
             <Row>
-               <Col sm={4}>
+               <Col md={4} sm={5}>
                   <PlayerIcon color={color} name='ME'/>
                </Col>
-               <Col sm={4}/>
-               <Col sm={4}>
+               <Col md={4} sm={2} xs={0}/>
+               <Col md={4} sm={5}>
                   <PlayerIcon color={pairColor} name={pair}/>
                </Col>
             </Row>

@@ -88,7 +88,7 @@ const Login = () => {
 
    return (
       <>
-      <Card className="margin-auto margin-top-4 width-30">
+      <Card className="margin-auto margin-top-4 login-width">
          <Card.Header className="text-center text-dark">
             <h1>Please sign in</h1>
          </Card.Header>
@@ -104,8 +104,8 @@ const Login = () => {
             </Row>
          }
          <Row>
-            <Col sm={1}/>
-            <Col sm={10}>
+            <Col md={1} xs={0}/>
+            <Col md={10} xs={12}>
                <Input type="text" id="username"
                         className="input-size"
                         name="username" value={username}
@@ -118,12 +118,12 @@ const Login = () => {
                         }}
                />
             </Col>
-            <Col sm={1}/>
+            <Col md={1} xs={0}/>
          </Row>
          <br />
          <Row>
-            <Col sm={1}/>
-            <Col sm={10}>
+            <Col md={1} xs={0}/>
+            <Col md={10} xs={12}>
                <Input type="password" id="password"
                         className="input-size"
                         name="password" value={password}
@@ -136,20 +136,20 @@ const Login = () => {
                         }}
                />
             </Col>
-            <Col sm={1}/>
+            <Col md={1} xs={0}/>
          </Row>
          </Card.Body>
          <Card.Footer>
          <Row>
-            <Col sm={1}/>
-            <Col sm={10}>
+            <Col md={1} xs={0}/>
+            <Col md={10} xs={12}>
                <Button disabled={!canLogin}
                   className="login-button-margin login-font-size input-size" block
                   variant="primary" onClick={(e)=>handleLogin(e)}>
                   Sign In
                </Button>
             </Col>
-            <Col sm={1} />
+            <Col md={1} xs={0}/>
          </Row>
          <Row>
             <Col sm={12}>
