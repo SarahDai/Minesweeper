@@ -7,6 +7,7 @@ import InvalidPage from "../components/InvalidPage";
 import Game from "../components/game/Game";
 import Lobby from "../components/lobby/Lobby";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const App = () => {
   const page = useSelector(state => state.user.page);
@@ -31,6 +32,7 @@ const App = () => {
     <>
       <Header />
       {display()}
+      <Footer/>
     </>
   );
 };

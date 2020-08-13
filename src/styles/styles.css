@@ -30,14 +30,6 @@ h3 {
    flex-direction: column;
 } */
 
-.login-width {
-   width: 30rem;
-}
-
-.sign-width {
-   width: 30rem;
-}
-
 .bold {
    font-weight: bold;
 }
@@ -110,7 +102,7 @@ h3 {
   box-sizing: border-box;
 }
 
-.menu {
+.icon-size {
    font-size: 2em;
 }
 
@@ -252,6 +244,10 @@ h3 {
    overflow: auto;
 }
 
+.account-width {
+   width: 16rem;
+}
+
 @media screen and (max-width: 768px) {
    .system-notification-frame {
       max-height: 50vh;
@@ -285,56 +281,32 @@ h3 {
    font-size: 1.5rem;
 }
 
+h1 {
+   font-size: 1.4rem;
+}
+
+.input-size {
+   font-size: 0.9rem;
+}
+
+.link-style {
+   font-size: 0.7rem;
+}
+
 @media (max-width: 1300px) {
-   .login-width {
-      width: 25rem;
-   }
+
 }
 
 @media (max-width: 1100px) {
-   h1 {
-      font-size: 2rem;
-   }
 
-   .login-width {
-      width: 20rem;
-   }
 }
 
 @media (max-width: 900px) {
-   h1 {
-      font-size: 1.5rem;
-   }
 
-   .sign-width {
-      width: 25rem;
-   }
-
-   .input-size {
-      font-size: 1rem;
-   }
-
-   .link-style {
-      font-size: 1rem;
-   }
 }
 
 @media (max-width: 700px) {
-   h1 {
-      font-size: 1rem;
-   }
 
-   .input-size {
-      font-size: 0.9rem;
-   }
-
-   .link-style {
-      font-size: 0.8rem;
-   }
-
-   .sign-width {
-      width: 20rem;
-   }
 }
 
 @media (max-width: 522px) {

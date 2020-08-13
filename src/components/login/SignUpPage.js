@@ -82,7 +82,7 @@ const SignUpPage = () => {
 
    return (
       <Card 
-         className="margin-auto margin-top-4 sign-width">
+         className="margin-auto margin-top-4 account-width">
          <Card.Header className="text-center text-dark">
             <h1>Create your account</h1>
          </Card.Header>
@@ -109,8 +109,7 @@ const SignUpPage = () => {
          }
          
          <Row>
-         <Col sm={1}/>
-            <Col sm={10}>
+            <Col>
                <Input type="text" id="username"
                       name="username" value={username}
                       className="input-size"
@@ -127,12 +126,10 @@ const SignUpPage = () => {
                <FormFeedback valid>Sweet! that username is available </FormFeedback>
                <FormFeedback>Oh noes! that name is already taken</FormFeedback>
             </Col>
-            <Col sm={1}/>
          </Row>
          <br />
          <Row>
-            <Col sm={1}/>
-            <Col sm={10}>
+            <Col>
                <Input type="password" id="password1"
                       className="input-size"
                       name="password" value={password1}
@@ -145,18 +142,16 @@ const SignUpPage = () => {
                       }}
                />
             </Col>
-            <Col sm={1}/>
          </Row>
          <br />
          <Row>
-            <Col sm={1}/>
-            <Col sm={10}>
+            <Col>
                <Input type="password" id="password2"
                       className="input-size"
                       name="password" value={password2}
                       onKeyUp={e => handleKeyPress(e)}
                       aria-label="input-password"
-                      placeholder="Confirm your password"
+                      placeholder="Confirm Password"
                       invalid={password2.length > 0 && password1 !== password2}
                       onChange={e => {
                          beginEdit = true;
@@ -165,29 +160,24 @@ const SignUpPage = () => {
                />
                <FormFeedback>Password doesn't match.</FormFeedback>
             </Col>
-            <Col sm={1}/>
          </Row>
          </Card.Body>
          <Card.Footer>
          <Row>
-            <Col sm={1}/>
-            <Col sm={10}>
+            <Col>
                <Button disabled={!canSignUp}
                   className="login-button-margin login-font-size input-size" block
                   variant="primary" onClick={()=>handleSignUp()}>
                   Finish
                </Button>
             </Col>
-            <Col sm={1}/>
          </Row>
          <Row>
-            <Col sm={12}>
-               <Button variant="light"
-                  className="text-primary link-style" block
-                  onClick={()=>dispatch(setPage(PAGE.LOGIN))}>
-                  Already have an account? Sign in here.
-               </Button>
-            </Col>
+            <Button variant="light"
+               className="text-primary link-style" block
+               onClick={()=>dispatch(setPage(PAGE.LOGIN))}>
+               Already have an account? Sign in here.
+            </Button>
          </Row>
          </Card.Footer>   
       </Card>

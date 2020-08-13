@@ -87,7 +87,7 @@ const Login = () => {
 
    return (
       <>
-      <Card className="margin-auto margin-top-4 login-width">
+      <Card className="margin-auto margin-top-4 account-width">
          <Card.Header className="text-center text-dark">
             <h1>Please sign in</h1>
          </Card.Header>
@@ -95,16 +95,13 @@ const Login = () => {
          {
             showAlert &&
             <Row className="margin-bottom-1">
-               <Col sm={1}/>
-               <Col sm={10}>
+               <Col>
                   {handleAlert()}
                </Col>
-               <Col sm={1} />
             </Row>
          }
          <Row>
-            <Col md={1} xs={0}/>
-            <Col md={10} xs={12}>
+            <Col>
                <Input type="text" id="username"
                         className="input-size"
                         name="username" value={username}
@@ -117,12 +114,10 @@ const Login = () => {
                         }}
                />
             </Col>
-            <Col md={1} xs={0}/>
          </Row>
          <br />
          <Row>
-            <Col md={1} xs={0}/>
-            <Col md={10} xs={12}>
+            <Col>
                <Input type="password" id="password"
                         className="input-size"
                         name="password" value={password}
@@ -135,32 +130,27 @@ const Login = () => {
                         }}
                />
             </Col>
-            <Col md={1} xs={0}/>
          </Row>
          </Card.Body>
          <Card.Footer>
          <Row>
-            <Col md={1} xs={0}/>
-            <Col md={10} xs={12}>
+            <Col>
                <Button disabled={!canLogin}
                   className="login-button-margin login-font-size input-size" block
                   variant="primary" onClick={(e)=>handleLogin(e)}>
                   Sign In
                </Button>
             </Col>
-            <Col md={1} xs={0}/>
          </Row>
          <Row>
-            <Col sm={12}>
-               <Button 
-                  variant="light"
-                  className="text-primary link-style" block
-                  onClick={()=>dispatch(setPage(PAGE.SIGN_UP))}>
-                  Don't have an account? Create one now.
-               </Button>
-            </Col>
+            <Button 
+               variant="light"
+               className="text-primary link-style" block
+               onClick={()=>dispatch(setPage(PAGE.SIGN_UP))}>
+               Don't have an account? Create one now.
+            </Button>
          </Row>
-         </Card.Footer>   
+         </Card.Footer>
       </Card>
       {
          loginState === LOGIN_STATE.LOGIN_REQUESTED &&
