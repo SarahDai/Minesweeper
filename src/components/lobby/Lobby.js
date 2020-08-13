@@ -6,6 +6,7 @@ import SendRequest from "./SendRequest";
 import InvitationNotification from "./InvatationNotification";
 import { Row, Col} from "reactstrap";
 import SystemNotification from "./SystemNotification";
+import Intro from "./Intro";
 
 
 const Lobby = () => {
@@ -27,6 +28,11 @@ const Lobby = () => {
     return (
         onboardingComplete?
         <>
+            <Row>
+                <Col>
+                    <Intro />
+                </Col>
+            </Row>
             <Row>
                 <Col xs="12" md="5">
                     <SystemNotification />
