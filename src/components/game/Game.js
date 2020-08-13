@@ -37,9 +37,9 @@ const Game = () => {
             }
          </Card.Body>
          <Card.Footer className="game-footer-font">
-            <p>Left click reveals the result of the current grid.</p>
-            <p>Right click places a flag on the current grid.</p>
-            <p>You can unflag pair's flags, remember to use flag within threshold!</p>
+            <p>{"Left click -> Reveal"}</p>
+            <p>{"First Right click -> Flag"}</p>
+            <p>{"Second Right click -> Unflag"}</p>
          </Card.Footer>
       </Card>
    );
