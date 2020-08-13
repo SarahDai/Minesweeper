@@ -110,12 +110,13 @@ const validateUser = async (username, password, clientId) => {
                     id: clientId,
                     docId: doc.id,
                     username: doc.data().username,
-                    status: doc.data().gamingStatus,
+                    status: PLAYER_STATUS.AVAILABLE,
                     win: doc.data().win,
                     lose: doc.data().lose,
                     onboardingComplete: doc.data().onboardingComplete,
                     gamingStatus: doc.data().gamingStatus
                 }
+                const result = await users.doc(doc.id).set({gamingStatus: PLAYER_STATUS.AVAILABLE}, {merge: true});
                 addOnlinePlayer(user, username);
                 processNotifications(NOTIFICATION_TYPE.SYSTEM, "Welcome " + username + " to the Game Lobby!")
                 return {
