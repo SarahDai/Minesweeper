@@ -8,7 +8,6 @@ const SendRequest = () => {
     const invitationTo = useSelector(state => state.invitation.invitationTo);
     const invitationFrom = useSelector(state => state.invitation.invitationFrom);
     const invitationStatus = useSelector(state => state.invitation.status);
-    console.log(invitationFrom, "log from sent request component");
 
     const displayContent = () => {
         switch (invitationStatus) {

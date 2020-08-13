@@ -50,7 +50,6 @@ const Login = () => {
    }
 
    const handleAlert = () => {
-      console.log(loginState);
       if (!beginEdit) {
          if (loginState === LOGIN_STATE.NETWORK_ERROR) {
             return (

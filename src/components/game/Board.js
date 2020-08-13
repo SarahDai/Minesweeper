@@ -38,7 +38,6 @@ export const plantMines = (width, height, mines, newBoard) => {
    while (minesPlanted < mines) {
       randX = getRand(width);
       randY = getRand(height);
-      // console.log(JSON.stringify(newBoard));
       if (!newBoard[randX][randY].isMine) {
          newBoard[randX][randY].isMine = true;
          minesPlanted++;

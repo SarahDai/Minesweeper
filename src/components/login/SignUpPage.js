@@ -19,7 +19,6 @@ const SignUpPage = () => {
    const [showAlert, setShowAlert] = useState(false);
 
    const registerStatus = useSelector(state => state.user.registerStatus);
-   console.log("Sign up page:", registerStatus);
    const existingUsernames = useSelector(state => state.user.existingUsernames);
    const dispatch = useDispatch();
 
