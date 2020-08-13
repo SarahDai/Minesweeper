@@ -14,4 +14,9 @@
    - ### USERNAME: `user`
    - ### PASSWORD: `user`
    
-  (){%"homepage": "https://pages.github.ccs.neu.edu/cs7580su20-seattle/linni_cai_xinyu_dai_finalproject/"%}
+  
+  
+  [!]("homepage": "https://pages.github.ccs.neu.edu/cs7580su20-seattle/linni_cai_xinyu_dai_finalproject/")
+
+  
+  
