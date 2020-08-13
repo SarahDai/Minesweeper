@@ -1,15 +1,15 @@
 # Final Project
 
 # LOGIN ACCOUNT
-- new user
-   - ## USERNAME: `newuser`
-   - ## PASSWORD: `newuser`
+- ### new user
+   - ### USERNAME: `newuser`
+   - ### PASSWORD: `newuser`
+- ### old user
+   - ### USERNAME: `expert`
+   - ### PASSWORD: `expert`
 - old user
-   - ## USERNAME: `expert`
-   - ## PASSWORD: `expert`
-- old user
-   - ## USERNAME: `user`
-   - ## PASSWORD: `user`
+   - ### USERNAME: `user`
+   - ### PASSWORD: `user`
    
 ## This repo is private but the site will be available at 
 ### https://minesweeper-7580.herokuapp.com/
