@@ -1,6 +1,6 @@
 {
-   "name": "Linni Cai Assignment 2",
-   "short_name": "LC HW2",
+   "name": "minesweep",
+   "short_name": "minesweep",
    "icons": [
    	  {
           "src": "favicon.ico",
