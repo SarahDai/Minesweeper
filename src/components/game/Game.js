@@ -14,17 +14,17 @@ const Game = () => {
    const pairColor = useSelector(state => state.game.pairColor);
 
    return (
-      <Card>
+      <Card className="game-width">
          <Card.Header className="text-center display-4">
             {"Mines: " + mines}
          </Card.Header>
          <Card.Body>
             <Row>
-               <Col md={4} sm={5}>
+               <Col md={4} xs={5}>
                   <PlayerIcon color={color} name='ME'/>
                </Col>
-               <Col md={4} sm={2} xs={0}/>
-               <Col md={4} sm={5}>
+               <Col md={4} xs={2}/>
+               <Col md={4} xs={5}>
                   <PlayerIcon color={pairColor} name={pair}/>
                </Col>
             </Row>
@@ -36,6 +36,11 @@ const Game = () => {
                <GameOptions />
             }
          </Card.Body>
+         <Card.Footer className="game-footer-font">
+            <p>Left click reveals the result of the current grid.</p>
+            <p>Right click places a flag on the current grid.</p>
+            <p>You can unflag pair's flags, remember to use flag within threshold!</p>
+         </Card.Footer>
       </Card>
    );
 };

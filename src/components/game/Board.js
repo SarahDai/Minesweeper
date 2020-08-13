@@ -24,6 +24,7 @@ export const createEmptyArray = (width, height) => {
             isEmpty: false,
             isFlagged: false,
             color: "", 
+            flagColor: ""
          };
       }
    }
@@ -206,9 +207,11 @@ const Board = () => {
       }
       if (newBoard[x][y].isFlagged) {
          newBoard[x][y].isFlagged = false;
+         newBoard[x][y].flagColor = "";
          newMines++;
-      } else {
+      } else if (newMines > 0) {
          newBoard[x][y].isFlagged = true;
+         newBoard[x][y].flagColor = color;
          newMines--;
       }
       if (newMines === 0) {

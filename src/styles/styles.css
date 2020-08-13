@@ -33,6 +33,11 @@ h3 {
 .login-width {
    width: 30rem;
 }
+
+.sign-width {
+   width: 30rem;
+}
+
 .bold {
    font-weight: bold;
 }
@@ -42,8 +47,24 @@ h3 {
    padding-bottom: 1em;
 }
 
-.fa-flag {
-   color: rosybrown !important
+.fa-flag-header {
+   color: rosybrown !important;
+}
+
+.fa-flag-red {
+   color: red !important;
+}
+
+.fa-flag-green {
+   color: #4caf50 !important;
+}
+
+.border-red {
+   border: 5px solid red !important;
+}
+
+.border-green {
+   border: 5px solid #4caf50 !important;
 }
 
 .nav-font {
@@ -103,7 +124,7 @@ h3 {
 }
 
 .game {
-  max-width: 400px;
+  width: 400px;
   height: 400px;
   margin: 0 auto;
   padding: 20px;
@@ -249,6 +270,7 @@ h3 {
 .link-style {
    border: none;
    background: none;
+   font-size: 1.3rem;
 }
 
 .self-border {
@@ -257,6 +279,10 @@ h3 {
 
 .pair-border {
    border: 2px solid red;
+}
+
+.game-footer-font {
+   font-size: 1.5rem;
 }
 
 @media (max-width: 1300px) {
@@ -280,8 +306,16 @@ h3 {
       font-size: 1.5rem;
    }
 
-   .login-width {
-      width: 15rem;
+   .sign-width {
+      width: 25rem;
+   }
+
+   .input-size {
+      font-size: 1rem;
+   }
+
+   .link-style {
+      font-size: 1rem;
    }
 }
 
@@ -290,12 +324,22 @@ h3 {
       font-size: 1rem;
    }
 
-   .login-width {
-      width: 10rem;
+   .input-size {
+      font-size: 0.9rem;
    }
 
-   .input-size {
-      font-size: 1rem;
+   .link-style {
+      font-size: 0.8rem;
+   }
+
+   .sign-width {
+      width: 20rem;
+   }
+}
+
+@media (max-width: 522px) {
+   .game-width {
+      width: 25rem;
    }
 }
 

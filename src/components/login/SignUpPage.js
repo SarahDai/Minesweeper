@@ -83,7 +83,7 @@ const SignUpPage = () => {
 
    return (
       <Card 
-         className="margin-auto margin-top-4 width-30">
+         className="margin-auto margin-top-4 sign-width">
          <Card.Header className="text-center text-dark">
             <h1>Create your account</h1>
          </Card.Header>
