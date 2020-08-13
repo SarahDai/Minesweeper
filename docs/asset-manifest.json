@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/cs7580su20-seattle/linni_cai_xinyu_dai_finalproject/static/css/main.45a36eb6.chunk.css",
+    "main.js": "/cs7580su20-seattle/linni_cai_xinyu_dai_finalproject/static/js/main.b085c80a.chunk.js",
+    "main.js.map": "/cs7580su20-seattle/linni_cai_xinyu_dai_finalproject/static/js/main.b085c80a.chunk.js.map",
+    "runtime-main.js": "/cs7580su20-seattle/linni_cai_xinyu_dai_finalproject/static/js/runtime-main.9b55a4fc.js",
+    "runtime-main.js.map": "/cs7580su20-seattle/linni_cai_xinyu_dai_finalproject/static/js/runtime-main.9b55a4fc.js.map",
+    "static/js/2.9c227e5c.chunk.js": "/cs7580su20-seattle/linni_cai_xinyu_dai_finalproject/static/js/2.9c227e5c.chunk.js",
+    "static/js/2.9c227e5c.chunk.js.map": "/cs7580su20-seattle/linni_cai_xinyu_dai_finalproject/static/js/2.9c227e5c.chunk.js.map",
+    "index.html": "/cs7580su20-seattle/linni_cai_xinyu_dai_finalproject/index.html",
+    "precache-manifest.038585cd360189388803239609363b22.js": "/cs7580su20-seattle/linni_cai_xinyu_dai_finalproject/precache-manifest.038585cd360189388803239609363b22.js",
+    "service-worker.js": "/cs7580su20-seattle/linni_cai_xinyu_dai_finalproject/service-worker.js",
+    "static/css/main.45a36eb6.chunk.css.map": "/cs7580su20-seattle/linni_cai_xinyu_dai_finalproject/static/css/main.45a36eb6.chunk.css.map",
+    "static/js/2.9c227e5c.chunk.js.LICENSE.txt": "/cs7580su20-seattle/linni_cai_xinyu_dai_finalproject/static/js/2.9c227e5c.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.9b55a4fc.js",
+    "static/js/2.9c227e5c.chunk.js",
+    "static/css/main.45a36eb6.chunk.css",
+    "static/js/main.b085c80a.chunk.js"
+  ]
+}

@@ -160,7 +160,7 @@ const getAllUsernames = async () => {
                 allUsernames.push(doc.data().username)
             });
         } else {
-            console.log("No registed users in the system yet.")
+            console.log("No registered users in the system yet.")
         }
         return allUsernames;
     } catch (error) {
@@ -195,7 +195,6 @@ const addNewUser = async (username, password) => {
 // Add a client to the online players object
 const addOnlinePlayer = (user, username) => {
     onlinePlayers[username] = user;
-    console.log(onlinePlayers);
     io.sockets.emit("online players update", onlinePlayers);
 }
 
@@ -227,7 +226,6 @@ const processNotifications = (type, msg) => {
         content: msg,
         time: new Date().getTime()
     }
-    console.log("notification", newNotification.time)
     notifications.push(newNotification);
     io.sockets.emit("all notifications", notifications);
 }
@@ -466,7 +464,6 @@ io.on("connection", client => {
     })
 
     client.on("update pair board", board => {
-        console.log("update board");
         const p1 = client.id;
         const p2 = pair_book[p1];
         board_pair[p1] = board;
@@ -476,7 +473,6 @@ io.on("connection", client => {
     });
 
     client.on("update pair mines", mines => {
-        console.log("update mines");
         const p1 = client.id;
         const p2 = pair_book[p1];
         mines_pair[p1] = mines;
@@ -486,7 +482,6 @@ io.on("connection", client => {
     });
 
     client.on("update pair status", status => {
-        console.log("update pair status: ", status);
         const p1 = client.id;
         const p2 = pair_book[p1];
         io.to(p2).emit("set pair status", status);
@@ -515,7 +510,6 @@ io.on("connection", client => {
 
     // Update disconnect information
     client.on("disconnect", () => {
-        console.log(client.id + " is disconnected");
         const username = getClientUsername(client.id);
         if (username === "") {
             cleanUpPlayers();
@@ -539,7 +533,6 @@ io.on("connection", client => {
                     const pairClientId = pair_book[client.id];
                     releaseGamePair(pairClientId);
                     const pairUsername = getClientUsername(pairClientId);
-                    console.log("pair username", pairUsername);
                     incrementLoseNumber(username).then(
                         () => {
                                 incrementWinNumber(pairUsername).then(

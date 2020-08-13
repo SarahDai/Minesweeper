@@ -19,15 +19,8 @@ const socketIOClient = require("socket.io-client");
 // When deployed, connect to the hosted server, otherwise connect to local server
 // Localhost port must match server
 let host = process.env.NODE_ENV === 'production' ?
-    "appname.herokuapp.com" : "localhost:4002"   
+    "minesweeper-7580.herokuapp.com" : "localhost:4002"   
 let socket = socketIOClient.connect(host, {secure: true});
-// Checks which host we're connected to (for troubleshooting);
-console.log("connected to " + host);
-
-// Print out a notification from the server (for debuging)
-socket.on("notification", message => {
-    console.log(message);
-});
 
 // Request to get all existing usernames in the database
 export const getUsernames = () => {
@@ -80,7 +73,6 @@ export const register = (username, password) => {
     socket.emit("request to register", username, password);
 
     socket.on("register response", response => {
-        console.log("register", response.registerStatus)
         store.dispatch(registerReponse(response));
     })
 }
