@@ -241,10 +241,6 @@ h3 {
    overflow: auto;
 }
 
-.account-width {
-   width: 16rem;
-}
-
 @media screen and (max-width: 768px) {
    .system-notification-frame {
       max-height: 50vh;
@@ -282,13 +278,10 @@ h1 {
    font-size: 1.4rem;
 }
 
-.input-size {
-   border-radius: 0.5rem;
-   font-size: 0.9rem;
-}
-
-.link-style {
-   font-size: 0.7rem;
+.game-body {
+   padding: 0;
+   padding-top: 1rem;
+   padding-bottom: 1rem;
 }
 
 .game-width {
@@ -296,10 +289,17 @@ h1 {
    width: 40rem;
 }
 
-.game-body {
-   padding: 0;
-   padding-top: 1rem;
-   padding-bottom: 1rem;
+.account-width {
+   width: 22rem;
+}
+
+.input-size {
+   border-radius: 0.5rem;
+   font-size: 1.2rem;
+}
+
+.link-style {
+   font-size: 1rem;
 }
 
 @media (max-width: 1100px) {
