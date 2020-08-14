@@ -15,10 +15,10 @@ const Game = () => {
 
    return (
       <Card className="game-width">
-         <Card.Header className="text-center display-4">
+         <Card.Header className="text-center game-font-size">
             {"Mines: " + mines}
          </Card.Header>
-         <Card.Body>
+         <Card.Body className="game-body">
             <Row>
                <Col md={4} xs={5}>
                   <PlayerIcon color={color} name='ME'/>
@@ -36,7 +36,7 @@ const Game = () => {
                <GameOptions />
             }
          </Card.Body>
-         <Card.Footer className="game-footer-font">
+         <Card.Footer className="game-font-size">
             <p>{"Left click -> Reveal"}</p>
             <p>{"First Right click -> Flag"}</p>
             <p>{"Second Right click -> Unflag"}</p>

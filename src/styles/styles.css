@@ -23,6 +23,8 @@ h3 {
    font-size: 1.5em;
 }
 
+
+
 /* Specific Feature
 ------------------------- */
 /* .card-header {
@@ -272,11 +274,11 @@ h3 {
    border: 2px solid red;
 }
 
-.game-footer-font {
-   font-size: 1.5rem;
+h1 {
+   font-size: 1.4rem;
 }
 
-h1 {
+.game-font-size {
    font-size: 1.4rem;
 }
 
@@ -289,25 +291,38 @@ h1 {
    font-size: 0.7rem;
 }
 
-@media (max-width: 1300px) {
+.game-width {
+   margin: auto;
+   width: 40rem;
+}
 
+.game-body {
+   padding: 0;
+   padding-top: 1rem;
+   padding-bottom: 1rem;
 }
 
 @media (max-width: 1100px) {
-
+   .game-width {
+      width: 35rem;
+   }
 }
 
 @media (max-width: 900px) {
-
+   .game-width {
+      width: 30rem;
+   }
 }
 
-@media (max-width: 700px) {
-
-}
-
-@media (max-width: 522px) {
+@media (max-width: 800px) {
    .game-width {
       width: 25rem;
+   }
+}
+
+@media (max-width: 600px) {
+   .game-width {
+      width: 22rem;
    }
 }
 

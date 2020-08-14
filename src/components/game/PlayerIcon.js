@@ -15,9 +15,9 @@ const PlayerIcon = props => {
             }}/>
          {/* <Flag size={96} color={props.color}
                      style={{ display: "block", margin: "auto" }}/> */}
-         <h1 style={{ textAlign: "center" }}>
+         <p style={{ textAlign: "center" }} className="game-font-size">
             {props.name}
-         </h1>
+         </p>
       </div>
    );
 };
