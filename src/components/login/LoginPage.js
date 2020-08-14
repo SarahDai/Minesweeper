@@ -102,32 +102,34 @@ const Login = () => {
          }
          <Row>
             <Col>
-               <Input type="text" id="username"
-                        className="input-size"
-                        name="username" value={username}
-                        onKeyUp={e => handleKeyPress(e)}
-                        aria-label="input-username"
-                        placeholder="Username"
-                        onChange={e => {
-                           beginEdit = true;
-                           setUsername(e.target.value);
-                        }}
+               <Input 
+                  type="text" id="username"
+                  className="input-size"
+                  name="username" value={username}
+                  onKeyUp={e => handleKeyPress(e)}
+                  aria-label="input-username"
+                  placeholder="Username"
+                  onChange={e => {
+                     beginEdit = true;
+                     setUsername(e.target.value);
+                  }}
                />
             </Col>
          </Row>
          <br />
          <Row>
             <Col>
-               <Input type="password" id="password"
-                        className="input-size"
-                        name="password" value={password}
-                        onKeyUp={e => handleKeyPress(e)}
-                        aria-label="input-password"
-                        placeholder="Password"
-                        onChange={e => {
-                           beginEdit = true;
-                           setPassword(e.target.value);
-                        }}
+               <Input 
+                  type="password" id="password"
+                  className="input-size"
+                  name="password" value={password}
+                  onKeyUp={e => handleKeyPress(e)}
+                  aria-label="input-password"
+                  placeholder="Password"
+                  onChange={e => {
+                     beginEdit = true;
+                     setPassword(e.target.value);
+                  }}
                />
             </Col>
          </Row>

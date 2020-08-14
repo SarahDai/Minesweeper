@@ -90,11 +90,9 @@ const SignUpPage = () => {
          {
             showAlert &&
             <Row className="margin-bottom-1">
-               <Col xl={4} lg={3} sm={0}/>
-               <Col xl={6} lg={9} sm={12}>
+               <Col>
                   {handleAlert()}
                </Col>
-               <Col xl={2} />
             </Row>
          }
          {

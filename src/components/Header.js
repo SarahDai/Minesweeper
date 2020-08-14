@@ -12,7 +12,7 @@ const Header = () => {
     return (
         <>
             <Row className="homepage-header text-left">
-                <Col xs={12}>
+                <Col xs={8} md={10}>
                     <div className="icon-size" block>
                         <FontAwesomeIcon
                             className="fa-flag-header"
@@ -22,12 +22,13 @@ const Header = () => {
                     </div>
                 </Col>
                 <Col className="menu">
-                    {
-                        page === PAGE.LOBBY &&
-                        <Menu />
-                    }
+                {
+                    page === PAGE.LOBBY &&
+                    <Menu />
+                }
                 </Col>
             </Row>
+            
             <hr/>
             <br/>
         </>
